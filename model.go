@@ -114,7 +114,12 @@ type User struct {
 		UserTopKeywords    *APIEndpoint `json:"UserTopKeywords"`
 		URLPathLookup      *APIEndpoint `json:"UrlPathLookup"`
 	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	ResponseLevel string          `json:"ResponseLevel"`
+	Expansions    *UserExpansions `json:"-"`
+}
+
+type UserExpansions struct {
+	Albums []*Album `json:"-"`
 }
 
 type UserResponse struct {
@@ -130,8 +135,9 @@ type UserResponse struct {
 		DocURI         string  `json:"DocUri"`
 		Timing         *Timing `json:"Timing"`
 	} `json:"Response"`
-	Code    int    `json:"Code"`
-	Message string `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
 
 type Album struct {
@@ -182,7 +188,13 @@ type Album struct {
 		AlbumPrices              *APIEndpoint `json:"AlbumPrices"`
 		AlbumPricelistExclusions *APIEndpoint `json:"AlbumPricelistExclusions"`
 	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	ResponseLevel string           `json:"ResponseLevel"`
+	Expansions    *AlbumExpansions `json:"-"`
+}
+
+type AlbumExpansions struct {
+	HighlightImage *Image   `json:"HighlightImage"`
+	Images         []*Image `json:"Images"`
 }
 
 type Pages struct {
@@ -208,8 +220,25 @@ type AlbumsResponse struct {
 		Pages          *Pages   `json:"Pages"`
 		Timing         *Timing  `json:"Timing"`
 	} `json:"Response"`
-	Code    int    `json:"Code"`
-	Message string `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+}
+
+type AlbumResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Album          *Album  `json:"Album"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		DocURI         string  `json:"DocUri"`
+		Timing         *Timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
 
 type Image struct {
@@ -260,7 +289,7 @@ type Image struct {
 	} `json:"FormattedValues"`
 	URI            string `json:"Uri"`
 	URIDescription string `json:"UriDescription"`
-	Uris           struct {
+	URIs           struct {
 		LargestImage                  *APIEndpoint `json:"LargestImage"`
 		ImageSizes                    *APIEndpoint `json:"ImageSizes"`
 		ImageSizeDetails              *APIEndpoint `json:"ImageSizeDetails"`
@@ -277,9 +306,14 @@ type Image struct {
 		AlbumImageMetadata            *APIEndpoint `json:"AlbumImageMetadata"`
 		AlbumImageShareUris           *APIEndpoint `json:"AlbumImageShareUris"`
 	} `json:"Uris"`
-	Movable bool   `json:"Movable"`
-	Origin  string `json:"Origin"`
-	WebURI  string `json:"WebUri"`
+	Movable    bool             `json:"Movable"`
+	Origin     string           `json:"Origin"`
+	WebURI     string           `json:"WebUri"`
+	Expansions *ImageExpansions `json:"-"`
+}
+
+type ImageExpansions struct {
+	ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
 }
 
 type ImagesResponse struct {
@@ -299,6 +333,64 @@ type ImagesResponse struct {
 		Pages          *Pages   `json:"Pages"`
 		Timing         *Timing  `json:"Timing"`
 	} `json:"Response"`
-	Code    int    `json:"Code"`
-	Message string `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+}
+
+type ImageResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Image          *Image  `json:"Image"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		DocURI         string  `json:"DocUri"`
+		Timing         *Timing `json:"Timing"`
+	} `json:"Response"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+}
+
+type ImageSize struct {
+	URL    string `json:"Url,omitempty"`
+	Ext    string `json:",omitempty"`
+	Height int    `json:",omitempty"`
+	Width  int    `json:",omitempty"`
+	Size   int    `json:",omitempty"`
+}
+
+type ImageSizeDetails struct {
+	ImageSizeLarge    *ImageSize `json:",omitempty"`
+	ImageSizeMedium   *ImageSize `json:",omitempty"`
+	ImageSizeOriginal *ImageSize `json:",omitempty"`
+	ImageSizeSmall    *ImageSize `json:",omitempty"`
+	ImageSizeThumb    *ImageSize `json:",omitempty"`
+	ImageSizeTiny     *ImageSize `json:",omitempty"`
+	ImageSizeX2Large  *ImageSize `json:",omitempty"`
+	ImageSizeX3Large  *ImageSize `json:",omitempty"`
+	ImageSizeXLarge   *ImageSize `json:",omitempty"`
+	ImageURLTemplate  string     `json:"ImageUrlTemplate,omitempty"`
+	UsableSizes       []string   `json:",omitempty"`
+
+	URI            string `json:"Uri,omitempty"`
+	URIDescription string `json:"UriDescription,omitempty"`
+}
+
+type ImageSizes struct {
+	LargeImageURL    string `json:"LargeImageUrl,omitempty"`
+	LargestImageURL  string `json:"LargestImageUrl,omitempty"`
+	MediumImageURL   string `json:"MediumImageUrl,omitempty"`
+	OriginalImageURL string `json:"OriginalImageUrl,omitempty"`
+	SmallImageURL    string `json:"SmallImageUrl,omitempty"`
+	ThumbImageURL    string `json:"ThumbImageUrl,omitempty"`
+	TinyImageURL     string `json:"TinyImageUrl,omitempty"`
+	X2LargeImageURL  string `json:"X2LargeImageUrl,omitempty"`
+	X3LargeImageURL  string `json:"X3LargeImageUrl,omitempty"`
+	XLargeImageURL   string `json:"XLargeImageUrl,omitempty"`
+
+	URI            string `json:"Uri,omitempty"`
+	URIDescription string `json:"UriDescription,omitempty"`
 }

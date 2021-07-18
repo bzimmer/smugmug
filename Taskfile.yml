@@ -12,4 +12,4 @@ tasks:
   demo:
     desc: Run the smugmug demo
     cmds:
-      - go run cmd/mg/*.go {{.CLI_ARGS}}
+      - go run cmd/demo/*.go {{.CLI_ARGS}}
