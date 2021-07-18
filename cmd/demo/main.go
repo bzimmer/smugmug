@@ -130,6 +130,35 @@ func main() {
 				},
 			},
 			{
+				Name: "nodes",
+				Action: func(c *cli.Context) error {
+					user, err := mg.User.User(c.Context)
+					if err != nil {
+						return err
+					}
+					i := 0
+					page := smugmug.WithPagination(0, 100)
+					for {
+						nodes, pages, err := mg.Node.Search(c.Context, page,
+							smugmug.WithSearch(user.URI, c.Args().First()))
+						if err != nil {
+							return err
+						}
+						for _, node := range nodes {
+							fmt.Printf("[%04d] [%s] %s\n", i, node.NodeID, node.URI)
+							i++
+						}
+
+						if pages.NextPage == "" {
+							return nil
+						}
+
+						fmt.Println("-")
+						page = smugmug.WithPagination(pages.Start+pages.Count, 100)
+					}
+				},
+			},
+			{
 				Name: "album",
 				Action: func(c *cli.Context) error {
 					album, err := mg.Album.Album(c.Context, c.Args().First(), smugmug.WithExpansions("AlbumHighlightImage", "AlbumImages"))
@@ -156,12 +185,11 @@ func main() {
 					if err != nil {
 						return err
 					}
-
 					log.Info().Str("scope", user.URIs.Node.URI).Msg("search")
 					albums, pages, err := mg.Album.Search(c.Context,
-						smugmug.WithFilters("URLName", "LastUpdated"),
+						smugmug.WithFilters("Name", "LastUpdated"),
 						smugmug.WithSorting(smugmug.DirectionNone, smugmug.MethodLastUpdated),
-						smugmug.WithSearch(c.Args().First(), user.URIs.Node.URI),
+						smugmug.WithSearch(user.URIs.Node.URI, c.Args().First()),
 					)
 					if err != nil {
 						return err
@@ -170,7 +198,7 @@ func main() {
 					fmt.Printf(" total %d\n", pages.Total)
 
 					for _, album := range albums {
-						fmt.Printf("  %s -- %s\n", album.LastUpdated, album.URLName)
+						fmt.Printf("  %s -- %s\n", album.LastUpdated, album.Name)
 					}
 					return nil
 				},

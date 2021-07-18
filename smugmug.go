@@ -31,6 +31,7 @@ type Client struct {
 	pretty bool
 
 	User  *UserService
+	Node  *NodeService
 	Album *AlbumService
 	Image *ImageService
 }
@@ -38,6 +39,7 @@ type Client struct {
 func withServices() Option {
 	return func(c *Client) error {
 		c.User = &UserService{c}
+		c.Node = &NodeService{c}
 		c.Album = &AlbumService{c}
 		c.Image = &ImageService{c}
 		return nil
@@ -109,7 +111,7 @@ func WithFilters(filters ...string) APIOption {
 
 // WithSearch queries Smugmug for the text within the given scope
 // The scope is a URI representing a user, album, node, or folder
-func WithSearch(text, scope string) APIOption {
+func WithSearch(scope, text string) APIOption {
 	return func(v url.Values) error {
 		v.Set("Text", text)
 		v.Set("Scope", scope)
