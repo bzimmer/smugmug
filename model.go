@@ -48,6 +48,11 @@ type Timing struct {
 	} `json:"Total"`
 }
 
+type FormattedValue struct {
+	HTML string `json:"html"`
+	Text string `json:"text"`
+}
+
 type Options struct {
 	MethodDetails struct {
 		OPTIONS struct {
@@ -278,14 +283,8 @@ type Image struct {
 	Comments         bool       `json:"Comments"`
 	ShowKeywords     bool       `json:"ShowKeywords"`
 	FormattedValues  struct {
-		Caption struct {
-			HTML string `json:"html"`
-			Text string `json:"text"`
-		} `json:"Caption"`
-		FileName struct {
-			HTML string `json:"html"`
-			Text string `json:"text"`
-		} `json:"FileName"`
+		Caption  *FormattedValue `json:"Caption"`
+		FileName *FormattedValue `json:"FileName"`
 	} `json:"FormattedValues"`
 	URI            string `json:"Uri"`
 	URIDescription string `json:"UriDescription"`
@@ -317,11 +316,7 @@ type ImageExpansions struct {
 }
 
 type ImagesResponse struct {
-	Request struct {
-		Version string `json:"Version"`
-		Method  string `json:"Method"`
-		URI     string `json:"Uri"`
-	} `json:"Request"`
+	Request  *Request `json:"Request"`
 	Options  *Options `json:"Options"`
 	Response struct {
 		URI            string   `json:"Uri"`
@@ -374,9 +369,8 @@ type ImageSizeDetails struct {
 	ImageSizeXLarge   *ImageSize `json:",omitempty"`
 	ImageURLTemplate  string     `json:"ImageUrlTemplate,omitempty"`
 	UsableSizes       []string   `json:",omitempty"`
-
-	URI            string `json:"Uri,omitempty"`
-	URIDescription string `json:"UriDescription,omitempty"`
+	URI               string     `json:"Uri,omitempty"`
+	URIDescription    string     `json:"UriDescription,omitempty"`
 }
 
 type ImageSizes struct {
@@ -390,7 +384,73 @@ type ImageSizes struct {
 	X2LargeImageURL  string `json:"X2LargeImageUrl,omitempty"`
 	X3LargeImageURL  string `json:"X3LargeImageUrl,omitempty"`
 	XLargeImageURL   string `json:"XLargeImageUrl,omitempty"`
+	URI              string `json:"Uri,omitempty"`
+	URIDescription   string `json:"UriDescription,omitempty"`
+}
 
-	URI            string `json:"Uri,omitempty"`
-	URIDescription string `json:"UriDescription,omitempty"`
+type Node struct {
+	CoverImageURI         string     `json:"CoverImageUri"`
+	Description           string     `json:"Description"`
+	HideOwner             bool       `json:"HideOwner"`
+	HighlightImageURI     string     `json:"HighlightImageUri"`
+	Name                  string     `json:"Name"`
+	Keywords              []string   `json:"Keywords"`
+	Password              string     `json:"Password"`
+	PasswordHint          string     `json:"PasswordHint"`
+	Privacy               string     `json:"Privacy"`
+	SecurityType          string     `json:"SecurityType"`
+	ShowCoverImage        bool       `json:"ShowCoverImage"`
+	SmugSearchable        string     `json:"SmugSearchable"`
+	SortDirection         string     `json:"SortDirection"`
+	SortMethod            string     `json:"SortMethod"`
+	Type                  string     `json:"Type"`
+	URLName               string     `json:"UrlName"`
+	WorldSearchable       string     `json:"WorldSearchable"`
+	DateAdded             *time.Time `json:"DateAdded"`
+	DateModified          *time.Time `json:"DateModified"`
+	EffectivePrivacy      string     `json:"EffectivePrivacy"`
+	EffectiveSecurityType string     `json:"EffectiveSecurityType"`
+	FormattedValues       struct {
+		Name        *FormattedValue `json:"Name"`
+		Description *FormattedValue `json:"Description"`
+	} `json:"FormattedValues"`
+	HasChildren    bool   `json:"HasChildren"`
+	IsRoot         bool   `json:"IsRoot"`
+	NodeID         string `json:"NodeID"`
+	URLPath        string `json:"UrlPath"`
+	URI            string `json:"Uri"`
+	WebURI         string `json:"WebUri"`
+	URIDescription string `json:"UriDescription"`
+	URIs           struct {
+		FolderByID     *APIEndpoint `json:"FolderByID"`
+		ParentNode     *APIEndpoint `json:"ParentNode"`
+		ParentNodes    *APIEndpoint `json:"ParentNodes"`
+		User           *APIEndpoint `json:"User"`
+		NodeCoverImage *APIEndpoint `json:"NodeCoverImage"`
+		HighlightImage *APIEndpoint `json:"HighlightImage"`
+		NodeComments   *APIEndpoint `json:"NodeComments"`
+		ChildNodes     *APIEndpoint `json:"ChildNodes"`
+		MoveNodes      *APIEndpoint `json:"MoveNodes"`
+		NodeGrants     *APIEndpoint `json:"NodeGrants"`
+		NodePageDesign *APIEndpoint `json:"NodePageDesign"`
+	} `json:"Uris"`
+	ResponseLevel string `json:"ResponseLevel"`
+}
+
+type NodesResponse struct {
+	Request  *Request `json:"Request"`
+	Options  *Options `json:"Options"`
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Node           []*Node `json:"Node"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		Pages          *Pages  `json:"Pages"`
+		Timing         *Timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
