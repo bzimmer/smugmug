@@ -85,7 +85,7 @@ type SortMethod int
 const (
 	MethodNone        SortMethod = iota // None
 	MethodRank                          // Rank
-	MethodLastUpdated                   // LastUpdated
+	MethodLastUpdated                   // Last Updated
 )
 
 func WithSorting(direction SortDirection, method SortMethod) APIOption {

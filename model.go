@@ -141,9 +141,9 @@ type UserResponse struct {
 }
 
 type Album struct {
-	NiceName            string     `json:"NiceName"`
+	// NiceName            string     `json:"NiceName"` // deprecated, use URLName
+	// Title               string     `json:"Title"` // deprecated, use Name
 	URLName             string     `json:"UrlName"`
-	Title               string     `json:"Title"`
 	Name                string     `json:"Name"`
 	AllowDownloads      bool       `json:"AllowDownloads"`
 	Description         string     `json:"Description"`
@@ -242,11 +242,12 @@ type AlbumResponse struct {
 }
 
 type Image struct {
+	// Date             *time.Time `json:"Date"` // deprecated, use DateTimeUploaded
+	// Watermark        string     `json:"Watermark"` // deprecated
 	Title            string     `json:"Title"`
 	Caption          string     `json:"Caption"`
 	Keywords         string     `json:"Keywords"`
 	KeywordArray     []string   `json:"KeywordArray"`
-	Watermark        string     `json:"Watermark"`
 	Latitude         Coordinate `json:"Latitude"`
 	Longitude        Coordinate `json:"Longitude"`
 	Altitude         int        `json:"Altitude"`
@@ -255,7 +256,6 @@ type Image struct {
 	FileName         string     `json:"FileName"`
 	Processing       bool       `json:"Processing"`
 	UploadKey        string     `json:"UploadKey"`
-	Date             *time.Time `json:"Date"`
 	DateTimeUploaded *time.Time `json:"DateTimeUploaded"`
 	DateTimeOriginal *time.Time `json:"DateTimeOriginal"`
 	Format           string     `json:"Format"`

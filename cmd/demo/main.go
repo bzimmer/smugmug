@@ -116,14 +116,15 @@ func main() {
 							return err
 						}
 						for _, album := range albums {
-							fmt.Printf("[%04d] %s\n", i, album.NiceName)
+							fmt.Printf("[%04d] [%s] %s\n", i, album.AlbumKey, album.URLName)
 							i++
 						}
 
-						if i == pages.Total {
+						if pages.NextPage == "" {
 							return nil
 						}
 
+						fmt.Println("-")
 						page = smugmug.WithPagination(pages.Start+pages.Count, 100)
 					}
 				},
@@ -135,7 +136,7 @@ func main() {
 					if err != nil {
 						return err
 					}
-					fmt.Println(album.NiceName)
+					fmt.Println(album.URLName)
 					fmt.Println(" " + album.Expansions.HighlightImage.FileName)
 					fmt.Printf(" %03d images\n", len(album.Expansions.Images))
 					for _, image := range album.Expansions.Images {
@@ -158,7 +159,7 @@ func main() {
 
 					log.Info().Str("scope", user.URIs.Node.URI).Msg("search")
 					albums, pages, err := mg.Album.Search(c.Context,
-						smugmug.WithFilters("NiceName", "LastUpdated"),
+						smugmug.WithFilters("URLName", "LastUpdated"),
 						smugmug.WithSorting(smugmug.DirectionNone, smugmug.MethodLastUpdated),
 						smugmug.WithSearch(c.Args().First(), user.URIs.Node.URI),
 					)
@@ -169,7 +170,7 @@ func main() {
 					fmt.Printf(" total %d\n", pages.Total)
 
 					for _, album := range albums {
-						fmt.Printf("  %s -- %s\n", album.LastUpdated, album.NiceName)
+						fmt.Printf("  %s -- %s\n", album.LastUpdated, album.URLName)
 					}
 					return nil
 				},
@@ -202,7 +203,7 @@ func main() {
 
 			fmt.Printf(" pages >> %d/%d\n", pages.Count, pages.Total)
 			for i, album := range albums {
-				fmt.Printf(" %s | %s |\n", album.NiceName, "")
+				fmt.Printf(" %s | %s |\n", album.URLName, "")
 				if i == 0 {
 					images, pages, err := mg.Image.Images(c.Context, album.AlbumKey)
 					if err != nil {
