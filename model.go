@@ -34,12 +34,6 @@ func (c *Coordinate) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-type Request struct {
-	Version string `json:"Version"`
-	Method  string `json:"Method"`
-	URI     string `json:"Uri"`
-}
-
 type Timing struct {
 	Total struct {
 		Time    float64 `json:"time"`
@@ -51,38 +45,6 @@ type Timing struct {
 type FormattedValue struct {
 	HTML string `json:"html"`
 	Text string `json:"text"`
-}
-
-type Options struct {
-	MethodDetails struct {
-		OPTIONS struct {
-			Permissions []string `json:"Permissions"`
-		} `json:"OPTIONS"`
-		GET struct {
-			Permissions []string `json:"Permissions"`
-		} `json:"GET"`
-	} `json:"MethodDetails"`
-	Methods    []string `json:"Methods"`
-	MediaTypes []string `json:"MediaTypes"`
-	Output     []struct {
-		Name        string   `json:"Name"`
-		Type        string   `json:"Type"`
-		OPTIONS     []string `json:"OPTIONS,omitempty"`
-		MINCOUNT    int      `json:"MIN_COUNT,omitempty"`
-		MAXCOUNT    int      `json:"MAX_COUNT,omitempty"`
-		MINCHARS    int      `json:"MIN_CHARS,omitempty"`
-		MAXCHARS    int      `json:"MAX_CHARS,omitempty"`
-		MINVALUE    int      `json:"MIN_VALUE,omitempty"`
-		MAXVALUE    int      `json:"MAX_VALUE,omitempty"`
-		Description string   `json:"Description,omitempty"`
-	} `json:"Output"`
-	ResponseLevels []string `json:"ResponseLevels"`
-	Path           []struct {
-		Type       string `json:"type"`
-		Text       string `json:"text,omitempty"`
-		ParamName  string `json:"param_name,omitempty"`
-		ParamValue string `json:"param_value,omitempty"`
-	} `json:"Path"`
 }
 
 type APIEndpoint struct {
@@ -120,16 +82,18 @@ type User struct {
 		URLPathLookup      *APIEndpoint `json:"UrlPathLookup"`
 	} `json:"Uris"`
 	ResponseLevel string          `json:"ResponseLevel"`
-	Expansions    *UserExpansions `json:"-"`
+	Expansions    *UserExpansions `json:"Expansions"`
 }
 
 type UserExpansions struct {
-	Albums []*Album `json:"-"`
+	Albums []*Album `json:"Albums"`
+}
+
+func (u *User) HasExpansions() bool {
+	return u.Expansions != nil
 }
 
 type UserResponse struct {
-	Request  *Request `json:"Request"`
-	Options  *Options `json:"Options"`
 	Response struct {
 		URI            string  `json:"Uri"`
 		Locator        string  `json:"Locator"`
@@ -231,12 +195,16 @@ type Album struct {
 		AlbumPricelistExclusions   *APIEndpoint `json:"AlbumPricelistExclusions"`
 	} `json:"Uris"`
 	ResponseLevel string           `json:"ResponseLevel"`
-	Expansions    *AlbumExpansions `json:"-"`
+	Expansions    *AlbumExpansions `json:"Expansions"`
 }
 
 type AlbumExpansions struct {
 	HighlightImage *Image   `json:"HighlightImage"`
 	Images         []*Image `json:"Images"`
+}
+
+func (a *Album) HasExpansions() bool {
+	return a.Expansions != nil
 }
 
 type Pages struct {
@@ -250,8 +218,6 @@ type Pages struct {
 }
 
 type AlbumsResponse struct {
-	Request  *Request `json:"Request"`
-	Options  *Options `json:"Options"`
 	Response struct {
 		URI            string   `json:"Uri"`
 		Locator        string   `json:"Locator"`
@@ -262,9 +228,8 @@ type AlbumsResponse struct {
 		Pages          *Pages   `json:"Pages"`
 		Timing         *Timing  `json:"Timing"`
 	} `json:"Response"`
-	Expansions map[string]*json.RawMessage `json:",omitempty"`
-	Code       int                         `json:"Code"`
-	Message    string                      `json:"Message"`
+	Code    int    `json:"Code"`
+	Message string `json:"Message"`
 }
 
 type AlbumResponse struct {
@@ -278,7 +243,7 @@ type AlbumResponse struct {
 		DocURI         string  `json:"DocUri"`
 		Timing         *Timing `json:"Timing"`
 	} `json:"Response"`
-	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`
 	Message    string                      `json:"Message"`
 }
@@ -345,16 +310,18 @@ type Image struct {
 	Movable    bool             `json:"Movable"`
 	Origin     string           `json:"Origin"`
 	WebURI     string           `json:"WebUri"`
-	Expansions *ImageExpansions `json:"-"`
+	Expansions *ImageExpansions `json:"Expansions"`
 }
 
 type ImageExpansions struct {
 	ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
 }
 
+func (i *Image) HasExpansions() bool {
+	return i.Expansions != nil
+}
+
 type ImagesResponse struct {
-	Request  *Request `json:"Request"`
-	Options  *Options `json:"Options"`
 	Response struct {
 		URI            string   `json:"Uri"`
 		Locator        string   `json:"Locator"`
@@ -365,9 +332,8 @@ type ImagesResponse struct {
 		Pages          *Pages   `json:"Pages"`
 		Timing         *Timing  `json:"Timing"`
 	} `json:"Response"`
-	Expansions map[string]*json.RawMessage `json:",omitempty"`
-	Code       int                         `json:"Code"`
-	Message    string                      `json:"Message"`
+	Code    int    `json:"Code"`
+	Message string `json:"Message"`
 }
 
 type ImageResponse struct {
@@ -459,6 +425,7 @@ type Node struct {
 	WebURI         string `json:"WebUri"`
 	URIDescription string `json:"UriDescription"`
 	URIs           struct {
+		Album          *APIEndpoint `json:"Album"`
 		FolderByID     *APIEndpoint `json:"FolderByID"`
 		ParentNode     *APIEndpoint `json:"ParentNode"`
 		ParentNodes    *APIEndpoint `json:"ParentNodes"`
@@ -471,12 +438,20 @@ type Node struct {
 		NodeGrants     *APIEndpoint `json:"NodeGrants"`
 		NodePageDesign *APIEndpoint `json:"NodePageDesign"`
 	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	ResponseLevel string          `json:"ResponseLevel"`
+	Expansions    *NodeExpansions `json:"Expansions"`
+}
+
+type NodeExpansions struct {
+	Album      *Album  `json:"Album"`
+	ChildNodes []*Node `json:"ChildNodes"`
+}
+
+func (n *Node) HasExpansions() bool {
+	return n.Expansions != nil
 }
 
 type NodesResponse struct {
-	Request  *Request `json:"Request"`
-	Options  *Options `json:"Options"`
 	Response struct {
 		URI            string  `json:"Uri"`
 		Locator        string  `json:"Locator"`
@@ -487,7 +462,21 @@ type NodesResponse struct {
 		Pages          *Pages  `json:"Pages"`
 		Timing         *Timing `json:"Timing"`
 	} `json:"Response"`
-	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code    int    `json:"Code"`
+	Message string `json:"Message"`
+}
+
+type NodeResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Node           *Node   `json:"Node"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		Timing         *Timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`
 	Message    string                      `json:"Message"`
 }

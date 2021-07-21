@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/mrjones/oauth"
-	"github.com/rs/zerolog/log"
 )
 
 //go:generate genwith --client --do --package smugmug
@@ -147,12 +146,10 @@ func (c *Client) newRequest(ctx context.Context, method, uri string, options []A
 		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
-	log.Debug().Str("uri", uri).Msg("pre")
 	u, err := url.Parse(uri)
 	if err != nil {
 		return nil, err
 	}
-	log.Debug().Str("uri", uri).Msg("post")
 
 	req, err := http.NewRequestWithContext(ctx, method, u.String(), nil)
 	if err != nil {
