@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -14,6 +15,27 @@ import (
 )
 
 var mg *smugmug.Client
+
+type Stack []string
+
+func (s *Stack) IsEmpty() bool {
+	return len(*s) == 0
+}
+
+func (s *Stack) Push(str string) {
+	*s = append(*s, str)
+}
+
+func (s *Stack) Pop() (string, bool) {
+	if s.IsEmpty() {
+		return "", false
+	} else {
+		index := len(*s) - 1
+		element := (*s)[index]
+		*s = (*s)[:index]
+		return element, true
+	}
+}
 
 func main() {
 	app := &cli.App{
@@ -130,6 +152,57 @@ func main() {
 				},
 			},
 			{
+				Name: "children",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:  "images",
+						Value: false,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					img := c.Bool("images")
+					enc := json.NewEncoder(c.App.Writer)
+					nodes := &Stack{}
+					nodes.Push(c.Args().First())
+					for {
+						nodeID, ok := nodes.Pop()
+						if !ok {
+							return nil
+						}
+						node, err := mg.Node.Node(c.Context, nodeID, smugmug.WithExpansions("ChildNodes", "Album"))
+						if err != nil {
+							return err
+						}
+						t := log.Info().Str("nodeID", nodeID).Str("name", node.Name).Str("type", node.Type)
+						if node.Type == "Album" {
+							t = t.Str("albumID", node.Expansions.Album.AlbumKey)
+						}
+						t.Msg("query")
+						if !node.HasExpansions() {
+							continue
+						}
+						for _, child := range node.Expansions.ChildNodes {
+							nodes.Push(child.NodeID)
+						}
+
+						if img && node.Type == "Album" {
+							album, err := mg.Album.Album(c.Context, node.Expansions.Album.AlbumKey, smugmug.WithExpansions("AlbumImages"))
+							if err != nil {
+								return err
+							}
+							if !album.HasExpansions() {
+								continue
+							}
+							for _, image := range album.Expansions.Images {
+								if err := enc.Encode(image); err != nil {
+									return err
+								}
+							}
+						}
+					}
+				},
+			},
+			{
 				Name: "nodes",
 				Action: func(c *cli.Context) error {
 					user, err := mg.User.User(c.Context)
@@ -145,7 +218,7 @@ func main() {
 							return err
 						}
 						for _, node := range nodes {
-							fmt.Printf("[%04d] [%s] %s\n", i, node.NodeID, node.URI)
+							fmt.Printf("[%04d] [%s] %s %s\n", i, node.NodeID, node.URI, node.Name)
 							i++
 						}
 
