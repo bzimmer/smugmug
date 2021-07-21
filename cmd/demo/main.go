@@ -169,34 +169,44 @@ func main() {
 						if !ok {
 							return nil
 						}
-						node, err := mg.Node.Node(c.Context, nodeID, smugmug.WithExpansions("ChildNodes", "Album"))
+						node, err := mg.Node.Node(c.Context, nodeID,
+							smugmug.WithExpansions("Album", "FolderByID", "HighlightImage", "User"))
 						if err != nil {
 							return err
 						}
-						t := log.Info().Str("nodeID", nodeID).Str("name", node.Name).Str("type", node.Type)
-						if node.Type == "Album" {
-							t = t.Str("albumID", node.Expansions.Album.AlbumKey)
-						}
-						t.Msg("query")
-						if !node.HasExpansions() {
-							continue
-						}
-						for _, child := range node.Expansions.ChildNodes {
-							nodes.Push(child.NodeID)
-						}
 
-						if img && node.Type == "Album" {
-							album, err := mg.Album.Album(c.Context, node.Expansions.Album.AlbumKey, smugmug.WithExpansions("AlbumImages"))
+						switch node.Type {
+						case "Album":
+							log.Info().Str("nodeID", nodeID).Str("albumKey", node.Album.AlbumKey).Str("type", node.Type).Str("name", node.Name).Msg("images")
+							if img {
+								images, err := mg.Image.ImagesAll(c.Context, node.Album.AlbumKey)
+								if err != nil {
+									return err
+								}
+								for _, image := range images {
+									if image.Caption == "" {
+										continue
+									}
+									if err := enc.Encode(map[string]interface{}{
+										"filename":  image.FileName,
+										"caption":   image.Caption,
+										"latitude":  image.Latitude,
+										"longitude": image.Longitude,
+									}); err != nil {
+										return err
+									}
+								}
+							}
+						case "Folder":
+							fallthrough
+						default:
+							log.Info().Str("nodeID", nodeID).Str("name", node.Name).Str("type", node.Type).Msg("children")
+							children, err := mg.Node.ChildrenAll(c.Context, nodeID)
 							if err != nil {
 								return err
 							}
-							if !album.HasExpansions() {
-								continue
-							}
-							for _, image := range album.Expansions.Images {
-								if err := enc.Encode(image); err != nil {
-									return err
-								}
+							for _, child := range children {
+								nodes.Push(child.NodeID)
 							}
 						}
 					}
@@ -213,6 +223,7 @@ func main() {
 					page := smugmug.WithPagination(0, 100)
 					for {
 						nodes, pages, err := mg.Node.Search(c.Context, page,
+							smugmug.WithExpansions("ParentNode"),
 							smugmug.WithSearch(user.URI, c.Args().First()))
 						if err != nil {
 							return err
@@ -234,19 +245,24 @@ func main() {
 			{
 				Name: "album",
 				Action: func(c *cli.Context) error {
-					album, err := mg.Album.Album(c.Context, c.Args().First(), smugmug.WithExpansions("AlbumHighlightImage", "AlbumImages"))
+					album, err := mg.Album.Album(c.Context, c.Args().First(), smugmug.WithExpansions("AlbumHighlightImage"))
 					if err != nil {
 						return err
 					}
 					fmt.Println(album.URLName)
-					fmt.Println(" " + album.Expansions.HighlightImage.FileName)
-					fmt.Printf(" %03d images\n", len(album.Expansions.Images))
-					for _, image := range album.Expansions.Images {
+					fmt.Println(" " + album.HighlightImage.FileName)
+
+					images, err := mg.Image.ImagesAll(c.Context, album.AlbumKey)
+					if err != nil {
+						return err
+					}
+					fmt.Printf(" %03d images\n", len(images))
+					for _, image := range images {
 						cover := " "
-						if album.Expansions.HighlightImage.FileName == image.FileName {
+						if album.HighlightImage.FileName == image.FileName {
 							cover = "*"
 						}
-						fmt.Printf("%s  %s | %s |\n", cover, image.FileName, image.Caption)
+						fmt.Printf("%s  %s | %s %s |\n", cover, image.FileName, image.ImageKey, image.Caption)
 					}
 					return nil
 				},
@@ -261,7 +277,7 @@ func main() {
 					log.Info().Str("scope", user.URIs.Node.URI).Msg("search")
 					albums, pages, err := mg.Album.Search(c.Context,
 						smugmug.WithFilters("Name", "LastUpdated"),
-						smugmug.WithSorting(smugmug.DirectionNone, smugmug.MethodLastUpdated),
+						smugmug.WithSorting("", "Last Updated"),
 						smugmug.WithSearch(user.URIs.Node.URI, c.Args().First()),
 					)
 					if err != nil {
@@ -283,19 +299,18 @@ func main() {
 					if err != nil {
 						return err
 					}
-					fmt.Printf(" %s %s\n", img.FileName, img.Expansions.ImageSizeDetails.ImageSizeLarge.URL)
+					fmt.Printf(" %s %s\n", img.FileName, img.ImageSizeDetails.ImageSizeLarge.URL)
 					return nil
 				},
 			},
 		},
 		Action: func(c *cli.Context) error {
-			user, err := mg.User.User(c.Context, smugmug.WithExpansions("UserAlbums", "UserGeoMedia", "CoverImage"))
+			user, err := mg.User.User(c.Context)
 			if err != nil {
 				return err
 			}
 
 			fmt.Println(user.NickName)
-			fmt.Printf(" %03d albums\n", len(user.Expansions.Albums))
 
 			albums, pages, err := mg.Album.Albums(c.Context, user.NickName)
 			if err != nil {

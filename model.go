@@ -81,16 +81,10 @@ type User struct {
 		UserTopKeywords    *APIEndpoint `json:"UserTopKeywords"`
 		URLPathLookup      *APIEndpoint `json:"UrlPathLookup"`
 	} `json:"Uris"`
-	ResponseLevel string          `json:"ResponseLevel"`
-	Expansions    *UserExpansions `json:"Expansions"`
-}
-
-type UserExpansions struct {
-	Albums []*Album `json:"Albums"`
-}
-
-func (u *User) HasExpansions() bool {
-	return u.Expansions != nil
+	ResponseLevel string `json:"ResponseLevel"`
+	// expansions
+	Node   *Node   `json:"Node"`
+	Folder *Folder `json:"Folder"`
 }
 
 type UserResponse struct {
@@ -194,17 +188,12 @@ type Album struct {
 		AlbumPrices                *APIEndpoint `json:"AlbumPrices"`
 		AlbumPricelistExclusions   *APIEndpoint `json:"AlbumPricelistExclusions"`
 	} `json:"Uris"`
-	ResponseLevel string           `json:"ResponseLevel"`
-	Expansions    *AlbumExpansions `json:"Expansions"`
-}
-
-type AlbumExpansions struct {
-	HighlightImage *Image   `json:"HighlightImage"`
-	Images         []*Image `json:"Images"`
-}
-
-func (a *Album) HasExpansions() bool {
-	return a.Expansions != nil
+	ResponseLevel string `json:"ResponseLevel"`
+	// expansions
+	User           *User   `json:"User"`
+	Node           *Node   `json:"Node"`
+	Folder         *Folder `json:"Folder"`
+	HighlightImage *Image  `json:"HighlightImage"`
 }
 
 type Pages struct {
@@ -228,8 +217,9 @@ type AlbumsResponse struct {
 		Pages          *Pages   `json:"Pages"`
 		Timing         *Timing  `json:"Timing"`
 	} `json:"Response"`
-	Code    int    `json:"Code"`
-	Message string `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
 
 type AlbumResponse struct {
@@ -291,34 +281,27 @@ type Image struct {
 	URI            string `json:"Uri"`
 	URIDescription string `json:"UriDescription"`
 	URIs           struct {
-		LargestImage                  *APIEndpoint `json:"LargestImage"`
-		ImageSizes                    *APIEndpoint `json:"ImageSizes"`
+		Album                         *APIEndpoint `json:"Album"`
+		AlbumImageMetadata            *APIEndpoint `json:"AlbumImageMetadata"`
+		AlbumImagePricelistExclusions *APIEndpoint `json:"AlbumImagePricelistExclusions"`
+		AlbumImageShareUris           *APIEndpoint `json:"AlbumImageShareUris"`
+		Image                         *APIEndpoint `json:"Image"`
+		ImageComments                 *APIEndpoint `json:"ImageComments"`
+		ImageMetadata                 *APIEndpoint `json:"ImageMetadata"`
+		ImagePricelistExclusions      *APIEndpoint `json:"ImagePricelistExclusions"`
+		ImagePrices                   *APIEndpoint `json:"ImagePrices"`
 		ImageSizeDetails              *APIEndpoint `json:"ImageSizeDetails"`
+		ImageSizes                    *APIEndpoint `json:"ImageSizes"`
+		LargestImage                  *APIEndpoint `json:"LargestImage"`
 		PointOfInterest               *APIEndpoint `json:"PointOfInterest"`
 		PointOfInterestCrops          *APIEndpoint `json:"PointOfInterestCrops"`
 		Regions                       *APIEndpoint `json:"Regions"`
-		ImageComments                 *APIEndpoint `json:"ImageComments"`
-		ImageMetadata                 *APIEndpoint `json:"ImageMetadata"`
-		ImagePrices                   *APIEndpoint `json:"ImagePrices"`
-		ImagePricelistExclusions      *APIEndpoint `json:"ImagePricelistExclusions"`
-		Album                         *APIEndpoint `json:"Album"`
-		Image                         *APIEndpoint `json:"Image"`
-		AlbumImagePricelistExclusions *APIEndpoint `json:"AlbumImagePricelistExclusions"`
-		AlbumImageMetadata            *APIEndpoint `json:"AlbumImageMetadata"`
-		AlbumImageShareUris           *APIEndpoint `json:"AlbumImageShareUris"`
 	} `json:"Uris"`
-	Movable    bool             `json:"Movable"`
-	Origin     string           `json:"Origin"`
-	WebURI     string           `json:"WebUri"`
-	Expansions *ImageExpansions `json:"Expansions"`
-}
-
-type ImageExpansions struct {
+	Movable bool   `json:"Movable"`
+	Origin  string `json:"Origin"`
+	WebURI  string `json:"WebUri"`
+	// expansions
 	ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
-}
-
-func (i *Image) HasExpansions() bool {
-	return i.Expansions != nil
 }
 
 type ImagesResponse struct {
@@ -332,8 +315,9 @@ type ImagesResponse struct {
 		Pages          *Pages   `json:"Pages"`
 		Timing         *Timing  `json:"Timing"`
 	} `json:"Response"`
-	Code    int    `json:"Code"`
-	Message string `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
 
 type ImageResponse struct {
@@ -347,9 +331,9 @@ type ImageResponse struct {
 		DocURI         string  `json:"DocUri"`
 		Timing         *Timing `json:"Timing"`
 	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
 	Code       int                         `json:"Code"`
 	Message    string                      `json:"Message"`
-	Expansions map[string]*json.RawMessage `json:",omitempty"`
 }
 
 type ImageSize struct {
@@ -426,29 +410,25 @@ type Node struct {
 	URIDescription string `json:"UriDescription"`
 	URIs           struct {
 		Album          *APIEndpoint `json:"Album"`
+		ChildNodes     *APIEndpoint `json:"ChildNodes"`
 		FolderByID     *APIEndpoint `json:"FolderByID"`
+		HighlightImage *APIEndpoint `json:"HighlightImage"`
+		MoveNodes      *APIEndpoint `json:"MoveNodes"`
+		NodeComments   *APIEndpoint `json:"NodeComments"`
+		NodeCoverImage *APIEndpoint `json:"NodeCoverImage"`
+		NodeGrants     *APIEndpoint `json:"NodeGrants"`
+		NodePageDesign *APIEndpoint `json:"NodePageDesign"`
 		ParentNode     *APIEndpoint `json:"ParentNode"`
 		ParentNodes    *APIEndpoint `json:"ParentNodes"`
 		User           *APIEndpoint `json:"User"`
-		NodeCoverImage *APIEndpoint `json:"NodeCoverImage"`
-		HighlightImage *APIEndpoint `json:"HighlightImage"`
-		NodeComments   *APIEndpoint `json:"NodeComments"`
-		ChildNodes     *APIEndpoint `json:"ChildNodes"`
-		MoveNodes      *APIEndpoint `json:"MoveNodes"`
-		NodeGrants     *APIEndpoint `json:"NodeGrants"`
-		NodePageDesign *APIEndpoint `json:"NodePageDesign"`
 	} `json:"Uris"`
-	ResponseLevel string          `json:"ResponseLevel"`
-	Expansions    *NodeExpansions `json:"Expansions"`
-}
-
-type NodeExpansions struct {
-	Album      *Album  `json:"Album"`
-	ChildNodes []*Node `json:"ChildNodes"`
-}
-
-func (n *Node) HasExpansions() bool {
-	return n.Expansions != nil
+	ResponseLevel string `json:"ResponseLevel"`
+	// expansions
+	User           *User   `json:"User"`
+	Album          *Album  `json:"Album"`
+	Parent         *Node   `json:"Parent"`
+	Folder         *Folder `json:"Folder"`
+	HighlightImage *Image  `json:"HighlightImage"`
 }
 
 type NodesResponse struct {
@@ -462,8 +442,9 @@ type NodesResponse struct {
 		Pages          *Pages  `json:"Pages"`
 		Timing         *Timing `json:"Timing"`
 	} `json:"Response"`
-	Code    int    `json:"Code"`
-	Message string `json:"Message"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
 
 type NodeResponse struct {
@@ -472,6 +453,57 @@ type NodeResponse struct {
 		Locator        string  `json:"Locator"`
 		LocatorType    string  `json:"LocatorType"`
 		Node           *Node   `json:"Node"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		Timing         *Timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+}
+
+type Folder struct {
+	Name           string     `json:"Name"`
+	URLName        string     `json:"UrlName"`
+	SecurityType   string     `json:"SecurityType"`
+	SortMethod     string     `json:"SortMethod"`
+	SortDirection  string     `json:"SortDirection"`
+	Description    string     `json:"Description"`
+	Keywords       string     `json:"Keywords"`
+	PasswordHint   string     `json:"PasswordHint"`
+	DateAdded      *time.Time `json:"DateAdded"`
+	DateModified   *time.Time `json:"DateModified"`
+	URLPath        string     `json:"UrlPath"`
+	NodeID         string     `json:"NodeID"`
+	IsEmpty        bool       `json:"IsEmpty"`
+	URI            string     `json:"Uri"`
+	WebURI         string     `json:"WebUri"`
+	URIDescription string     `json:"UriDescription"`
+	URIs           struct {
+		AlbumList            *APIEndpoint `json:"AlbumList"`
+		FolderAlbums         *APIEndpoint `json:"FolderAlbums"`
+		FolderByID           *APIEndpoint `json:"FolderByID"`
+		FolderHighlightImage *APIEndpoint `json:"FolderHighlightImage"`
+		FolderList           *APIEndpoint `json:"FolderList"`
+		FolderPages          *APIEndpoint `json:"FolderPages"`
+		Folders              *APIEndpoint `json:"Folders"`
+		FolderSearch         *APIEndpoint `json:"FolderSearch"`
+		HighlightImage       *APIEndpoint `json:"HighlightImage"`
+		Node                 *APIEndpoint `json:"Node"`
+		ParentFolder         *APIEndpoint `json:"ParentFolder"`
+		ParentFolders        *APIEndpoint `json:"ParentFolders"`
+		Size                 *APIEndpoint `json:"Size"`
+		User                 *APIEndpoint `json:"User"`
+	} `json:"Uris"`
+	ResponseLevel string `json:"ResponseLevel"`
+}
+
+type FolderResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Folder         *Folder `json:"Folder"`
 		URIDescription string  `json:"UriDescription"`
 		EndpointType   string  `json:"EndpointType"`
 		Timing         *Timing `json:"Timing"`
