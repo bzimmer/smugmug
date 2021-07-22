@@ -10,19 +10,27 @@ import (
 // NodeService is the API for node endpoints
 type NodeService service
 
-type nodesCallback func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
+// NodeIterFunc is called for each node in the results
+type NodeIterFunc func(*Node) error
 
-func (s *NodeService) iter(ctx context.Context, f nodesCallback, options ...APIOption) ([]*Node, error) {
-	var res []*Node
+type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
+
+func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error {
+	i := 0
 	page := WithPagination(1, batchSize)
 	for {
-		nodes, pages, err := f(ctx, append(options, page)...)
+		nodes, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		res = append(res, nodes...)
-		if len(res) == pages.Total {
-			return res, nil
+		i += pages.Count
+		for _, node := range nodes {
+			if err := f(node); err != nil {
+				return err
+			}
+		}
+		if i == pages.Total {
+			return nil
 		}
 		page = WithPagination(pages.Start+pages.Count, batchSize)
 	}
@@ -43,50 +51,49 @@ func (s *NodeService) nodes(req *http.Request) ([]*Node, *Pages, error) {
 }
 
 func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) {
-	for key, val := range expansions {
-		switch {
-		case key == node.URIs.User.URI:
-			res := struct{ User *User }{}
+	if val, ok := expansions[node.URIs.User.URI]; ok {
+		res := struct{ User *User }{}
+		if err := json.Unmarshal(*val, &res); err != nil {
+			return nil, err
+		}
+		node.User = res.User
+	}
+	if val, ok := expansions[node.URIs.HighlightImage.URI]; ok {
+		res := struct{ Image *Image }{}
+		if err := json.Unmarshal(*val, &res); err != nil {
+			return nil, err
+		}
+		node.HighlightImage = res.Image
+	}
+	if val, ok := expansions[node.URIs.ParentNode.URI]; ok {
+		res := struct{ Node *Node }{}
+		if err := json.Unmarshal(*val, &res); err != nil {
+			return nil, err
+		}
+		node.Parent = res.Node
+	}
+	switch node.Type {
+	case "Folder":
+		if val, ok := expansions[node.URIs.FolderByID.URI]; ok {
+			res := struct{ Folder *Folder }{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
 			}
-			node.User = res.User
-		case key == node.URIs.HighlightImage.URI:
-			res := struct{ Image *Image }{}
+			node.Folder = res.Folder
+		}
+	case "Album":
+		if val, ok := expansions[node.URIs.Album.URI]; ok {
+			res := struct{ Album *Album }{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
 			}
-			node.HighlightImage = res.Image
-		case key == node.URIs.ParentNode.URI:
-			res := struct{ Node *Node }{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			node.Parent = res.Node
-		default:
-			switch node.Type {
-			case "Folder":
-				if key == node.URIs.FolderByID.URI {
-					res := struct{ Folder *Folder }{}
-					if err := json.Unmarshal(*val, &res); err != nil {
-						return nil, err
-					}
-					node.Folder = res.Folder
-				}
-			case "Album":
-				if key == node.URIs.Album.URI {
-					res := struct{ Album *Album }{}
-					if err := json.Unmarshal(*val, &res); err != nil {
-						return nil, err
-					}
-					node.Album = res.Album
-				}
-			}
+			node.Album = res.Album
 		}
 	}
 	return node, nil
 }
 
+// Node returns the node with id `nodeID`
 func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOption) (*Node, error) {
 	uri := fmt.Sprintf("node/%s", nodeID)
 	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
@@ -101,6 +108,7 @@ func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOpt
 	return s.expand(res.Response.Node, res.Expansions)
 }
 
+// Children returns a single page of direct children of the node (does not traverse)
 func (s *NodeService) Children(ctx context.Context, nodeID string, options ...APIOption) ([]*Node, *Pages, error) {
 	uri := fmt.Sprintf("node/%s!children", nodeID)
 	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
@@ -110,12 +118,14 @@ func (s *NodeService) Children(ctx context.Context, nodeID string, options ...AP
 	return s.nodes(req)
 }
 
-func (s *NodeService) ChildrenAll(ctx context.Context, nodeID string, options ...APIOption) ([]*Node, error) {
+// ChildrenIter iterates all direct children of the node (does not traverse)
+func (s *NodeService) ChildrenIter(ctx context.Context, nodeID string, iter NodeIterFunc, options ...APIOption) error {
 	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
 		return s.Children(ctx, nodeID, options...)
-	}, options...)
+	}, iter, options...)
 }
 
+// Search returns a single page of search results (does not traverse)
 func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
 	uri := "node!search"
 	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
@@ -125,10 +135,41 @@ func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node
 	return s.nodes(req)
 }
 
-func (s *NodeService) SearchAll(ctx context.Context, nodeID string, options ...APIOption) ([]*Node, error) {
-	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
-		return s.Search(ctx, options...)
-	}, options...)
+// Search iterates all search results (does not traverse)
+func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options ...APIOption) error {
+	return s.iter(ctx, s.Search, iter, options...)
+}
+
+// Walk traverses all children of the node rooted at `nodeID`
+func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, options ...APIOption) error {
+	k := &stack{}
+	k.Push(nodeID)
+	for {
+		nid, ok := k.Pop()
+		if !ok {
+			return nil
+		}
+		node, err := s.Node(ctx, nid, options...)
+		if err != nil {
+			return err
+		}
+		if err := fn(node); err != nil {
+			return err
+		}
+		switch node.Type {
+		case "Album":
+			// ignore, no children
+		case "Folder":
+			if err := s.ChildrenIter(ctx, nid, func(node *Node) error {
+				k.Push(node.NodeID)
+				return nil
+			}, options...); err != nil {
+				return err
+			}
+		default:
+			return fmt.Errorf("unhandled type {%s}", node.Type)
+		}
+	}
 }
 
 type stack []string
@@ -149,38 +190,5 @@ func (s *stack) Pop() (string, bool) {
 		element := (*s)[index]
 		*s = (*s)[:index]
 		return element, true
-	}
-}
-
-type WalkFunc func(context.Context, *Node) error
-
-func (s *NodeService) Walk(ctx context.Context, nodeID string, fn WalkFunc, options ...APIOption) error {
-	k := &stack{}
-	k.Push(nodeID)
-	for {
-		nid, ok := k.Pop()
-		if !ok {
-			return nil
-		}
-		node, err := s.Node(ctx, nid, options...)
-		if err != nil {
-			return err
-		}
-		if err := fn(ctx, node); err != nil {
-			return err
-		}
-		switch node.Type {
-		case "Album":
-		case "Folder":
-			fallthrough
-		default:
-			children, err := s.ChildrenAll(ctx, nid, options...)
-			if err != nil {
-				return err
-			}
-			for _, child := range children {
-				k.Push(child.NodeID)
-			}
-		}
 	}
 }
