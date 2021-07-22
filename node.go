@@ -130,3 +130,57 @@ func (s *NodeService) SearchAll(ctx context.Context, nodeID string, options ...A
 		return s.Search(ctx, options...)
 	}, options...)
 }
+
+type stack []string
+
+func (s *stack) IsEmpty() bool {
+	return len(*s) == 0
+}
+
+func (s *stack) Push(str string) {
+	*s = append(*s, str)
+}
+
+func (s *stack) Pop() (string, bool) {
+	if s.IsEmpty() {
+		return "", false
+	} else {
+		index := len(*s) - 1
+		element := (*s)[index]
+		*s = (*s)[:index]
+		return element, true
+	}
+}
+
+type WalkFunc func(context.Context, *Node) error
+
+func (s *NodeService) Walk(ctx context.Context, nodeID string, fn WalkFunc, options ...APIOption) error {
+	k := &stack{}
+	k.Push(nodeID)
+	for {
+		nid, ok := k.Pop()
+		if !ok {
+			return nil
+		}
+		node, err := s.Node(ctx, nid, options...)
+		if err != nil {
+			return err
+		}
+		if err := fn(ctx, node); err != nil {
+			return err
+		}
+		switch node.Type {
+		case "Album":
+		case "Folder":
+			fallthrough
+		default:
+			children, err := s.ChildrenAll(ctx, nid, options...)
+			if err != nil {
+				return err
+			}
+			for _, child := range children {
+				k.Push(child.NodeID)
+			}
+		}
+	}
+}

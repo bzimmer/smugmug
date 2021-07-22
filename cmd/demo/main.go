@@ -303,6 +303,31 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name: "walk",
+				Action: func(c *cli.Context) error {
+					return mg.Node.Walk(c.Context, c.Args().First(), func(ctx context.Context, node *smugmug.Node) error {
+						switch node.Type {
+						case "Album":
+							log.Info().
+								Str("nodeID", node.NodeID).
+								Str("name", node.Name).
+								Str("albumKey", node.Album.AlbumKey).
+								Str("type", node.Type).
+								Msg("images")
+						case "Folder":
+							fallthrough
+						case "Node":
+							log.Info().
+								Str("nodeID", node.NodeID).
+								Str("name", node.Name).
+								Str("type", node.Type).
+								Msg("children")
+						}
+						return nil
+					}, smugmug.WithExpansions("Album"))
+				},
+			},
 		},
 		Action: func(c *cli.Context) error {
 			user, err := mg.User.User(c.Context)
