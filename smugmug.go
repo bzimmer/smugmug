@@ -11,10 +11,9 @@ import (
 )
 
 //go:generate genwith --client --do --package smugmug
-//go:generate stringer -type=SortMethod -linecomment -output=method_string.go
-//go:generate stringer -type=SortDirection -linecomment -output=direction_string.go
 
 const (
+	batchSize = 100
 	baseURL   = "https://api.smugmug.com/api/v2"
 	userAgent = "github.com/bzimmer/smugmug"
 )
@@ -73,30 +72,10 @@ func WithPagination(start, count int) APIOption {
 	}
 }
 
-type SortDirection int
-
-const (
-	DirectionNone       SortDirection = iota // None
-	DirectionAscending                       // Ascending
-	DirectionDescending                      // Descending
-)
-
-type SortMethod int
-
-const (
-	MethodNone        SortMethod = iota // None
-	MethodRank                          // Rank
-	MethodLastUpdated                   // Last Updated
-)
-
-func WithSorting(direction SortDirection, method SortMethod) APIOption {
+func WithSorting(direction, method string) APIOption {
 	return func(v url.Values) error {
-		if direction != DirectionNone {
-			v.Set("SortDirection", direction.String())
-		}
-		if method != MethodNone {
-			v.Set("SortMethod", method.String())
-		}
+		v.Set("SortDirection", direction)
+		v.Set("SortMethod", method)
 		return nil
 	}
 }
