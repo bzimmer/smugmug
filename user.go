@@ -10,27 +10,25 @@ import (
 type UserService service
 
 func (s *UserService) expand(user *User, expansions map[string]*json.RawMessage) (*User, error) {
-	for key, val := range expansions {
-		switch {
-		case key == user.URIs.Node.URI:
-			res := struct{ Node *Node }{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			user.Node = res.Node
-		case key == user.URIs.Folder.URI:
-			res := struct{ Folder *Folder }{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			user.Folder = res.Folder
-		default:
+	if val, ok := expansions[user.URIs.Node.URI]; ok {
+		res := struct{ Node *Node }{}
+		if err := json.Unmarshal(*val, &res); err != nil {
+			return nil, err
 		}
+		user.Node = res.Node
+	}
+	if val, ok := expansions[user.URIs.Folder.URI]; ok {
+		res := struct{ Folder *Folder }{}
+		if err := json.Unmarshal(*val, &res); err != nil {
+			return nil, err
+		}
+		user.Folder = res.Folder
 	}
 	return user, nil
 }
 
-func (s *UserService) User(ctx context.Context, options ...APIOption) (*User, error) {
+// AuthUser returns the authorized user
+func (s *UserService) AuthUser(ctx context.Context, options ...APIOption) (*User, error) {
 	req, err := s.client.newRequest(ctx, http.MethodGet, "!authuser", options)
 	if err != nil {
 		return nil, err

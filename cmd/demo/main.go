@@ -16,27 +16,6 @@ import (
 
 var mg *smugmug.Client
 
-type Stack []string
-
-func (s *Stack) IsEmpty() bool {
-	return len(*s) == 0
-}
-
-func (s *Stack) Push(str string) {
-	*s = append(*s, str)
-}
-
-func (s *Stack) Pop() (string, bool) {
-	if s.IsEmpty() {
-		return "", false
-	} else {
-		index := len(*s) - 1
-		element := (*s)[index]
-		*s = (*s)[:index]
-		return element, true
-	}
-}
-
 func main() {
 	app := &cli.App{
 		Name:     "demo",
@@ -126,29 +105,16 @@ func main() {
 			{
 				Name: "albums",
 				Action: func(c *cli.Context) error {
-					user, err := mg.User.User(c.Context)
+					user, err := mg.User.AuthUser(c.Context)
 					if err != nil {
 						return err
 					}
 					i := 0
-					page := smugmug.WithPagination(0, 100)
-					for {
-						albums, pages, err := mg.Album.Albums(c.Context, user.NickName, page)
-						if err != nil {
-							return err
-						}
-						for _, album := range albums {
-							fmt.Printf("[%04d] [%s] %s\n", i, album.AlbumKey, album.URLName)
-							i++
-						}
-
-						if pages.NextPage == "" {
-							return nil
-						}
-
-						fmt.Println("-")
-						page = smugmug.WithPagination(pages.Start+pages.Count, 100)
-					}
+					return mg.Album.AlbumsIter(c.Context, user.NickName, func(album *smugmug.Album) error {
+						fmt.Printf("[%04d] [%s] %s\n", i, album.AlbumKey, album.URLName)
+						i++
+						return nil
+					})
 				},
 			},
 			{
@@ -162,84 +128,57 @@ func main() {
 				Action: func(c *cli.Context) error {
 					img := c.Bool("images")
 					enc := json.NewEncoder(c.App.Writer)
-					nodes := &Stack{}
-					nodes.Push(c.Args().First())
-					for {
-						nodeID, ok := nodes.Pop()
-						if !ok {
-							return nil
-						}
-						node, err := mg.Node.Node(c.Context, nodeID,
-							smugmug.WithExpansions("Album", "FolderByID", "HighlightImage", "User"))
-						if err != nil {
-							return err
-						}
-
+					f := func(node *smugmug.Node) error {
 						switch node.Type {
 						case "Album":
-							log.Info().Str("nodeID", nodeID).Str("albumKey", node.Album.AlbumKey).Str("type", node.Type).Str("name", node.Name).Msg("images")
+							log.Info().
+								Str("nodeID", node.NodeID).
+								Str("albumKey", node.Album.AlbumKey).
+								Str("type", node.Type).
+								Str("name", node.Name).
+								Int("imageCount", node.Album.ImageCount).
+								Msg("images")
 							if img {
-								images, err := mg.Image.ImagesAll(c.Context, node.Album.AlbumKey)
-								if err != nil {
-									return err
-								}
-								for _, image := range images {
+								return mg.Image.ImagesIter(c.Context, node.Album.AlbumKey, func(image *smugmug.Image) error {
 									if image.Caption == "" {
-										continue
+										return nil
 									}
-									if err := enc.Encode(map[string]interface{}{
+									return enc.Encode(map[string]interface{}{
 										"filename":  image.FileName,
 										"caption":   image.Caption,
 										"latitude":  image.Latitude,
 										"longitude": image.Longitude,
-									}); err != nil {
-										return err
-									}
-								}
+									})
+								})
 							}
 						case "Folder":
 							fallthrough
 						default:
-							log.Info().Str("nodeID", nodeID).Str("name", node.Name).Str("type", node.Type).Msg("children")
-							children, err := mg.Node.ChildrenAll(c.Context, nodeID)
-							if err != nil {
-								return err
-							}
-							for _, child := range children {
-								nodes.Push(child.NodeID)
-							}
+							log.Info().Str("nodeID", node.NodeID).Str("name", node.Name).Str("type", node.Type).Msg("children")
 						}
+						return nil
 					}
+					nodeID := c.Args().First()
+					return mg.Node.ChildrenIter(c.Context, nodeID, f, smugmug.WithExpansions("Album", "FolderByID", "HighlightImage", "User"))
 				},
 			},
 			{
 				Name: "nodes",
 				Action: func(c *cli.Context) error {
-					user, err := mg.User.User(c.Context)
+					user, err := mg.User.AuthUser(c.Context)
 					if err != nil {
 						return err
 					}
 					i := 0
-					page := smugmug.WithPagination(0, 100)
-					for {
-						nodes, pages, err := mg.Node.Search(c.Context, page,
-							smugmug.WithExpansions("ParentNode"),
-							smugmug.WithSearch(user.URI, c.Args().First()))
-						if err != nil {
-							return err
-						}
-						for _, node := range nodes {
+					return mg.Node.SearchIter(
+						c.Context,
+						func(node *smugmug.Node) error {
 							fmt.Printf("[%04d] [%s] %s %s\n", i, node.NodeID, node.URI, node.Name)
 							i++
-						}
-
-						if pages.NextPage == "" {
 							return nil
-						}
-
-						fmt.Println("-")
-						page = smugmug.WithPagination(pages.Start+pages.Count, 100)
-					}
+						},
+						smugmug.WithExpansions("ParentNode"),
+						smugmug.WithSearch(user.URI, c.Args().First()))
 				},
 			},
 			{
@@ -251,26 +190,23 @@ func main() {
 					}
 					fmt.Println(album.URLName)
 					fmt.Println(" " + album.HighlightImage.FileName)
+					fmt.Printf(" %03d images\n", album.ImageCount)
 
-					images, err := mg.Image.ImagesAll(c.Context, album.AlbumKey)
-					if err != nil {
-						return err
-					}
-					fmt.Printf(" %03d images\n", len(images))
-					for _, image := range images {
+					f := func(image *smugmug.Image) error {
 						cover := " "
 						if album.HighlightImage.FileName == image.FileName {
 							cover = "*"
 						}
 						fmt.Printf("%s  %s | %s %s |\n", cover, image.FileName, image.ImageKey, image.Caption)
+						return nil
 					}
-					return nil
+					return mg.Image.ImagesIter(c.Context, album.AlbumKey, f)
 				},
 			},
 			{
 				Name: "search",
 				Action: func(c *cli.Context) error {
-					user, err := mg.User.User(c.Context)
+					user, err := mg.User.AuthUser(c.Context)
 					if err != nil {
 						return err
 					}
@@ -306,14 +242,15 @@ func main() {
 			{
 				Name: "walk",
 				Action: func(c *cli.Context) error {
-					return mg.Node.Walk(c.Context, c.Args().First(), func(ctx context.Context, node *smugmug.Node) error {
+					return mg.Node.Walk(c.Context, c.Args().First(), func(node *smugmug.Node) error {
 						switch node.Type {
 						case "Album":
 							log.Info().
 								Str("nodeID", node.NodeID).
-								Str("name", node.Name).
 								Str("albumKey", node.Album.AlbumKey).
 								Str("type", node.Type).
+								Str("name", node.Name).
+								Int("imageCount", node.Album.ImageCount).
 								Msg("images")
 						case "Folder":
 							fallthrough
@@ -330,7 +267,7 @@ func main() {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			user, err := mg.User.User(c.Context)
+			user, err := mg.User.AuthUser(c.Context)
 			if err != nil {
 				return err
 			}
