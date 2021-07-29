@@ -2,6 +2,7 @@ package smugmug
 
 import (
 	"encoding/json"
+	"io"
 	"strconv"
 	"time"
 )
@@ -281,11 +282,13 @@ type Image struct {
 	URI            string `json:"Uri"`
 	URIDescription string `json:"UriDescription"`
 	URIs           struct {
+		// Album and ImageAlbum are used in different context but should be identical
 		Album                         *APIEndpoint `json:"Album"`
 		AlbumImageMetadata            *APIEndpoint `json:"AlbumImageMetadata"`
 		AlbumImagePricelistExclusions *APIEndpoint `json:"AlbumImagePricelistExclusions"`
 		AlbumImageShareUris           *APIEndpoint `json:"AlbumImageShareUris"`
 		Image                         *APIEndpoint `json:"Image"`
+		ImageAlbum                    *APIEndpoint `json:"ImageAlbum"`
 		ImageComments                 *APIEndpoint `json:"ImageComments"`
 		ImageMetadata                 *APIEndpoint `json:"ImageMetadata"`
 		ImagePricelistExclusions      *APIEndpoint `json:"ImagePricelistExclusions"`
@@ -301,6 +304,7 @@ type Image struct {
 	Origin  string `json:"Origin"`
 	WebURI  string `json:"WebUri"`
 	// expansions
+	Album            *Album            `json:"Album"`
 	ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
 }
 
@@ -511,4 +515,31 @@ type FolderResponse struct {
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`
 	Message    string                      `json:"Message"`
+}
+
+// Uploadable holds the details about an image suitable for upload
+type Uploadable struct {
+	// Name is the basename of the image (not the full path)
+	Name string
+	// Size is the size in bytes
+	Size int64
+	// MD5 is the hash of the file contents
+	MD5 string
+	// Replaces is the URI of an image to replace
+	Replaces string
+	// Reader holds the image data for uploading
+	Reader io.Reader
+}
+
+type UploadedImage struct {
+	StatusImageReplaceURI string `json:"StatusImageReplaceUri"`
+	ImageURI              string `json:"ImageUri"`
+	AlbumImageURI         string `json:"AlbumImageUri"`
+	URL                   string `json:"URL"`
+}
+
+type Upload struct {
+	Stat        string         `json:"stat"`
+	Method      string         `json:"method"`
+	UploadImage *UploadedImage `json:"Image"`
 }

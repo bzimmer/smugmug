@@ -110,10 +110,10 @@ func main() {
 						return err
 					}
 					i := 0
-					return mg.Album.AlbumsIter(c.Context, user.NickName, func(album *smugmug.Album) error {
+					return mg.Album.AlbumsIter(c.Context, user.NickName, func(album *smugmug.Album) (bool, error) {
 						fmt.Printf("[%04d] [%s] %s\n", i, album.AlbumKey, album.URLName)
 						i++
-						return nil
+						return true, nil
 					})
 				},
 			},
@@ -128,7 +128,7 @@ func main() {
 				Action: func(c *cli.Context) error {
 					img := c.Bool("images")
 					enc := json.NewEncoder(c.App.Writer)
-					f := func(node *smugmug.Node) error {
+					f := func(node *smugmug.Node) (bool, error) {
 						switch node.Type {
 						case "Album":
 							log.Info().
@@ -139,11 +139,11 @@ func main() {
 								Int("imageCount", node.Album.ImageCount).
 								Msg("images")
 							if img {
-								return mg.Image.ImagesIter(c.Context, node.Album.AlbumKey, func(image *smugmug.Image) error {
+								return true, mg.Image.ImagesIter(c.Context, node.Album.AlbumKey, func(image *smugmug.Image) (bool, error) {
 									if image.Caption == "" {
-										return nil
+										return true, nil
 									}
-									return enc.Encode(map[string]interface{}{
+									return true, enc.Encode(map[string]interface{}{
 										"filename":  image.FileName,
 										"caption":   image.Caption,
 										"latitude":  image.Latitude,
@@ -156,7 +156,7 @@ func main() {
 						default:
 							log.Info().Str("nodeID", node.NodeID).Str("name", node.Name).Str("type", node.Type).Msg("children")
 						}
-						return nil
+						return true, nil
 					}
 					nodeID := c.Args().First()
 					return mg.Node.ChildrenIter(c.Context, nodeID, f, smugmug.WithExpansions("Album", "FolderByID", "HighlightImage", "User"))
@@ -172,10 +172,10 @@ func main() {
 					i := 0
 					return mg.Node.SearchIter(
 						c.Context,
-						func(node *smugmug.Node) error {
+						func(node *smugmug.Node) (bool, error) {
 							fmt.Printf("[%04d] [%s] %s %s\n", i, node.NodeID, node.URI, node.Name)
 							i++
-							return nil
+							return true, nil
 						},
 						smugmug.WithExpansions("ParentNode"),
 						smugmug.WithSearch(user.URI, c.Args().First()))
@@ -192,13 +192,13 @@ func main() {
 					fmt.Println(" " + album.HighlightImage.FileName)
 					fmt.Printf(" %03d images\n", album.ImageCount)
 
-					f := func(image *smugmug.Image) error {
+					f := func(image *smugmug.Image) (bool, error) {
 						cover := " "
 						if album.HighlightImage.FileName == image.FileName {
 							cover = "*"
 						}
 						fmt.Printf("%s  %s | %s %s |\n", cover, image.FileName, image.ImageKey, image.Caption)
-						return nil
+						return true, nil
 					}
 					return mg.Image.ImagesIter(c.Context, album.AlbumKey, f)
 				},
@@ -229,20 +229,9 @@ func main() {
 				},
 			},
 			{
-				Name: "image",
-				Action: func(c *cli.Context) error {
-					img, err := mg.Image.Image(c.Context, c.Args().First(), smugmug.WithExpansions("ImageSizeDetails"))
-					if err != nil {
-						return err
-					}
-					fmt.Printf(" %s %s\n", img.FileName, img.ImageSizeDetails.ImageSizeLarge.URL)
-					return nil
-				},
-			},
-			{
 				Name: "walk",
 				Action: func(c *cli.Context) error {
-					return mg.Node.Walk(c.Context, c.Args().First(), func(node *smugmug.Node) error {
+					return mg.Node.Walk(c.Context, c.Args().First(), func(node *smugmug.Node) (bool, error) {
 						switch node.Type {
 						case "Album":
 							log.Info().
@@ -261,40 +250,74 @@ func main() {
 								Str("type", node.Type).
 								Msg("children")
 						}
-						return nil
+						return true, nil
 					}, smugmug.WithExpansions("Album"))
 				},
 			},
-		},
-		Action: func(c *cli.Context) error {
-			user, err := mg.User.AuthUser(c.Context)
-			if err != nil {
-				return err
-			}
-
-			fmt.Println(user.NickName)
-
-			albums, pages, err := mg.Album.Albums(c.Context, user.NickName)
-			if err != nil {
-				return err
-			}
-
-			fmt.Printf(" pages >> %d/%d\n", pages.Count, pages.Total)
-			for i, album := range albums {
-				fmt.Printf(" %s | %s |\n", album.URLName, "")
-				if i == 0 {
-					images, pages, err := mg.Image.Images(c.Context, album.AlbumKey)
+			{
+				Name: "image",
+				Action: func(c *cli.Context) error {
+					img, err := mg.Image.Image(c.Context, c.Args().First(), smugmug.WithExpansions("Album", "ImageAlbum"))
 					if err != nil {
 						return err
 					}
-					fmt.Printf("  pages >> %d/%d\n", pages.Count, pages.Total)
-					for _, image := range images {
-						fmt.Printf("  %s => '%s'\n", image.FileName, image.Caption)
+					log.Info().
+						Str("caption", img.Caption).
+						Str("imageKey", img.ImageKey).
+						Str("albumName", img.Album.Name).
+						Str("albumKey", img.Album.AlbumKey).
+						Msg("image")
+					return nil
+				},
+			},
+			{
+				Name: "upload",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "album",
+						Value:    "",
+						Required: true,
+					},
+					&cli.BoolFlag{
+						Name:     "update",
+						Value:    false,
+						Required: false,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					up, err := smugmug.UploadableFromFile(c.Args().First())
+					if err != nil {
+						return err
 					}
-				}
-			}
-
-			return nil
+					var abort bool
+					if err := mg.Image.ImagesIter(c.Context, c.String("album"), func(img *smugmug.Image) (bool, error) {
+						if img.FileName != up.Name {
+							return true, nil
+						}
+						if c.Bool("update") {
+							up.Replaces = img.URIs.Image.URI
+						}
+						if up.MD5 == img.ArchivedMD5 {
+							abort = true
+							return false, nil
+						}
+						return false, nil
+					}); err != nil {
+						return err
+					}
+					if abort {
+						log.Warn().Msg("skipping upload, md5s match")
+						return nil
+					}
+					log.Info().Interface("up", up).Msg("upload")
+					img, err := mg.Upload.Upload(c.Context, c.String("album"), up)
+					if err != nil {
+						return err
+					}
+					log.Info().Interface("img", img).Msg("upload")
+					return nil
+				},
+			},
 		},
 	}
 	if err := app.RunContext(context.Background(), os.Args); err != nil {

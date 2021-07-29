@@ -15,6 +15,7 @@ import (
 const (
 	batchSize = 100
 	baseURL   = "https://api.smugmug.com/api/v2"
+	uploadURL = "https://upload.smugmug.com"
 	userAgent = "github.com/bzimmer/smugmug"
 )
 
@@ -28,10 +29,11 @@ type Client struct {
 	client *http.Client
 	pretty bool
 
-	User  *UserService
-	Node  *NodeService
-	Album *AlbumService
-	Image *ImageService
+	User   *UserService
+	Node   *NodeService
+	Album  *AlbumService
+	Image  *ImageService
+	Upload *UploadService
 }
 
 func withServices() Option {
@@ -40,6 +42,7 @@ func withServices() Option {
 		c.Node = &NodeService{c}
 		c.Album = &AlbumService{c}
 		c.Image = &ImageService{c}
+		c.Upload = &UploadService{c}
 		return nil
 	}
 }

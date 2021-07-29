@@ -11,7 +11,7 @@ import (
 type NodeService service
 
 // NodeIterFunc is called for each node in the results
-type NodeIterFunc func(*Node) error
+type NodeIterFunc func(*Node) (bool, error)
 
 type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
 
@@ -25,8 +25,10 @@ func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc
 		}
 		i += pages.Count
 		for _, node := range nodes {
-			if err := f(node); err != nil {
+			if ok, err := f(node); err != nil {
 				return err
+			} else if !ok {
+				return nil
 			}
 		}
 		if i == pages.Total {
@@ -153,16 +155,18 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 		if err != nil {
 			return err
 		}
-		if err := fn(node); err != nil {
+		if ok, err := fn(node); err != nil {
 			return err
+		} else if !ok {
+			return nil
 		}
 		switch node.Type {
 		case "Album":
 			// ignore, no children
 		case "Folder":
-			if err := s.ChildrenIter(ctx, nid, func(node *Node) error {
+			if err := s.ChildrenIter(ctx, nid, func(node *Node) (bool, error) {
 				k.Push(node.NodeID)
-				return nil
+				return true, nil
 			}, options...); err != nil {
 				return err
 			}

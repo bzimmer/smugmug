@@ -11,7 +11,7 @@ import (
 type ImageService service
 
 // ImageIterFunc is called for iteration of images results
-type ImageIterFunc func(*Image) error
+type ImageIterFunc func(*Image) (bool, error)
 
 type imagesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Image, *Pages, error)
 
@@ -25,8 +25,10 @@ func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterF
 		}
 		i += pages.Count
 		for _, image := range images {
-			if err := f(image); err != nil {
+			if ok, err := f(image); err != nil {
 				return err
+			} else if !ok {
+				return nil
 			}
 		}
 		if i == pages.Total {
@@ -57,6 +59,33 @@ func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessa
 			return nil, err
 		}
 		image.ImageSizeDetails = res.ImageSizeDetails
+	}
+
+	f := func(val *json.RawMessage) (*Image, error) {
+		res := struct{ Album *Album }{}
+		if err := json.Unmarshal(*val, &res); err != nil {
+			return nil, err
+		}
+		if image.Album != nil {
+			if image.Album.AlbumKey != res.Album.AlbumKey {
+				return nil,
+					fmt.Errorf("inconsistent albums found {%s} != {%s}",
+						image.Album.AlbumKey, res.Album.AlbumKey)
+			}
+		}
+		image.Album = res.Album
+		return image, nil
+	}
+	if image.URIs.ImageAlbum != nil {
+		if val, ok := expansions[image.URIs.ImageAlbum.URI]; ok {
+			return f(val)
+		}
+	}
+	if image.URIs.Album != nil {
+		if val, ok := expansions[image.URIs.Album.URI]; ok {
+			return f(val)
+		}
+		return image, nil
 	}
 	return image, nil
 }
