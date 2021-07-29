@@ -82,8 +82,19 @@ type Uploader struct {
 	images  map[string]*Image
 }
 
-func (u *Uploader) Add(uploads ...*Uploadable) {
-	u.uploads = append(u.uploads, uploads...)
+func (u *Uploader) Add(upload *Uploadable, replace bool) bool {
+	img, ok := u.images[upload.Name]
+	if !ok {
+		return false
+	}
+	if replace {
+		upload.Replaces = img.URIs.Image.URI
+	}
+	if upload.MD5 == img.ArchivedMD5 {
+		return false
+	}
+	u.uploads = append(u.uploads, upload)
+	return true
 }
 
 func (u *Uploader) Upload(ctx context.Context) <-chan *Uploads {

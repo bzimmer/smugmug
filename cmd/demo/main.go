@@ -290,21 +290,6 @@ func main() {
 						return err
 					}
 					var abort bool
-					if err := mg.Image.ImagesIter(c.Context, c.String("album"), func(img *smugmug.Image) (bool, error) {
-						if img.FileName != up.Name {
-							return true, nil
-						}
-						if c.Bool("update") {
-							up.Replaces = img.URIs.Image.URI
-						}
-						if up.MD5 == img.ArchivedMD5 {
-							abort = true
-							return false, nil
-						}
-						return false, nil
-					}); err != nil {
-						return err
-					}
 					if abort {
 						log.Warn().Msg("skipping upload, md5s match")
 						return nil
