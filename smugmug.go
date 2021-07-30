@@ -77,12 +77,19 @@ func WithPagination(start, count int) APIOption {
 
 func WithSorting(direction, method string) APIOption {
 	return func(v url.Values) error {
-		v.Set("SortDirection", direction)
-		v.Set("SortMethod", method)
+		v.Del("SortDirection")
+		if direction != "" {
+			v.Set("SortDirection", direction)
+		}
+		v.Del("SortMethod")
+		if method != "" {
+			v.Set("SortMethod", method)
+		}
 		return nil
 	}
 }
 
+// WithFilters queries SmugMug for only the attributes in the filter list
 func WithFilters(filters ...string) APIOption {
 	return func(v url.Values) error {
 		v.Set("_filter", strings.Join(filters, ","))
@@ -94,8 +101,14 @@ func WithFilters(filters ...string) APIOption {
 // The scope is a URI representing a user, album, node, or folder
 func WithSearch(scope, text string) APIOption {
 	return func(v url.Values) error {
-		v.Set("Text", text)
-		v.Set("Scope", scope)
+		v.Del("Text")
+		if text != "" {
+			v.Set("Text", text)
+		}
+		v.Del("Scope")
+		if scope != "" {
+			v.Set("Scope", scope)
+		}
 		return nil
 	}
 }

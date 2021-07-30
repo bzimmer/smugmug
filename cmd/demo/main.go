@@ -212,8 +212,8 @@ func main() {
 					}
 					log.Info().Str("scope", user.URIs.Node.URI).Msg("search")
 					albums, pages, err := mg.Album.Search(c.Context,
-						smugmug.WithFilters("Name", "LastUpdated"),
-						smugmug.WithSorting("", "Last Updated"),
+						smugmug.WithFilters("Name", "LastUpdated", "AlbumKey"),
+						smugmug.WithSorting("", "LastUpdated"),
 						smugmug.WithSearch(user.URIs.Node.URI, c.Args().First()),
 					)
 					if err != nil {
@@ -223,7 +223,7 @@ func main() {
 					fmt.Printf(" total %d\n", pages.Total)
 
 					for _, album := range albums {
-						fmt.Printf("  %s -- %s\n", album.LastUpdated, album.Name)
+						fmt.Printf("  %s -- %s -- %s\n", album.LastUpdated, album.Name, album.AlbumKey)
 					}
 					return nil
 				},
@@ -281,8 +281,11 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					var n int
-					p := smugmug.NewFsUploadables(mg, c.String("album"), c.Args().Slice())
-					uploadc, errc := mg.Upload.Uploads(c.Context, p)
+
+					ctx := c.Context
+					// smugmug.WithReplace(false), smugmug.WithSkip(false)
+					p := smugmug.NewFsUploadables(mg, c.String("album"), c.Args().Slice(), smugmug.WithExtensions(".jpg"))
+					uploadc, errc := mg.Upload.Uploads(ctx, p)
 					for {
 						select {
 						case err := <-errc:
