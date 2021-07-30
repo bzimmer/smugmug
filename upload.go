@@ -108,6 +108,9 @@ func (s *UploadService) uploads(ctx context.Context,
 					log.Debug().Msg("exiting; exhausted uploadables")
 					return nil
 				}
+				if up == nil {
+					continue
+				}
 				log.Info().
 					Str("name", up.Name).
 					Str("album", up.AlbumID).
@@ -137,30 +140,31 @@ func (s *UploadService) uploads(ctx context.Context,
 	}
 }
 
-// Uploadables is a factory for Uploadable instances
+// Uploadables is a factory for Uploadable instances from a filesystem
 type Uploadables interface {
 	// Uploadable returns an Uploadable instance or nil of no more Uploadable instances are available
 	Uploadables(context.Context) (<-chan *Uploadable, <-chan error)
 }
 
-type fsUploadables struct {
-	client    *Client
-	albumID   string
-	filenames []string
-	config    *fsUploadablesConfig
+// FsUploadable creates Uploadable instances
+type FsUploadable interface {
+	// Uploadable creates an Uploadable from a filesystem
+	Uploadable(string) (*Uploadable, error)
 }
 
-type fsUploadablesConfig struct {
+type fsUploadable struct {
 	skip       bool
 	replace    bool
+	albumID    string
 	extensions []string
+	images     map[string]*Image
 }
 
-type FsUploadablesOption func(c *fsUploadablesConfig)
+type FsUploadableOption func(c *fsUploadable)
 
 // WithExtensions configures which extensions (inclusive of '.') are supported
-func WithExtensions(exts ...string) FsUploadablesOption {
-	return func(c *fsUploadablesConfig) {
+func WithExtensions(exts ...string) FsUploadableOption {
+	return func(c *fsUploadable) {
 		c.extensions = make([]string, len(exts))
 		for i := range exts {
 			c.extensions[i] = strings.ToLower(exts[i])
@@ -169,50 +173,110 @@ func WithExtensions(exts ...string) FsUploadablesOption {
 }
 
 // WithReplace configures if an image replaces an image with the same filename or creates a duplicate
-func WithReplace(replace bool) FsUploadablesOption {
-	return func(c *fsUploadablesConfig) {
+func WithReplace(replace bool) FsUploadableOption {
+	return func(c *fsUploadable) {
 		c.replace = replace
 	}
 }
 
 // WithSkip configures if an image is uploaded if the md5 sum matches
-func WithSkip(skip bool) FsUploadablesOption {
-	return func(c *fsUploadablesConfig) {
+func WithSkip(skip bool) FsUploadableOption {
+	return func(c *fsUploadable) {
 		c.skip = skip
 	}
 }
 
-// NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
-//  from files on the filesystem
-func NewFsUploadables(client *Client, albumID string, filenames []string, opts ...FsUploadablesOption) Uploadables {
-	config := &fsUploadablesConfig{replace: true, skip: true}
-	for i := range opts {
-		opts[i](config)
-	}
-	return &fsUploadables{
-		client:    client,
-		albumID:   albumID,
-		filenames: filenames,
-		config:    config,
+// WithImages maps basenames from the album to existing images
+func WithImages(albumID string, images map[string]*Image) FsUploadableOption {
+	return func(c *fsUploadable) {
+		c.images = images
+		c.albumID = albumID
 	}
 }
 
-func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-chan error) {
-	errc := make(chan error, 1)
-	images := make(map[string]*Image)
-
-	log.Info().Msg("querying existing gallery images")
-	if err := p.client.Image.ImagesIter(ctx, p.albumID, func(img *Image) (bool, error) {
-		images[img.FileName] = img
-		return true, nil
-	}); err != nil {
-		errc <- err
-		return nil, errc
+func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
+	p := &fsUploadable{skip: true, replace: true}
+	for i := range options {
+		options[i](p)
 	}
-	log.Info().Int("count", len(images)).Msg("existing gallery images")
+	if p.images == nil {
+		p.images = make(map[string]*Image)
+	}
+	if p.albumID == "" {
+		return nil, errors.New("missing albumID")
+	}
+	return p, nil
+}
 
+func (p *fsUploadable) Uploadable(filename string) (*Uploadable, error) {
+	if !p.supported(filename) {
+		log.Info().Str("reason", "unsupported").Str("path", filename).Msg("skipping")
+		return nil, nil
+	}
+	up, err := p.fromFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	up.AlbumID = p.albumID
+	img, ok := p.images[up.Name]
+	if ok {
+		if p.skip && up.MD5 == img.ArchivedMD5 {
+			log.Info().Str("reason", "md5").Str("path", filename).Msg("skipping")
+			return nil, nil
+		}
+		if p.replace {
+			up.Replaces = img.URIs.Image.URI
+		}
+	}
+	return up, nil
+}
+
+func (p *fsUploadable) fromFile(path string) (*Uploadable, error) {
+	fp, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer fp.Close()
+
+	buf := bytes.NewBuffer(nil)
+	size, err := io.Copy(buf, fp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Uploadable{
+		Name:   filepath.Base(path),
+		Size:   size,
+		MD5:    fmt.Sprintf("%x", md5.Sum(buf.Bytes())),
+		Reader: bytes.NewBuffer(buf.Bytes()),
+	}, nil
+}
+
+func (p *fsUploadable) supported(filename string) bool {
+	f := strings.ToLower(filename)
+	for i := range p.extensions {
+		if strings.HasSuffix(f, p.extensions[i]) {
+			return true
+		}
+	}
+	return false
+}
+
+type fsUploadables struct {
+	filenames  []string
+	uploadable FsUploadable
+}
+
+// NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
+//  from files on the filesystem
+func NewFsUploadables(filenames []string, uploadable FsUploadable) Uploadables {
+	return &fsUploadables{filenames: filenames, uploadable: uploadable}
+}
+
+func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-chan error) {
 	grp, ctx := errgroup.WithContext(ctx)
 
+	errc := make(chan error, 1)
 	filenamesc, walkerrc := p.walk(ctx)
 	grp.Go(func() error {
 		select {
@@ -233,24 +297,9 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-
 				if !ok {
 					return nil
 				}
-				if !p.supported(filename) {
-					log.Info().Str("reason", "unsupported").Str("path", filename).Msg("skipping")
-					continue
-				}
-				up, err := p.uploadableFromFile(filename)
+				up, err := p.uploadable.Uploadable(filename)
 				if err != nil {
 					return err
-				}
-				up.AlbumID = p.albumID
-				img, ok := images[up.Name]
-				if ok {
-					if p.config.skip && up.MD5 == img.ArchivedMD5 {
-						log.Info().Str("reason", "md5").Str("path", filename).Msg("skipping")
-						continue
-					}
-					if p.config.replace {
-						up.Replaces = img.URIs.Image.URI
-					}
 				}
 				select {
 				case <-ctx.Done():
@@ -271,27 +320,6 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-
 	}()
 
 	return uploadablesc, errc
-}
-
-func (p *fsUploadables) uploadableFromFile(path string) (*Uploadable, error) {
-	fp, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer fp.Close()
-
-	buf := bytes.NewBuffer(nil)
-	size, err := io.Copy(buf, fp)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Uploadable{
-		Name:   filepath.Base(path),
-		Size:   size,
-		MD5:    fmt.Sprintf("%x", md5.Sum(buf.Bytes())),
-		Reader: bytes.NewBuffer(buf.Bytes()),
-	}, nil
 }
 
 func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) {
@@ -318,14 +346,4 @@ func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) 
 		}
 	}()
 	return filenamesc, errc
-}
-
-func (p *fsUploadables) supported(filename string) bool {
-	f := strings.ToLower(filename)
-	for i := range p.config.extensions {
-		if strings.HasSuffix(f, p.config.extensions[i]) {
-			return true
-		}
-	}
-	return false
 }

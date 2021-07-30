@@ -282,10 +282,26 @@ func main() {
 				Action: func(c *cli.Context) error {
 					var n int
 
-					ctx := c.Context
-					// smugmug.WithReplace(false), smugmug.WithSkip(false)
-					p := smugmug.NewFsUploadables(mg, c.String("album"), c.Args().Slice(), smugmug.WithExtensions(".jpg"))
-					uploadc, errc := mg.Upload.Uploads(ctx, p)
+					images := make(map[string]*smugmug.Image)
+
+					log.Info().Msg("querying existing gallery images")
+					if err := mg.Image.ImagesIter(c.Context, c.String("album"), func(img *smugmug.Image) (bool, error) {
+						images[img.FileName] = img
+						return true, nil
+					}); err != nil {
+						return err
+					}
+					log.Info().Int("count", len(images)).Msg("existing gallery images")
+
+					u, err := smugmug.NewFsUploadable(
+						smugmug.WithExtensions(".jpg"),
+						smugmug.WithImages(c.String("album"), images),
+					)
+					if err != nil {
+						return err
+					}
+					p := smugmug.NewFsUploadables(c.Args().Slice(), u)
+					uploadc, errc := mg.Upload.Uploads(c.Context, p)
 					for {
 						select {
 						case err := <-errc:
