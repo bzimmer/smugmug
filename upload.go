@@ -67,12 +67,12 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 	return res, nil
 }
 
-func (s *UploadService) Uploads(ctx context.Context, provider Uploadables) (<-chan *Upload, <-chan error) {
+func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (<-chan *Upload, <-chan error) {
 	errc := make(chan error, 1)
 	updc := make(chan *Upload)
 	grp, ctx := errgroup.WithContext(ctx)
 
-	uploadablesc, uperrc := provider.Uploadables(ctx)
+	uploadablesc, uperrc := uploadables.Uploadables(ctx)
 	for i := 0; i < concurrency; i++ {
 		grp.Go(func() error {
 			for {
@@ -210,6 +210,7 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-
 				up, err := p.uploadableFromFile(filename)
 				if err != nil {
 					errc <- err
+					return
 				}
 				up.AlbumID = p.albumID
 				img, ok := images[up.Name]
@@ -276,9 +277,6 @@ func (p *fsUploadables) walk(ctx context.Context, filesc chan<- string) error {
 }
 
 func (p *fsUploadables) supported(filename string) bool {
-	if len(p.config.extensions) == 0 {
-		return true
-	}
 	f := strings.ToLower(filename)
 	for i := range p.config.extensions {
 		if strings.HasSuffix(f, p.config.extensions[i]) {
