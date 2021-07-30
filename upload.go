@@ -69,47 +69,48 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 
 func (s *UploadService) Uploads(ctx context.Context, provider Uploadables) (<-chan *Upload, <-chan error) {
 	errc := make(chan error, 1)
-	if err := provider.Begin(ctx); err != nil {
-		errc <- err
-		close(errc)
-		return nil, errc
-	}
-
 	updc := make(chan *Upload)
 	grp, ctx := errgroup.WithContext(ctx)
+
+	uploadablesc, uperrc := provider.Uploadables(ctx)
 	for i := 0; i < concurrency; i++ {
 		grp.Go(func() error {
 			for {
-				up, err := provider.Uploadable(ctx)
-				if err != nil {
-					return err
-				}
-				if up == nil {
-					log.Info().Msg("exiting; exhausted uploadables")
-					return nil
-				}
-				log.Info().
-					Str("name", up.Name).
-					Str("album", up.AlbumID).
-					Msg("uploading")
-				upload, err := s.Upload(ctx, up)
-				if err != nil {
-					log.Error().
-						Err(err).
-						Str("name", up.Name).
-						Str("album", up.AlbumID).
-						Msg("failed")
-					return err
-				}
-				log.Info().
-					Str("name", up.Name).
-					Str("album", up.AlbumID).
-					Str("uri", upload.UploadedImage.ImageURI).
-					Msg("uploaded")
 				select {
 				case <-ctx.Done():
 					return ctx.Err()
-				case updc <- upload:
+				case err := <-uperrc:
+					return err
+				case err := <-errc:
+					return err
+				case up, ok := <-uploadablesc:
+					if !ok {
+						log.Info().Msg("exiting; exhausted uploadables")
+						return nil
+					}
+					log.Info().
+						Str("name", up.Name).
+						Str("album", up.AlbumID).
+						Msg("uploading")
+					upload, err := s.Upload(ctx, up)
+					if err != nil {
+						log.Error().
+							Err(err).
+							Str("name", up.Name).
+							Str("album", up.AlbumID).
+							Msg("failed")
+						return err
+					}
+					log.Info().
+						Str("name", up.Name).
+						Str("album", up.AlbumID).
+						Str("uri", upload.UploadedImage.ImageURI).
+						Msg("uploaded")
+					select {
+					case <-ctx.Done():
+						return ctx.Err()
+					case updc <- upload:
+					}
 				}
 			}
 		})
@@ -128,77 +129,109 @@ func (s *UploadService) Uploads(ctx context.Context, provider Uploadables) (<-ch
 
 // Uploadables is a factory for Uploadable instances
 type Uploadables interface {
-	// Begin is called before any Uploadable is uploaded
-	Begin(context.Context) error
 	// Uploadable returns an Uploadable instance or nil of no more Uploadable instances are available
-	Uploadable(context.Context) (*Uploadable, error)
+	Uploadables(context.Context) (<-chan *Uploadable, <-chan error)
 }
 
 type fsUploadables struct {
 	client    *Client
 	albumID   string
-	images    map[string]*Image
 	filenames []string
-	errc      chan error
-	filesc    chan string
+	config    *fsUploadablesConfig
+}
+
+type fsUploadablesConfig struct {
+	extensions []string
+}
+
+type FsUploadablesOption func(c *fsUploadablesConfig)
+
+func WithExtensions(exts ...string) FsUploadablesOption {
+	return func(c *fsUploadablesConfig) {
+		c.extensions = make([]string, len(exts))
+		for i := range exts {
+			c.extensions[i] = strings.ToLower(exts[i])
+		}
+	}
 }
 
 // NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
 //  from files on the filesystem
-func NewFsUploadables(client *Client, albumID string, filenames []string) Uploadables {
+func NewFsUploadables(client *Client, albumID string, filenames []string, opts ...FsUploadablesOption) Uploadables {
+	config := &fsUploadablesConfig{extensions: []string{".jpg"}}
+	for i := range opts {
+		opts[i](config)
+	}
 	return &fsUploadables{
 		client:    client,
 		albumID:   albumID,
-		images:    make(map[string]*Image),
 		filenames: filenames,
-		filesc:    make(chan string),
-		errc:      make(chan error, 1),
+		config:    config,
 	}
 }
 
-func (p *fsUploadables) Begin(ctx context.Context) error {
-	go func() {
-		defer close(p.errc)
-		defer close(p.filesc)
-		n, err := p.walk(ctx)
-		if err != nil {
-			log.Error().Err(err).Int("enqueued", n).Msg("walk")
-		} else {
-			log.Info().Int("enqueued", n).Msg("walk")
-		}
-	}()
+func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-chan error) {
+	errc := make(chan error, 1)
+	images := make(map[string]*Image)
+
+	log.Info().Msg("querying existing gallery images")
 	if err := p.client.Image.ImagesIter(ctx, p.albumID, func(img *Image) (bool, error) {
-		p.images[img.FileName] = img
+		images[img.FileName] = img
 		return true, nil
 	}); err != nil {
-		return err
+		errc <- err
+		return nil, errc
 	}
-	return nil
-}
+	log.Info().Int("count", len(images)).Msg("existing gallery images")
 
-func (p *fsUploadables) Uploadable(ctx context.Context) (*Uploadable, error) {
-	for filename := range p.filesc {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-			up, err := p.uploadableFromFile(filename)
-			if err != nil {
-				return nil, err
-			}
-			up.AlbumID = p.albumID
-			img, ok := p.images[up.Name]
-			if ok {
-				if up.MD5 == img.ArchivedMD5 {
-					log.Info().Str("path", filename).Msg("skipping; md5 matches")
+	filenamesc := make(chan string)
+	uploadablesc := make(chan *Uploadable)
+
+	go func() {
+		defer close(filenamesc)
+		if err := p.walk(ctx, filenamesc); err != nil {
+			errc <- err
+		}
+	}()
+
+	go func() {
+		defer close(errc)
+		defer close(uploadablesc)
+		for filename := range filenamesc {
+			select {
+			case <-ctx.Done():
+				errc <- ctx.Err()
+				return
+			default:
+				if !p.supported(filename) {
+					log.Info().Str("path", filename).Msg("skipping; not supported")
 					continue
 				}
-				up.Replaces = img.URIs.Image.URI
+				up, err := p.uploadableFromFile(filename)
+				if err != nil {
+					errc <- err
+				}
+				up.AlbumID = p.albumID
+				img, ok := images[up.Name]
+				if ok {
+					if up.MD5 == img.ArchivedMD5 {
+						log.Info().Str("path", filename).Msg("skipping; md5 matches")
+						continue
+					}
+					up.Replaces = img.URIs.Image.URI
+				}
+				select {
+				case <-ctx.Done():
+					errc <- ctx.Err()
+					return
+				case uploadablesc <- up:
+					log.Info().Str("path", filename).Msg("uploadable")
+				}
 			}
-			return up, nil
 		}
-	}
-	return nil, nil
+	}()
+
+	return uploadablesc, errc
 }
 
 func (p *fsUploadables) uploadableFromFile(path string) (*Uploadable, error) {
@@ -222,30 +255,35 @@ func (p *fsUploadables) uploadableFromFile(path string) (*Uploadable, error) {
 	}, nil
 }
 
-func (p *fsUploadables) walk(ctx context.Context) (int, error) {
-	var n int
-	for _, filename := range p.filenames {
-		if err := filepath.Walk(filename, func(path string, info fs.FileInfo, err error) error {
+func (p *fsUploadables) walk(ctx context.Context, filesc chan<- string) error {
+	for _, root := range p.filenames {
+		if err := filepath.WalkDir(root, func(path string, info fs.DirEntry, err error) error {
 			if info.IsDir() {
 				return nil
 			}
-			if supported(path) {
-				n++
-				p.filesc <- path
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case filesc <- path:
+				log.Debug().Str("path", path).Msg("walk")
 			}
 			return nil
 		}); err != nil {
-			select {
-			case <-ctx.Done():
-				return n, ctx.Err()
-			case p.errc <- err:
-				return n, err
-			}
+			return err
 		}
 	}
-	return n, nil
+	return nil
 }
 
-func supported(filename string) bool {
-	return strings.HasSuffix(filename, ".jpg")
+func (p *fsUploadables) supported(filename string) bool {
+	if len(p.config.extensions) == 0 {
+		return true
+	}
+	f := strings.ToLower(filename)
+	for i := range p.config.extensions {
+		if strings.HasSuffix(f, p.config.extensions[i]) {
+			return true
+		}
+	}
+	return false
 }
