@@ -278,29 +278,23 @@ func main() {
 						Value:    "",
 						Required: true,
 					},
-					&cli.BoolFlag{
-						Name:     "update",
-						Value:    false,
-						Required: false,
-					},
 				},
 				Action: func(c *cli.Context) error {
-					up, err := smugmug.UploadableFromFile(c.Args().First())
-					if err != nil {
-						return err
+					var n int
+					p := smugmug.NewFsUploadables(mg, c.String("album"), c.Args().Slice())
+					uploadc, errc := mg.Upload.Uploads(c.Context, p)
+					for {
+						select {
+						case err := <-errc:
+							return err
+						case _, ok := <-uploadc:
+							if !ok {
+								log.Info().Int("uploaded", n).Msg("complete")
+								return nil
+							}
+							n++
+						}
 					}
-					var abort bool
-					if abort {
-						log.Warn().Msg("skipping upload, md5s match")
-						return nil
-					}
-					log.Info().Interface("up", up).Msg("upload")
-					img, err := mg.Upload.Upload(c.Context, c.String("album"), up)
-					if err != nil {
-						return err
-					}
-					log.Info().Interface("img", img).Msg("upload")
-					return nil
 				},
 			},
 		},

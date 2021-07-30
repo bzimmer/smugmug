@@ -527,6 +527,8 @@ type Uploadable struct {
 	MD5 string
 	// Replaces is the URI of an image to replace
 	Replaces string
+	// AlbumID is the album into which the file will be uploaded
+	AlbumID string
 	// Reader holds the image data for uploading
 	Reader io.Reader
 }
@@ -539,7 +541,7 @@ type UploadedImage struct {
 }
 
 type Upload struct {
-	Stat        string         `json:"stat"`
-	Method      string         `json:"method"`
-	UploadImage *UploadedImage `json:"Image"`
+	Stat          string         `json:"stat"`
+	Method        string         `json:"method"`
+	UploadedImage *UploadedImage `json:"Image"`
 }
