@@ -9,7 +9,6 @@ import (
 	"io"
 	"io/fs"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -149,7 +148,7 @@ type Uploadables interface {
 // FsUploadable creates Uploadable instances
 type FsUploadable interface {
 	// Uploadable creates an Uploadable from a filesystem
-	Uploadable(string) (*Uploadable, error)
+	Uploadable(fs.FS, string) (*Uploadable, error)
 }
 
 type fsUploadable struct {
@@ -208,12 +207,12 @@ func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
 	return p, nil
 }
 
-func (p *fsUploadable) Uploadable(filename string) (*Uploadable, error) {
+func (p *fsUploadable) Uploadable(fsys fs.FS, filename string) (*Uploadable, error) {
 	if !p.supported(filename) {
 		log.Info().Str("reason", "unsupported").Str("path", filename).Msg("skipping")
 		return nil, nil
 	}
-	up, err := p.fromFile(filename)
+	up, err := p.open(fsys, filename)
 	if err != nil {
 		return nil, err
 	}
@@ -224,15 +223,15 @@ func (p *fsUploadable) Uploadable(filename string) (*Uploadable, error) {
 			log.Info().Str("reason", "md5").Str("path", filename).Msg("skipping")
 			return nil, nil
 		}
-		if p.replace {
+		if p.replace && img.URIs.Image != nil {
 			up.Replaces = img.URIs.Image.URI
 		}
 	}
 	return up, nil
 }
 
-func (p *fsUploadable) fromFile(path string) (*Uploadable, error) {
-	fp, err := os.Open(path)
+func (p *fsUploadable) open(fsys fs.FS, path string) (*Uploadable, error) {
+	fp, err := fsys.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -263,14 +262,15 @@ func (p *fsUploadable) supported(filename string) bool {
 }
 
 type fsUploadables struct {
+	fsys       fs.FS
 	filenames  []string
 	uploadable FsUploadable
 }
 
 // NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
 //  from files on the filesystem
-func NewFsUploadables(filenames []string, uploadable FsUploadable) Uploadables {
-	return &fsUploadables{filenames: filenames, uploadable: uploadable}
+func NewFsUploadables(fsys fs.FS, filenames []string, uploadable FsUploadable) Uploadables {
+	return &fsUploadables{fsys: fsys, filenames: filenames, uploadable: uploadable}
 }
 
 func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-chan error) {
@@ -297,7 +297,7 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *Uploadable, <-
 				if !ok {
 					return nil
 				}
-				up, err := p.uploadable.Uploadable(filename)
+				up, err := p.uploadable.Uploadable(p.fsys, filename)
 				if err != nil {
 					return err
 				}
@@ -329,7 +329,10 @@ func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) 
 		defer close(errc)
 		defer close(filenamesc)
 		for _, root := range p.filenames {
-			if err := filepath.WalkDir(root, func(path string, info fs.DirEntry, err error) error {
+			if err := fs.WalkDir(p.fsys, root, func(path string, info fs.DirEntry, err error) error {
+				if err != nil {
+					return err
+				}
 				if info.IsDir() {
 					return nil
 				}
@@ -341,6 +344,7 @@ func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) 
 				}
 				return nil
 			}); err != nil {
+				fmt.Println(err)
 				errc <- err
 			}
 		}

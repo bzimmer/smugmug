@@ -68,19 +68,19 @@ type User struct {
 	URIs           struct {
 		BioImage           *APIEndpoint `json:"BioImage"`
 		CoverImage         *APIEndpoint `json:"CoverImage"`
-		UserProfile        *APIEndpoint `json:"UserProfile"`
-		Node               *APIEndpoint `json:"Node"`
-		Folder             *APIEndpoint `json:"Folder"`
 		Features           *APIEndpoint `json:"Features"`
+		Folder             *APIEndpoint `json:"Folder"`
+		Node               *APIEndpoint `json:"Node"`
 		SiteSettings       *APIEndpoint `json:"SiteSettings"`
-		UserAlbums         *APIEndpoint `json:"UserAlbums"`
-		UserGeoMedia       *APIEndpoint `json:"UserGeoMedia"`
-		UserPopularMedia   *APIEndpoint `json:"UserPopularMedia"`
-		UserFeaturedAlbums *APIEndpoint `json:"UserFeaturedAlbums"`
-		UserRecentImages   *APIEndpoint `json:"UserRecentImages"`
-		UserImageSearch    *APIEndpoint `json:"UserImageSearch"`
-		UserTopKeywords    *APIEndpoint `json:"UserTopKeywords"`
 		URLPathLookup      *APIEndpoint `json:"UrlPathLookup"`
+		UserAlbums         *APIEndpoint `json:"UserAlbums"`
+		UserFeaturedAlbums *APIEndpoint `json:"UserFeaturedAlbums"`
+		UserGeoMedia       *APIEndpoint `json:"UserGeoMedia"`
+		UserImageSearch    *APIEndpoint `json:"UserImageSearch"`
+		UserPopularMedia   *APIEndpoint `json:"UserPopularMedia"`
+		UserProfile        *APIEndpoint `json:"UserProfile"`
+		UserRecentImages   *APIEndpoint `json:"UserRecentImages"`
+		UserTopKeywords    *APIEndpoint `json:"UserTopKeywords"`
 	} `json:"Uris"`
 	ResponseLevel string `json:"ResponseLevel"`
 	// expansions

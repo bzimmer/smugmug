@@ -300,7 +300,8 @@ func main() {
 					if err != nil {
 						return err
 					}
-					p := smugmug.NewFsUploadables(c.Args().Slice(), u)
+					fsys := smugmug.RelativeFS("/")
+					p := smugmug.NewFsUploadables(fsys, c.Args().Slice(), u)
 					uploadc, errc := mg.Upload.Uploads(c.Context, p)
 					for {
 						select {

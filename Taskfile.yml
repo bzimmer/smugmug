@@ -13,3 +13,8 @@ tasks:
     desc: Run the smugmug demo
     cmds:
       - go run cmd/demo/*.go {{.CLI_ARGS}}
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test ./...
