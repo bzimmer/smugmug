@@ -12,6 +12,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/bzimmer/smugmug"
+	"github.com/bzimmer/smugmug/uploadable/filesystem"
 )
 
 var mg *smugmug.Client
@@ -293,15 +294,15 @@ func main() {
 					}
 					log.Info().Int("count", len(images)).Msg("existing gallery images")
 
-					u, err := smugmug.NewFsUploadable(
-						smugmug.WithExtensions(".jpg"),
-						smugmug.WithImages(c.String("album"), images),
+					u, err := filesystem.NewFsUploadable(
+						filesystem.WithExtensions(".jpg"),
+						filesystem.WithImages(c.String("album"), images),
 					)
 					if err != nil {
 						return err
 					}
-					fsys := smugmug.RelativeFS("/")
-					p := smugmug.NewFsUploadables(fsys, c.Args().Slice(), u)
+					fsys := filesystem.RelativeFS("/")
+					p := filesystem.NewFsUploadables(fsys, c.Args().Slice(), u)
 					uploadc, errc := mg.Upload.Uploads(c.Context, p)
 					for {
 						select {

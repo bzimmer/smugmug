@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/mrjones/oauth"
@@ -14,9 +15,10 @@ import (
 
 const (
 	batchSize = 100
-	baseURL   = "https://api.smugmug.com/api/v2"
-	uploadURL = "https://upload.smugmug.com"
 	userAgent = "github.com/bzimmer/smugmug"
+
+	_baseURL   = "https://api.smugmug.com/api/v2"
+	_uploadURL = "https://upload.smugmug.com"
 )
 
 var Provider = oauth.ServiceProvider{
@@ -26,8 +28,10 @@ var Provider = oauth.ServiceProvider{
 }
 
 type Client struct {
-	client *http.Client
-	pretty bool
+	client    *http.Client
+	pretty    bool
+	baseURL   string
+	uploadURL string
 
 	User   *UserService
 	Node   *NodeService
@@ -43,6 +47,13 @@ func withServices() Option {
 		c.Album = &AlbumService{c}
 		c.Image = &ImageService{c}
 		c.Upload = &UploadService{c}
+
+		if c.baseURL == "" {
+			c.baseURL = _baseURL
+		}
+		if c.uploadURL == "" {
+			c.uploadURL = _uploadURL
+		}
 		return nil
 	}
 }
@@ -54,6 +65,22 @@ type APIOption func(url.Values) error
 func WithPretty(pretty bool) Option {
 	return func(c *Client) error {
 		c.pretty = pretty
+		return nil
+	}
+}
+
+// WithBaseURL specifies the base url
+func WithBaseURL(baseURL string) Option {
+	return func(c *Client) error {
+		c.baseURL = baseURL
+		return nil
+	}
+}
+
+// WithUploadURL specifies the upload url
+func WithUploadURL(uploadURL string) Option {
+	return func(c *Client) error {
+		c.uploadURL = uploadURL
 		return nil
 	}
 }
@@ -122,15 +149,14 @@ func NewHTTPClient(consumerKey, consumerSecret, accessToken, accessTokenSecret s
 
 func (c *Client) newRequest(ctx context.Context, method, uri string, options []APIOption) (*http.Request, error) {
 	if strings.HasPrefix("!", uri) {
-		uri = fmt.Sprintf("%s%s", baseURL, uri)
+		uri = fmt.Sprintf("%s%s", c.baseURL, uri)
 	} else {
-		uri = fmt.Sprintf("%s/%s", baseURL, uri)
+		uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	}
 
 	v := url.Values{}
-	if c.pretty {
-		v.Set("_pretty", "true")
-	}
+	v.Set("_pretty", strconv.FormatBool(c.pretty))
+
 	for _, opt := range options {
 		if err := opt(v); err != nil {
 			return nil, err

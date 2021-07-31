@@ -1,0 +1,1494 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/album!search?Scope=\u0026SortDirection=Descending\u0026SortMethod=Rank\u0026Text=Marmot"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "ParameterDescription": {
+            "Varchar": "Variable length text from MIN_CHARS to MAX_CHARS (MAX_CHARS = INFINITY meaning arbitrary length)",
+            "Select": "Select one option. Options should pass only the \"Value\".",
+            "Uri": "Absolute or relative URL, restricted to Locator(s) of the supplied URL if not null.   Up to a MAX_LENGTH in length."
+        },
+        "Parameters": {
+            "GET": [
+                {
+                    "Name": "Text",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": null,
+                    "Description": "Search all text fields",
+                    "Type": "Varchar",
+                    "MIN_CHARS": 0,
+                    "MAX_CHARS": "INFINITY",
+                    "Value": "Marmot"
+                },
+                {
+                    "Name": "SortMethod",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "_score",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "Rank",
+                        "LastUpdated"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1,
+                    "Value": "Rank"
+                },
+                {
+                    "Name": "SortDirection",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Descending",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "Ascending",
+                        "Descending"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1,
+                    "Value": "Descending"
+                },
+                {
+                    "Name": "Scope",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": null,
+                    "Description": "The URI of a Folder, Node, or User to search within",
+                    "Type": "Uri",
+                    "MAX_LENGTH": "INFINITY",
+                    "Locator": [],
+                    "Value": ""
+                }
+            ]
+        },
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Notes": [
+            "_multiargs does not work at this endpoint"
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/album!search?Scope=\u0026SortDirection=Descending\u0026SortMethod=Rank\u0026Text=Marmot",
+        "Locator": "Album",
+        "LocatorType": "Objects",
+        "Album": [
+            {
+                "NiceName": "Marmota-marmota-Alpine-marmot",
+                "UrlName": "Marmota-marmota-Alpine-marmot",
+                "Title": "Marmota marmota, Alpine marmot",
+                "Name": "Marmota marmota, Alpine marmot",
+                "AllowDownloads": false,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": false,
+                "Geography": true,
+                "Keywords": "",
+                "PasswordHint": "",
+                "Protected": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "Date Taken",
+                "SecurityType": "None",
+                "AlbumKey": "kVVg3M",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2021-01-10T13:55:38+00:00",
+                "ImagesLastUpdated": "2021-01-10T13:55:54+00:00",
+                "NodeID": "CKfMR4",
+                "ImageCount": 62,
+                "UrlPath": "/Nature-and-Wildlife/Mammals/Marmota-marmota-Alpine-marmot",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/kVVg3M",
+                "WebUri": "https://bugsrus.smugmug.com/Nature-and-Wildlife/Mammals/Marmota-marmota-Alpine-marmot",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/kVVg3M!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/CKfMR4",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/CKfMR4!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/Bugsrus",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/Bugsrus/Nature-and-Wildlife/Mammals",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/Bugsrus/Nature-and-Wildlife/Mammals!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/CKfMR4",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/kVVg3M!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/kVVg3M!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/kVVg3M!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/kVVg3M!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/kVVg3M!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/kVVg3M!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/kVVg3M!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/kVVg3M!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Marmota-caligata",
+                "UrlName": "Marmota-caligata",
+                "Title": "Marmota caligata, Hoary Marmot",
+                "Name": "Marmota caligata, Hoary Marmot",
+                "AllowDownloads": false,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": false,
+                "Geography": true,
+                "Keywords": "Marmota caligata; Hoary Marmot",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Descending",
+                "SortMethod": "Date Taken",
+                "SecurityType": "None",
+                "AlbumKey": "5nSJJW",
+                "CanBuy": false,
+                "CanFavorite": false,
+                "LastUpdated": "2021-03-13T16:31:59+00:00",
+                "ImagesLastUpdated": "2021-03-13T16:32:58+00:00",
+                "NodeID": "WrbtDw",
+                "ImageCount": 6,
+                "UrlPath": "/Wildlife/M/Rodentia/Marmota-caligata",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/5nSJJW",
+                "WebUri": "https://paultavares.smugmug.com/Wildlife/M/Rodentia/Marmota-caligata",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/5nSJJW!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/WrbtDw",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/WrbtDw!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/PaulTavares",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/PaulTavares/Wildlife/M/Rodentia",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/PaulTavares/Wildlife/M/Rodentia!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/WrbtDw",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/5nSJJW!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/5nSJJW!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/5nSJJW!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/5nSJJW!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/5nSJJW!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/5nSJJW!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/5nSJJW!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/5nSJJW!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Marmotte",
+                "UrlName": "Marmotte",
+                "Title": "Marmotte",
+                "Name": "Marmotte",
+                "AllowDownloads": false,
+                "Description": "",
+                "EXIF": false,
+                "External": true,
+                "Filenames": true,
+                "Geography": false,
+                "Keywords": "marmotte; marmot",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Ascending",
+                "SortMethod": "Position",
+                "SecurityType": "None",
+                "AlbumKey": "tLGjTt",
+                "CanBuy": false,
+                "CanFavorite": false,
+                "LastUpdated": "2016-10-12T20:42:56+00:00",
+                "ImagesLastUpdated": "2016-10-12T20:43:58+00:00",
+                "NodeID": "Jz4NgZ",
+                "ImageCount": 2,
+                "UrlPath": "/Galleries/Mammals/Marmotte",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/tLGjTt",
+                "WebUri": "https://www.marclapointephotography.com/Galleries/Mammals/Marmotte",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/tLGjTt!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/Jz4NgZ",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/Jz4NgZ!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/marclapointe",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/marclapointe/Galleries/Mammals",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/marclapointe/Galleries/Mammals!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/Jz4NgZ",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/tLGjTt!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/tLGjTt!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/tLGjTt!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/tLGjTt!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/tLGjTt!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/tLGjTt!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Yellow-bellied-Marmot-Marmota",
+                "UrlName": "Yellow-bellied-Marmot-Marmota",
+                "Title": "Yellow-bellied Marmot (Marmota flaviventris)",
+                "Name": "Yellow-bellied Marmot (Marmota flaviventris)",
+                "AllowDownloads": false,
+                "Description": "ALL IMAGES IN THIS GALLERY ARE COPYRIGHTED, \u00a9Becca Wood - B. Wood Photography.\r\n\r\nThese photographs shall not to be downloaded or reproduced by any means without the formal written permission of B. Wood Photography.\r\n\r\nALL RIGHTS RESERVED.",
+                "EXIF": false,
+                "External": true,
+                "Filenames": true,
+                "Geography": true,
+                "Keywords": "Marmot; Marmota; Marmota flaviventris; Rock chuck; Yellowbellied Marmot; rockchuck",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Descending",
+                "SortMethod": "Date Uploaded",
+                "SecurityType": "None",
+                "AlbumKey": "RckJ2F",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2011-12-11T01:13:56+00:00",
+                "ImagesLastUpdated": "2011-12-11T18:32:05+00:00",
+                "NodeID": "f43bs",
+                "ImageCount": 99,
+                "UrlPath": "/Wildlife/Yellow-bellied-Marmot-Marmota",
+                "CanShare": false,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/RckJ2F",
+                "WebUri": "https://www.bwoodphotography.com/Wildlife/Yellow-bellied-Marmot-Marmota",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/RckJ2F!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/f43bs",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/f43bs!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/BWoodPhotography",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/BWoodPhotography/Wildlife",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/BWoodPhotography/Wildlife!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/f43bs",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/RckJ2F!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/RckJ2F!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/RckJ2F!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/RckJ2F!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/RckJ2F!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/RckJ2F!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/RckJ2F!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/RckJ2F!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Yellow-bellied-Marmot-Marmota-flaviventris",
+                "UrlName": "Yellow-bellied-Marmot-Marmota-flaviventris",
+                "Title": "Yellow-bellied Marmot (Marmota flaviventris)",
+                "Name": "Yellow-bellied Marmot (Marmota flaviventris)",
+                "AllowDownloads": false,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": true,
+                "Geography": true,
+                "Keywords": "Marmota flaviventris; Yellowbellied Marmot; photo; Rock Chuck",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Ascending",
+                "SortMethod": "Date Taken",
+                "SecurityType": "None",
+                "AlbumKey": "gjwKVg",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2021-06-07T05:20:34+00:00",
+                "ImagesLastUpdated": "2021-06-07T05:21:04+00:00",
+                "NodeID": "XKTgJw",
+                "ImageCount": 10,
+                "UrlPath": "/Our-World/Critters/Mammals/Rodents/Squirrels/Yellow-bellied-Marmot-Marmota-flaviventris",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/gjwKVg",
+                "WebUri": "https://www.creatorspalette.com/Our-World/Critters/Mammals/Rodents/Squirrels/Yellow-bellied-Marmot-Marmota-flaviventris",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/gjwKVg!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/XKTgJw",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/XKTgJw!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/CreatorsPalette",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/CreatorsPalette/Our-World/Critters/Mammals/Rodents/Squirrels",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/CreatorsPalette/Our-World/Critters/Mammals/Rodents/Squirrels!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/XKTgJw",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/gjwKVg!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/gjwKVg!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/gjwKVg!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/gjwKVg!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/gjwKVg!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/gjwKVg!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/gjwKVg!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/gjwKVg!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Yellow-bellied-Marmot-Marmota-flaviventris",
+                "UrlName": "Yellow-bellied-Marmot-Marmota-flaviventris",
+                "Title": "Yellow-bellied Marmot (Marmota flaviventris)",
+                "Name": "Yellow-bellied Marmot (Marmota flaviventris)",
+                "AllowDownloads": true,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": true,
+                "Geography": true,
+                "Keywords": "",
+                "PasswordHint": "",
+                "Protected": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "Date Taken",
+                "SecurityType": "None",
+                "AlbumKey": "cTNWr3",
+                "CanBuy": false,
+                "CanFavorite": false,
+                "LastUpdated": "2018-08-12T05:56:05+00:00",
+                "ImagesLastUpdated": "2018-08-12T05:56:16+00:00",
+                "NodeID": "GWvJFb",
+                "ImageCount": 2,
+                "UrlPath": "/Mammals/Squirrels/Yellow-bellied-Marmot-Marmota-flaviventris",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/cTNWr3",
+                "WebUri": "https://www.heyndekockphotography.com/Mammals/Squirrels/Yellow-bellied-Marmot-Marmota-flaviventris",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/cTNWr3!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/GWvJFb",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/GWvJFb!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/hdkphotography",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/hdkphotography/Mammals/Squirrels",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/hdkphotography/Mammals/Squirrels!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/GWvJFb",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/cTNWr3!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/cTNWr3!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/cTNWr3!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/cTNWr3!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/cTNWr3!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/cTNWr3!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumDownload": {
+                        "Uri": "/api/v2/album/cTNWr3!download",
+                        "Locator": "Download",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Download album",
+                        "EndpointType": "AlbumDownload"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/cTNWr3!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/cTNWr3!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Alpine-marmot",
+                "UrlName": "Alpine-marmot",
+                "Title": "Alpine Marmot",
+                "Name": "Alpine Marmot",
+                "AllowDownloads": false,
+                "Description": "",
+                "EXIF": false,
+                "External": true,
+                "Filenames": false,
+                "Geography": false,
+                "Keywords": "Alpine Marmot; Murmeltier; Marmota marmota",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Ascending",
+                "SortMethod": "Position",
+                "SecurityType": "None",
+                "AlbumKey": "GLKWRz",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2015-08-20T21:05:19+00:00",
+                "ImagesLastUpdated": "2015-08-20T21:05:32+00:00",
+                "NodeID": "T9LxvB",
+                "ImageCount": 4,
+                "UrlPath": "/Biota/Chordata/Mammals/Alpine-marmot",
+                "CanShare": false,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/GLKWRz",
+                "WebUri": "https://www.goodpicturesonline.com/Biota/Chordata/Mammals/Alpine-marmot",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/GLKWRz!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/T9LxvB",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/T9LxvB!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/goodpicturesonline",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/goodpicturesonline/Biota/Chordata/Mammals",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/goodpicturesonline/Biota/Chordata/Mammals!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/T9LxvB",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/GLKWRz!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/GLKWRz!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/GLKWRz!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/GLKWRz!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/GLKWRz!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/GLKWRz!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/GLKWRz!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Marmot",
+                "UrlName": "Marmot",
+                "Title": "Marmot",
+                "Name": "Marmot",
+                "AllowDownloads": true,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": false,
+                "Geography": true,
+                "Keywords": "",
+                "PasswordHint": "",
+                "Protected": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "Date Taken",
+                "SecurityType": "None",
+                "AlbumKey": "kqZ7Jv",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2019-04-29T15:21:03+00:00",
+                "ImagesLastUpdated": "2019-04-29T15:21:50+00:00",
+                "NodeID": "NmB3BS",
+                "ImageCount": 52,
+                "UrlPath": "/Marmot",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/kqZ7Jv",
+                "WebUri": "https://charlespost.smugmug.com/Marmot",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/kqZ7Jv!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/NmB3BS",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/NmB3BS!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/charlespost",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/charlespost",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/charlespost!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/NmB3BS",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/kqZ7Jv!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/kqZ7Jv!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/kqZ7Jv!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/kqZ7Jv!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/kqZ7Jv!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/kqZ7Jv!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumDownload": {
+                        "Uri": "/api/v2/album/kqZ7Jv!download",
+                        "Locator": "Download",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Download album",
+                        "EndpointType": "AlbumDownload"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/kqZ7Jv!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/kqZ7Jv!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Marmot",
+                "UrlName": "Marmot",
+                "Title": "Marmot",
+                "Name": "Marmot",
+                "AllowDownloads": false,
+                "Description": "Marmot",
+                "EXIF": true,
+                "External": true,
+                "Filenames": false,
+                "Geography": true,
+                "Keywords": "Marmot",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Ascending",
+                "SortMethod": "Date Taken",
+                "SecurityType": "None",
+                "AlbumKey": "jJ4PPD",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2020-06-28T00:05:16+00:00",
+                "ImagesLastUpdated": "2020-07-05T00:28:36+00:00",
+                "NodeID": "K9KSgQ",
+                "ImageCount": 6,
+                "UrlPath": "/Nature-Galleries/Animals/Squirrels/Marmot",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/jJ4PPD",
+                "WebUri": "https://leefox.smugmug.com/Nature-Galleries/Animals/Squirrels/Marmot",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/jJ4PPD!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/K9KSgQ",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/K9KSgQ!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/leefox",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/leefox/Nature-Galleries/Animals/Squirrels",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/leefox/Nature-Galleries/Animals/Squirrels!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/K9KSgQ",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/jJ4PPD!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/jJ4PPD!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/jJ4PPD!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/jJ4PPD!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/jJ4PPD!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/jJ4PPD!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/jJ4PPD!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/jJ4PPD!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "NiceName": "Marmot",
+                "UrlName": "Marmot",
+                "Title": "Marmot",
+                "Name": "Marmot",
+                "AllowDownloads": false,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": false,
+                "Geography": true,
+                "Keywords": "",
+                "PasswordHint": "",
+                "Protected": true,
+                "SortDirection": "Ascending",
+                "SortMethod": "Position",
+                "SecurityType": "None",
+                "AlbumKey": "mZz2Tk",
+                "CanBuy": false,
+                "CanFavorite": false,
+                "LastUpdated": "2018-02-27T13:41:48+00:00",
+                "ImagesLastUpdated": "2018-02-27T13:42:19+00:00",
+                "NodeID": "m5BFbS",
+                "ImageCount": 9,
+                "UrlPath": "/MAMALS/Marmot",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/mZz2Tk",
+                "WebUri": "https://kalterphotography.smugmug.com/MAMALS/Marmot",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/mZz2Tk!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/m5BFbS",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/m5BFbS!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/kalterphotography",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/kalterphotography/MAMALS",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/kalterphotography/MAMALS!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/m5BFbS",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/mZz2Tk!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/mZz2Tk!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/mZz2Tk!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/mZz2Tk!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/mZz2Tk!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/mZz2Tk!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/mZz2Tk!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/mZz2Tk!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            }
+        ],
+        "UriDescription": "Search for albums",
+        "EndpointType": "AlbumSearch",
+        "Pages": {
+            "Total": 20,
+            "Start": 1,
+            "Count": 10,
+            "RequestedCount": 10,
+            "FirstPage": "/api/v2/album!search?Scope=\u0026SortDirection=Descending\u0026SortMethod=Rank\u0026Text=Marmot\u0026start=1\u0026count=10",
+            "LastPage": "/api/v2/album!search?Scope=\u0026SortDirection=Descending\u0026SortMethod=Rank\u0026Text=Marmot\u0026start=1861\u0026count=10",
+            "NextPage": "/api/v2/album!search?Scope=\u0026SortDirection=Descending\u0026SortMethod=Rank\u0026Text=Marmot\u0026start=11\u0026count=10"
+        },
+        "Timing": {
+            "Total": {
+                "time": 0.32738,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}

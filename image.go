@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+// @todo(bzimmer) add image search
+
 // ImageService is the API for image endpoints
 type ImageService service
 

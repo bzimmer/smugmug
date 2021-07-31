@@ -1,62 +1,111 @@
 package smugmug_test
 
 import (
+	"context"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"os"
 	"testing"
-	"testing/fstest"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/bzimmer/smugmug"
 )
 
-func TestUploadable(t *testing.T) {
+func TestUpload(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	albumID := "Du82xY"
+	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fp, err := os.Open("testdata/upload_CVvj69L.json")
+		a.NoError(err)
+		defer fp.Close()
+		_, err = io.Copy(w, fp)
+		a.NoError(err)
+	}))
+	defer svr.Close()
+
+	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithUploadURL(svr.URL))
+	a.NoError(err)
+
+	up := &smugmug.Uploadable{Name: "DSC33556.jpg"}
+	upload, err := mg.Upload.Upload(context.Background(), up)
+	a.Error(err)
+	a.Nil(upload)
+
+	up.AlbumID = "7dFHSm"
+	upload, err = mg.Upload.Upload(context.Background(), up)
+	a.NoError(err)
+	a.NotNil(upload)
+}
+
+type testUploadables struct {
+	albumID string
+}
+
+func (t *testUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
+	errs := make(chan error)
+	uploadables := make(chan *smugmug.Uploadable, 1)
+	uploadables <- &smugmug.Uploadable{Name: "DSC33556.jpg", AlbumID: t.albumID}
+
+	close(errs)
+	close(uploadables)
+
+	return uploadables, errs
+}
+
+func TestUploads(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
 
 	tests := []struct {
-		filename string
-		options  []smugmug.FsUploadableOption
-		images   map[string]*smugmug.Image
-		replace  string
-		none     bool
+		albumID string
+		fail    bool
 	}{
-		{filename: ".DS_Info", none: true},
-		{filename: "DSC1234.jpg", none: true},
-		{filename: "DSC1234.jpg", none: false, options: []smugmug.FsUploadableOption{
-			smugmug.WithExtensions(".jpg"),
-		}},
-		{filename: "DSC12345.jpg", none: false,
-			images: map[string]*smugmug.Image{
-				"DSC12345.jpg": {
-					ArchivedMD5: "e19c1283c925b3206685ff522acfe3e6",
-				},
-			},
-			options: []smugmug.FsUploadableOption{
-				smugmug.WithExtensions(".jpg"),
-				smugmug.WithReplace(true)},
-		},
+		{albumID: "", fail: true},
+		{albumID: "7dFHSm", fail: false},
 	}
 
-	for _, tt := range tests {
-		tt := tt
+	for i := range tests {
+		test := tests[i]
+		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fp, err := os.Open("testdata/upload_CVvj69L.json")
+			a.NoError(err)
+			defer fp.Close()
+			_, err = io.Copy(w, fp)
+			a.NoError(err)
+		}))
+		defer svr.Close()
 
-		options := append(tt.options, smugmug.WithImages(albumID, tt.images))
-		fsup, err := smugmug.NewFsUploadable(options...)
+		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithUploadURL(svr.URL))
 		a.NoError(err)
 
-		fsys := fstest.MapFS{
-			tt.filename: {Data: []byte("this is a test")},
+		uploadables := &testUploadables{test.albumID}
+		uploadc, errc := mg.Upload.Uploads(context.Background(), uploadables)
+		a.NotNil(uploadc)
+		a.NotNil(errc)
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*1)
+		defer cancel()
+
+		err = nil
+		var up *smugmug.Upload
+		select {
+		case <-ctx.Done():
+			a.Error(ctx.Err())
+		case err = <-errc:
+		case up = <-uploadc:
 		}
 
-		up, err := fsup.Uploadable(fsys, tt.filename)
-		a.NoError(err)
-		switch tt.none {
-		case true:
-			a.Nil(up)
-		case false:
+		switch {
+		case test.fail:
+			a.NotNil(err)
+		case !test.fail:
+			a.Nil(err)
 			a.NotNil(up)
+			a.Equal("/api/v2/image/CVvj69L-0", up.UploadedImage.ImageURI)
 		}
 	}
 }

@@ -1,0 +1,374 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/user/cmac"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Output": [
+            {
+                "Name": "AccountStatus",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Active",
+                    "PastDue",
+                    "Suspended",
+                    "Closed"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "FirstName",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 20
+            },
+            {
+                "Name": "FriendsView",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ImageCount",
+                "Type": "Integer",
+                "MIN_VALUE": 0,
+                "MAX_VALUE": 16777215
+            },
+            {
+                "Name": "IsGettingStarted",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "IsTrial",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "IsTrialExpired",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "LastName",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 20
+            },
+            {
+                "Name": "NickName",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": 35
+            },
+            {
+                "Name": "SortBy",
+                "Type": "Select",
+                "OPTIONS": [
+                    "LastUpdated",
+                    "Position"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "ViewPassHint",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255
+            },
+            {
+                "Name": "ViewPassword",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 50
+            },
+            {
+                "Name": "Domain",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 50
+            },
+            {
+                "Name": "DomainOnly",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 50
+            },
+            {
+                "Name": "RefTag",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 13
+            },
+            {
+                "Name": "Name",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Plan",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "TotalAccountSize",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "TotalUploadedSize",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "QuickShare",
+                "Description": "Toggles the display of social media icons within the sharing UI which allow the user to share a photo to a variety of social networks.",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "IsAdmin",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "City",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 25
+            },
+            {
+                "Name": "Country",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 20
+            },
+            {
+                "Name": "Email",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 100
+            },
+            {
+                "Name": "PhoneNum",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 15
+            },
+            {
+                "Name": "State",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 20
+            },
+            {
+                "Name": "Street1",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 40
+            },
+            {
+                "Name": "Street2",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 40
+            },
+            {
+                "Name": "Zip",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 10
+            }
+        ],
+        "ResponseLevels": [
+            "Full",
+            "Public",
+            "Password",
+            "GrantAccess"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "user"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "nickname",
+                "param_value": "cmac"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/user/cmac",
+        "Locator": "User",
+        "LocatorType": "Object",
+        "User": {
+            "NickName": "cmac",
+            "ViewPassHint": "",
+            "RefTag": "TEjaxa2MF2LJ6",
+            "Name": "Chris MacAskill (Baldy)",
+            "QuickShare": true,
+            "Uri": "/api/v2/user/cmac",
+            "WebUri": "https://cmac.smugmug.com",
+            "UriDescription": "User By Nickname",
+            "Uris": {
+                "BioImage": {
+                    "Uri": "/api/v2/user/cmac!bioimage",
+                    "Locator": "BioImage",
+                    "LocatorType": "Object",
+                    "UriDescription": "User BioImage",
+                    "EndpointType": "BioImage"
+                },
+                "CoverImage": {
+                    "Uri": "/api/v2/user/cmac!coverimage",
+                    "Locator": "CoverImage",
+                    "LocatorType": "Object",
+                    "UriDescription": "User CoverImage",
+                    "EndpointType": "CoverImage"
+                },
+                "UserProfile": {
+                    "Uri": "/api/v2/user/cmac!profile",
+                    "Locator": "UserProfile",
+                    "LocatorType": "Object",
+                    "UriDescription": "User's profile information",
+                    "EndpointType": "UserProfile"
+                },
+                "Node": {
+                    "Uri": "/api/v2/node/zx4Fx",
+                    "Locator": "Node",
+                    "LocatorType": "Object",
+                    "UriDescription": "Node with the given id.",
+                    "EndpointType": "Node"
+                },
+                "Folder": {
+                    "Uri": "/api/v2/folder/user/cmac",
+                    "Locator": "Folder",
+                    "LocatorType": "Object",
+                    "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                    "EndpointType": "Folder"
+                },
+                "Features": {
+                    "Uri": "/api/v2/user/cmac!features",
+                    "Locator": "Features",
+                    "LocatorType": "Object",
+                    "UriDescription": "User's account features information",
+                    "EndpointType": "Features"
+                },
+                "SiteSettings": {
+                    "Uri": "/api/v2/user/cmac!sitesettings",
+                    "Locator": "SiteSettings",
+                    "LocatorType": "Object",
+                    "UriDescription": "User site settings",
+                    "EndpointType": "SiteSettings"
+                },
+                "UserAlbums": {
+                    "Uri": "/api/v2/user/cmac!albums",
+                    "Locator": "Album",
+                    "LocatorType": "Objects",
+                    "UriDescription": "All of user's albums",
+                    "EndpointType": "UserAlbums"
+                },
+                "UserCollections": {
+                    "Uri": "/api/v2/user/cmac!collections",
+                    "Locator": "Collection",
+                    "LocatorType": "Objects",
+                    "UriDescription": "All of user's collections",
+                    "EndpointType": "UserCollections"
+                },
+                "UserGeoMedia": {
+                    "Uri": "/api/v2/user/cmac!geomedia",
+                    "Locator": "Image",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Geotagged images for user",
+                    "EndpointType": "UserGeoMedia"
+                },
+                "UserPopularMedia": {
+                    "Uri": "/api/v2/user/cmac!popularmedia",
+                    "Locator": "Image",
+                    "LocatorType": "Objects",
+                    "UriDescription": "User's popular images",
+                    "EndpointType": "UserPopularMedia"
+                },
+                "UserFeaturedAlbums": {
+                    "Uri": "/api/v2/user/cmac!featuredalbums",
+                    "Locator": "Album",
+                    "LocatorType": "Objects",
+                    "UriDescription": "User's featured albums",
+                    "EndpointType": "UserFeaturedAlbums"
+                },
+                "UserRecentImages": {
+                    "Uri": "/api/v2/user/cmac!recentimages",
+                    "Locator": "Image",
+                    "LocatorType": "Objects",
+                    "UriDescription": "User's recent images",
+                    "EndpointType": "UserRecentImages"
+                },
+                "UserImageSearch": {
+                    "Uri": "/api/v2/user/cmac!imagesearch",
+                    "Locator": "Image",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Search for user images",
+                    "EndpointType": "UserImageSearch"
+                },
+                "UserTopKeywords": {
+                    "Uri": "/api/v2/user/cmac!topkeywords",
+                    "Locator": "UserTopKeywords",
+                    "LocatorType": "Object",
+                    "UriDescription": "User's top keywords",
+                    "EndpointType": "UserTopKeywords"
+                },
+                "UrlPathLookup": {
+                    "Uri": "/api/v2/user/cmac!urlpathlookup",
+                    "Locator": "Folder,Album,Page",
+                    "LocatorType": "Object",
+                    "UriDescription": "Lookup user's folder, album, or page by path",
+                    "EndpointType": "UrlPathLookup"
+                }
+            },
+            "ResponseLevel": "Public"
+        },
+        "UriDescription": "User By Nickname",
+        "EndpointType": "User",
+        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/user.html",
+        "Timing": {
+            "Total": {
+                "time": 0.03784,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}
