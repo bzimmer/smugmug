@@ -19,6 +19,7 @@ func (rfs *relativeFS) Open(name string) (fs.File, error) {
 	return rfs.FS.Open(name)
 }
 
+// RelativeFS returns an fs.FS instance relative to `dir`
 func RelativeFS(dir string) fs.FS {
 	return &relativeFS{FS: os.DirFS(dir), root: dir}
 }
