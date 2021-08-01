@@ -167,7 +167,7 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 			return nil
 		}
 		switch node.Type {
-		case "Album":
+		case "Album", "System Album":
 			// ignore, no children
 		case "Folder":
 			if err := s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {

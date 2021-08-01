@@ -2,8 +2,6 @@
 
 version: '3'
 
-dotenv: ['.env']
-
 vars:
   CWD:
     sh: git rev-parse --show-toplevel
@@ -13,12 +11,7 @@ vars:
 tasks:
   default:
     cmds:
-      - task: demo
-
-  demo:
-    desc: Run the smugmug demo
-    cmds:
-      - go run cmd/demo/*.go {{.CLI_ARGS}}
+      - task: test
 
   test:
     desc: Run tests
