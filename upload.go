@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
@@ -58,11 +59,47 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 		req.Header.Set(key, val)
 	}
 
-	res := &Upload{}
+	var res *Upload
+
+	defer func(t time.Time) {
+		elapsed := time.Since(t)
+		if err != nil {
+			s.client.metrics.IncrCounter([]string{"upload", "fail"}, 1)
+			log.Error().
+				Err(err).
+				Str("name", up.Name).
+				Str("album", up.AlbumID).
+				Dur("elapsed", elapsed).
+				Str("status", "fail").
+				Msg("upload")
+		} else {
+			s.client.metrics.IncrCounter([]string{"upload", "success"}, 1)
+			log.Info().
+				Str("name", up.Name).
+				Str("album", up.AlbumID).
+				Dur("elapsed", elapsed).
+				Str("uri", res.UploadedImage.ImageURI).
+				Str("status", "success").
+				Msg("upload")
+		}
+		s.client.metrics.AddSample([]string{"upload", "upload"}, float32(elapsed.Seconds()))
+	}(time.Now())
+
+	log.Info().
+		Str("name", up.Name).
+		Str("album", up.AlbumID).
+		Str("replaces", up.Replaces).
+		Str("status", "uploading").
+		Msg("upload")
+	s.client.metrics.IncrCounter([]string{"upload", "attempt"}, 1)
+
+	res = &Upload{}
 	err = s.client.do(req, res)
+
 	if err != nil {
 		return nil, err
 	}
+
 	return res, nil
 }
 
@@ -108,25 +145,10 @@ func (s *UploadService) uploads(ctx context.Context,
 					log.Debug().Msg("exiting; exhausted uploadables")
 					return nil
 				}
-				log.Info().
-					Str("name", up.Name).
-					Str("album", up.AlbumID).
-					Str("replaces", up.Replaces).
-					Msg("uploading")
 				upload, err := s.Upload(ctx, up)
 				if err != nil {
-					log.Error().
-						Err(err).
-						Str("name", up.Name).
-						Str("album", up.AlbumID).
-						Msg("failed")
 					return err
 				}
-				log.Info().
-					Str("name", up.Name).
-					Str("album", up.AlbumID).
-					Str("uri", upload.UploadedImage.ImageURI).
-					Msg("uploaded")
 				select {
 				case <-ctx.Done():
 					return ctx.Err()

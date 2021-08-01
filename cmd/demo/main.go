@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/armon/go-metrics"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v2"
@@ -16,6 +17,8 @@ import (
 )
 
 var mg *smugmug.Client
+var metr *metrics.Metrics
+var sink *metrics.InmemSink
 
 func main() {
 	app := &cli.App{
@@ -66,6 +69,21 @@ func main() {
 			}
 			log.Error().Err(err).Msg(c.App.Name)
 		},
+		After: func(c *cli.Context) error {
+			data := sink.Data()
+			for i := range data {
+				fmt.Println("counters")
+				for key, val := range data[i].Counters {
+					fmt.Printf("  %s, cnt: %d\n", key, val.Count)
+				}
+				fmt.Println("samples")
+				for key, val := range data[i].Samples {
+					as := val.AggregateSample
+					fmt.Printf("  %s, cnt: %d, min: %0.2f, mean: %0.2f, max: %0.2f, stddev: %0.2f\n", key, val.Count, as.Min, as.Mean(), as.Max, as.Stddev())
+				}
+			}
+			return nil
+		},
 		Before: func(c *cli.Context) error {
 			level := zerolog.InfoLevel
 			if c.Bool("verbose") {
@@ -83,6 +101,15 @@ func main() {
 			)
 
 			var err error
+			cfg := metrics.DefaultConfig("smugmug")
+			cfg.EnableRuntimeMetrics = false
+			cfg.TimerGranularity = time.Second
+			sink = metrics.NewInmemSink(time.Minute*10, time.Minute*10)
+			metr, err = metrics.New(cfg, sink)
+			if err != nil {
+				return err
+			}
+
 			client, err := smugmug.NewHTTPClient(
 				c.String("smugmug-client-key"),
 				c.String("smugmug-client-secret"),
@@ -93,6 +120,7 @@ func main() {
 			}
 
 			mg, err = smugmug.NewClient(
+				smugmug.WithMetrics(metr),
 				smugmug.WithHTTPClient(client),
 				smugmug.WithPretty(c.Bool("debug")),
 				smugmug.WithHTTPTracing(c.Bool("debug")))
@@ -293,6 +321,7 @@ func main() {
 					log.Info().Int("count", len(images)).Msg("existing gallery images")
 
 					u, err := filesystem.NewFsUploadable(
+						filesystem.WithMetrics(metr),
 						filesystem.WithExtensions(".jpg"),
 						filesystem.WithImages(c.String("album"), images),
 					)

@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/armon/go-metrics"
 	"github.com/rs/zerolog/log"
 
 	"github.com/bzimmer/smugmug"
@@ -26,11 +27,19 @@ type fsUploadable struct {
 	replace    bool
 	albumID    string
 	extensions []string
+	metrics    *metrics.Metrics
 	images     map[string]*smugmug.Image
 }
 
 // FsUploadableOption enables configuration of uploadable creation
 type FsUploadableOption func(c *fsUploadable)
+
+// WithMetrics configures the metrics instance
+func WithMetrics(metrics *metrics.Metrics) FsUploadableOption {
+	return func(c *fsUploadable) {
+		c.metrics = metrics
+	}
+}
 
 // WithExtensions configures which extensions (inclusive of '.') are supported
 func WithExtensions(exts ...string) FsUploadableOption {
@@ -76,11 +85,15 @@ func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
 	if p.albumID == "" {
 		return nil, errors.New("missing albumID")
 	}
+	if p.metrics == nil {
+		p.metrics = metrics.Default()
+	}
 	return p, nil
 }
 
 func (p *fsUploadable) Uploadable(fsys fs.FS, filename string) (*smugmug.Uploadable, error) {
 	if !p.supported(filename) {
+		p.metrics.IncrCounter([]string{"fsUploadable", "skip", "unsupported"}, 1)
 		log.Info().Str("reason", "unsupported").Str("path", filename).Msg("skipping")
 		return nil, nil
 	}
@@ -92,6 +105,7 @@ func (p *fsUploadable) Uploadable(fsys fs.FS, filename string) (*smugmug.Uploada
 	img, ok := p.images[up.Name]
 	if ok {
 		if p.skip && up.MD5 == img.ArchivedMD5 {
+			p.metrics.IncrCounter([]string{"fsUploadable", "skip", "md5"}, 1)
 			log.Info().Str("reason", "md5").Str("path", filename).Msg("skipping")
 			return nil, nil
 		}
@@ -108,6 +122,8 @@ func (p *fsUploadable) open(fsys fs.FS, path string) (*smugmug.Uploadable, error
 		return nil, err
 	}
 	defer fp.Close()
+
+	p.metrics.IncrCounter([]string{"fsUploadable", "open"}, 1)
 
 	buf := bytes.NewBuffer(nil)
 	size, err := io.Copy(buf, fp)
