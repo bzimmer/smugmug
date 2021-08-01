@@ -2,7 +2,6 @@ package smugmug_test
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -64,7 +63,6 @@ func TestImagesIter(t *testing.T) {
 	a.NoError(err)
 	err = mg.Image.ImagesIter(context.Background(), "HZMsPf", func(img *smugmug.Image) (bool, error) {
 		n++
-		fmt.Println(n)
 		return true, nil
 	}, smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("HighlightImage"))
 	a.NoError(err)

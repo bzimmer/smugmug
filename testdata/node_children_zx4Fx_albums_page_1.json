@@ -1,0 +1,982 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/node/zx4Fx!children"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "POST": {
+                "Permissions": [
+                    "Modify"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "ParameterDescription": {
+            "Select": "Select one option. Options should pass only the \"Value\"."
+        },
+        "Parameters": {
+            "GET": [
+                {
+                    "Name": "Type",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "All",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "All",
+                        "Folder Album Page",
+                        "Folder",
+                        "Album",
+                        "Page",
+                        "System Album"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                },
+                {
+                    "Name": "SortMethod",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Organizer",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "DateAdded",
+                        "DateModified",
+                        "Name",
+                        "Organizer"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                },
+                {
+                    "Name": "SortDirection",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Ascending",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "Ascending",
+                        "Descending"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                }
+            ]
+        },
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Notes": [
+            "_multiargs does not work at this endpoint"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "node"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "nodeid",
+                "param_value": "zx4Fx"
+            },
+            {
+                "type": "action",
+                "text": "children"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/node/zx4Fx!children",
+        "Locator": "Node",
+        "LocatorType": "Objects",
+        "Node": [
+            {
+                "Description": "",
+                "Name": "Spanish Fork Fiesta Days parade 2019",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Spanish-Fork-Fiesta-Days-parade-2019",
+                "DateAdded": "2019-07-28T03:26:32+00:00",
+                "DateModified": "2019-07-28T03:49:38+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Spanish Fork Fiesta Days parade 2019"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "J3wNMj",
+                "SortIndex": 1,
+                "UrlPath": "/Events/Spanish-Fork-Fiesta-Days-parade-2019",
+                "Uri": "/api/v2/node/J3wNMj",
+                "WebUri": "https://cmac.smugmug.com/Events/Spanish-Fork-Fiesta-Days-parade-2019",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/qH5CG3",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/J3wNMj!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/J3wNMj!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/J3wNMj!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/J3wNMj",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/J3wNMj!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Spanish Fork High 50th reunion 2019",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Spanish-Fork-High-50th-reunion-2019",
+                "DateAdded": "2019-07-30T05:14:56+00:00",
+                "DateModified": "2019-07-31T16:20:55+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Spanish Fork High 50th reunion 2019"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "5FD6k8",
+                "SortIndex": 2,
+                "UrlPath": "/Events/Spanish-Fork-High-50th-reunion-2019",
+                "Uri": "/api/v2/node/5FD6k8",
+                "WebUri": "https://cmac.smugmug.com/Events/Spanish-Fork-High-50th-reunion-2019",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/wqmpff",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/5FD6k8!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/5FD6k8!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/5FD6k8!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/5FD6k8",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/5FD6k8!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Golden Gate dog show 2019",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Golden-Gate-dog-show-2019",
+                "DateAdded": "2019-01-26T23:35:34+00:00",
+                "DateModified": "2019-01-27T00:46:40+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Golden Gate dog show 2019"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "LtqS2s",
+                "SortIndex": 3,
+                "UrlPath": "/Events/Golden-Gate-dog-show-2019",
+                "Uri": "/api/v2/node/LtqS2s",
+                "WebUri": "https://cmac.smugmug.com/Events/Golden-Gate-dog-show-2019",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/B8BLsX",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/LtqS2s!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/LtqS2s!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/LtqS2s!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/LtqS2s",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/LtqS2s!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Santa Cruz fungus festival 2019",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Santa-Cruz-fungus-festival-2019",
+                "DateAdded": "2019-01-13T08:09:48+00:00",
+                "DateModified": "2019-01-13T08:17:42+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Santa Cruz fungus festival 2019"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "jM739r",
+                "SortIndex": 4,
+                "UrlPath": "/Events/Santa-Cruz-fungus-festival-2019",
+                "Uri": "/api/v2/node/jM739r",
+                "WebUri": "https://cmac.smugmug.com/Events/Santa-Cruz-fungus-festival-2019",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/2XrGxm",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/jM739r!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/jM739r!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/jM739r!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/jM739r",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/jM739r!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Maker Faire 2008",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Album",
+                "UrlName": "Maker-Faire-2008",
+                "DateAdded": "2008-05-03T21:24:53+00:00",
+                "DateModified": "2008-05-03T22:46:12+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Maker Faire 2008"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "BjcPR",
+                "SortIndex": 5,
+                "UrlPath": "/Events/Maker-Faire-2008",
+                "Uri": "/api/v2/node/BjcPR",
+                "WebUri": "https://cmac.smugmug.com/Events/Maker-Faire-2008",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/gJ7d6r",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/BjcPR!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/BjcPR!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/BjcPR!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/BjcPR",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/BjcPR!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "SF Body Art Expo 2018",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "SF-Body-Art-Expo-2018",
+                "DateAdded": "2018-03-03T21:17:48+00:00",
+                "DateModified": "2018-03-07T17:12:47+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "SF Body Art Expo 2018"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "xH9vPF",
+                "SortIndex": 6,
+                "UrlPath": "/Events/SF-Body-Art-Expo-2018",
+                "Uri": "/api/v2/node/xH9vPF",
+                "WebUri": "https://cmac.smugmug.com/Events/SF-Body-Art-Expo-2018",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/pttBvK",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/xH9vPF!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/xH9vPF!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/xH9vPF!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/xH9vPF",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/xH9vPF!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Muttville adoption ceremony",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Muttville-adoption-ceremony",
+                "DateAdded": "2019-01-28T04:00:13+00:00",
+                "DateModified": "2019-01-28T19:41:45+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Muttville adoption ceremony"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "JbnGdJ",
+                "SortIndex": 7,
+                "UrlPath": "/Events/Muttville-adoption-ceremony",
+                "Uri": "/api/v2/node/JbnGdJ",
+                "WebUri": "https://cmac.smugmug.com/Events/Muttville-adoption-ceremony",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/KJXpSD",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/JbnGdJ!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/JbnGdJ!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/JbnGdJ!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/JbnGdJ",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/JbnGdJ!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "San Francisco Reptile Expo",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "San-Francisco-Reptile-Expo",
+                "DateAdded": "2019-02-10T00:12:09+00:00",
+                "DateModified": "2019-02-10T00:26:30+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "San Francisco Reptile Expo"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "kvh7p7",
+                "SortIndex": 8,
+                "UrlPath": "/Events/San-Francisco-Reptile-Expo",
+                "Uri": "/api/v2/node/kvh7p7",
+                "WebUri": "https://cmac.smugmug.com/Events/San-Francisco-Reptile-Expo",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/MGxZXq",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/kvh7p7!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/kvh7p7!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/kvh7p7!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/kvh7p7",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/kvh7p7!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "The touching story behind these photos: https://cake.co/c/fnPGK4c/Gd83Cjz",
+                "Name": "Humans melt and pets soak up love at the Bay Area Pet Fair",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Humans-melt-and-pets-soak-up-love-at-the-Bay-Area-Pet-Fair",
+                "DateAdded": "2019-09-15T03:36:13+00:00",
+                "DateModified": "2019-09-15T03:56:47+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Humans melt and pets soak up love at the Bay Area Pet Fair"
+                    },
+                    "Description": {
+                        "html": "The touching story behind these photos: <a href=\"https://cake.co/c/fnPGK4c/Gd83Cjz\">https://cake.co/c/fnPGK4c/Gd83Cjz</a>",
+                        "text": "The touching story behind these photos: https://cake.co/c/fnPGK4c/Gd83Cjz"
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "MG5c5r",
+                "SortIndex": 1568518573,
+                "UrlPath": "/Events/Humans-melt-and-pets-soak-up-love-at-the-Bay-Area-Pet-Fair",
+                "Uri": "/api/v2/node/MG5c5r",
+                "WebUri": "https://cmac.smugmug.com/Events/Humans-melt-and-pets-soak-up-love-at-the-Bay-Area-Pet-Fair",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/LPZThB",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/MG5c5r!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/MG5c5r!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/MG5c5r!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/MG5c5r",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/MG5c5r!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "47th annual electric vehicle show silicon valley",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "47th-annual-electric-vehicle-show-silicon-valley",
+                "DateAdded": "2019-09-17T05:30:50+00:00",
+                "DateModified": "2019-09-17T05:31:56+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "47th annual electric vehicle show silicon valley"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "6zFLgD",
+                "SortIndex": 1568698250,
+                "UrlPath": "/Events/47th-annual-electric-vehicle-show-silicon-valley",
+                "Uri": "/api/v2/node/6zFLgD",
+                "WebUri": "https://cmac.smugmug.com/Events/47th-annual-electric-vehicle-show-silicon-valley",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/GNpNRf",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/6zFLgD!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/6zFLgD!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/6zFLgD!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/6zFLgD",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/6zFLgD!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            }
+        ],
+        "UriDescription": "Child nodes of the given node.",
+        "EndpointType": "ChildNodes",
+        "Pages": {
+            "Total": 11,
+            "Start": 1,
+            "Count": 10,
+            "RequestedCount": 10,
+            "FirstPage": "/api/v2/node/zx4Fx!children?start=1\u0026count=10",
+            "LastPage": "/api/v2/node/zx4Fx!children?start=11\u0026count=10",
+            "NextPage": "/api/v2/node/zx4Fx!children?start=11\u0026count=10"
+        },
+        "Timing": {
+            "Total": {
+                "time": 0.12528,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}

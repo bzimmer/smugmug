@@ -13,7 +13,7 @@ import (
 	"github.com/bzimmer/smugmug"
 )
 
-func TestUser(t *testing.T) {
+func TestAuthUser(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 

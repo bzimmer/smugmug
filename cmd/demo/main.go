@@ -243,8 +243,6 @@ func main() {
 								Int("imageCount", node.Album.ImageCount).
 								Msg("images")
 						case "Folder":
-							fallthrough
-						case "Node":
 							log.Info().
 								Str("nodeID", node.NodeID).
 								Str("name", node.Name).

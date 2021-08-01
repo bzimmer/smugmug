@@ -16,14 +16,14 @@ type NodeIterFunc func(*Node) (bool, error)
 type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
 
 func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error {
-	i := 0
+	current := 0
 	page := WithPagination(1, batchSize)
 	for {
 		nodes, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
 			return err
 		}
-		i += pages.Count
+		current += pages.Count
 		for _, node := range nodes {
 			if ok, err := f(node); err != nil {
 				return err
@@ -31,7 +31,7 @@ func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc
 				return nil
 			}
 		}
-		if i == pages.Total {
+		if current == pages.Total {
 			return nil
 		}
 		page = WithPagination(pages.Start+pages.Count, batchSize)
@@ -147,15 +147,19 @@ func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options
 // Walk traverses all children of the node rooted at `nodeID`
 func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, options ...APIOption) error {
 	k := &stack{}
-	k.push(nodeID)
+	k.push(nodeID, nil)
 	for {
 		nid, ok := k.pop()
 		if !ok {
 			return nil
 		}
-		node, err := s.Node(ctx, nid, options...)
-		if err != nil {
-			return err
+		node := nid.node
+		if node == nil {
+			var err error
+			node, err = s.Node(ctx, nid.id, options...)
+			if err != nil {
+				return err
+			}
 		}
 		if ok, err := fn(node); err != nil {
 			return err
@@ -166,8 +170,8 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 		case "Album":
 			// ignore, no children
 		case "Folder":
-			if err := s.ChildrenIter(ctx, nid, func(node *Node) (bool, error) {
-				k.push(node.NodeID)
+			if err := s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {
+				k.push(node.NodeID, node)
 				return true, nil
 			}, options...); err != nil {
 				return err
@@ -178,15 +182,20 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 	}
 }
 
-type stack []string
-
-func (s *stack) push(str string) {
-	*s = append(*s, str)
+type item struct {
+	id   string
+	node *Node
 }
 
-func (s *stack) pop() (string, bool) {
+type stack []*item
+
+func (s *stack) push(id string, node *Node) {
+	*s = append(*s, &item{id: id, node: node})
+}
+
+func (s *stack) pop() (*item, bool) {
 	if len(*s) == 0 {
-		return "", false
+		return nil, false
 	}
 	index := len(*s) - 1
 	element := (*s)[index]

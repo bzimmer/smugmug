@@ -2,7 +2,6 @@ package filesystem
 
 import (
 	"context"
-	"fmt"
 	"io/fs"
 
 	"github.com/rs/zerolog/log"
@@ -97,7 +96,6 @@ func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) 
 				}
 				return nil
 			}); err != nil {
-				fmt.Println(err)
 				errc <- err
 			}
 		}

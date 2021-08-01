@@ -1,0 +1,954 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/node/zx4Fx!children?start=11\u0026count=10"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "POST": {
+                "Permissions": [
+                    "Modify"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "ParameterDescription": {
+            "Select": "Select one option. Options should pass only the \"Value\"."
+        },
+        "Parameters": {
+            "GET": [
+                {
+                    "Name": "Type",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "All",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "All",
+                        "Folder Album Page",
+                        "Folder",
+                        "Album",
+                        "Page",
+                        "System Album"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                },
+                {
+                    "Name": "SortMethod",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Organizer",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "DateAdded",
+                        "DateModified",
+                        "Name",
+                        "Organizer"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                },
+                {
+                    "Name": "SortDirection",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Ascending",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "Ascending",
+                        "Descending"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                }
+            ]
+        },
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Notes": [
+            "_multiargs does not work at this endpoint"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "node"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "nodeid",
+                "param_value": "zx4Fx"
+            },
+            {
+                "type": "action",
+                "text": "children"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/node/zx4Fx!children?start=11\u0026count=10",
+        "Locator": "Node",
+        "LocatorType": "Objects",
+        "Node": [
+            {
+                "Description": "",
+                "Name": "People",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "People",
+                "DateAdded": "2013-07-13T22:44:56+00:00",
+                "DateModified": "2020-11-28T14:37:07+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "People"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "z5kmt",
+                "SortIndex": 18,
+                "UrlPath": "/People",
+                "Uri": "/api/v2/node/z5kmt",
+                "WebUri": "https://cmac.smugmug.com/People",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/z5kmt",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/z5kmt!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/z5kmt!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/z5kmt!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/z5kmt",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/z5kmt!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/z5kmt!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Triathlon",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Triathlon",
+                "DateAdded": "2013-07-13T22:44:59+00:00",
+                "DateModified": "2013-07-13T22:44:59+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Triathlon"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "vcDwX",
+                "SortIndex": 19,
+                "UrlPath": "/Triathlon",
+                "Uri": "/api/v2/node/vcDwX",
+                "WebUri": "https://cmac.smugmug.com/Triathlon",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/vcDwX",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/vcDwX!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/vcDwX!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/vcDwX!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/vcDwX",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/vcDwX!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/vcDwX!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Events",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Events",
+                "DateAdded": "2013-07-13T22:44:59+00:00",
+                "DateModified": "2020-06-01T03:11:56+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Events"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "kTR76",
+                "SortIndex": 20,
+                "UrlPath": "/Events",
+                "Uri": "/api/v2/node/kTR76",
+                "WebUri": "https://cmac.smugmug.com/Events",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/kTR76",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/kTR76!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/kTR76!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/kTR76!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/kTR76",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/kTR76!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/kTR76!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Vacation",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Vacation",
+                "DateAdded": "2013-07-13T22:45:00+00:00",
+                "DateModified": "2013-07-13T22:45:00+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Vacation"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "Rqqpc",
+                "SortIndex": 21,
+                "UrlPath": "/Vacation",
+                "Uri": "/api/v2/node/Rqqpc",
+                "WebUri": "https://cmac.smugmug.com/Vacation",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/Rqqpc",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/Rqqpc!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/Rqqpc!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/Rqqpc!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/Rqqpc",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/Rqqpc!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/Rqqpc!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Humor",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Humor",
+                "DateAdded": "2013-07-13T22:45:06+00:00",
+                "DateModified": "2013-07-13T22:45:06+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Humor"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "zTS55",
+                "SortIndex": 23,
+                "UrlPath": "/Humor",
+                "Uri": "/api/v2/node/zTS55",
+                "WebUri": "https://cmac.smugmug.com/Humor",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/zTS55",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/zTS55!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/zTS55!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/zTS55!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/zTS55",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/zTS55!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/zTS55!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Holidays",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Holidays",
+                "DateAdded": "2013-07-13T22:45:08+00:00",
+                "DateModified": "2018-12-24T05:26:15+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Holidays"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "jNmhg",
+                "SortIndex": 24,
+                "UrlPath": "/Holidays",
+                "Uri": "/api/v2/node/jNmhg",
+                "WebUri": "https://cmac.smugmug.com/Holidays",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/jNmhg",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/jNmhg!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/jNmhg!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/jNmhg!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/jNmhg",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/jNmhg!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/jNmhg!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Weddings",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Weddings",
+                "DateAdded": "2013-07-13T22:45:08+00:00",
+                "DateModified": "2018-08-15T01:04:49+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Weddings"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "zdg7P",
+                "SortIndex": 25,
+                "UrlPath": "/Weddings",
+                "Uri": "/api/v2/node/zdg7P",
+                "WebUri": "https://cmac.smugmug.com/Weddings",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/zdg7P",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/zdg7P!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/zdg7P!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/zdg7P!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/zdg7P",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/zdg7P!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/zdg7P!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Plant chompers",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Folder",
+                "UrlName": "Plant-chompers",
+                "DateAdded": "2020-10-10T21:13:31+00:00",
+                "DateModified": "2020-10-10T21:16:25+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Plant chompers"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "JnWFtf",
+                "SortIndex": 1602364411,
+                "UrlPath": "/Plant-chompers",
+                "Uri": "/api/v2/node/JnWFtf",
+                "WebUri": "https://cmac.smugmug.com/Plant-chompers",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/JnWFtf",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/JnWFtf!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/JnWFtf!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/JnWFtf!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/JnWFtf",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/JnWFtf!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/JnWFtf!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Zero",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Zero",
+                "DateAdded": "2020-04-28T23:38:55+00:00",
+                "DateModified": "2020-04-28T23:38:55+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Zero"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "JDVkPQ",
+                "SortIndex": 1588117135,
+                "UrlPath": "/Zero",
+                "Uri": "/api/v2/node/JDVkPQ",
+                "WebUri": "https://cmac.smugmug.com/Zero",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/RM4BL2",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/JDVkPQ!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/JDVkPQ!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/JDVkPQ!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/JDVkPQ",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/JDVkPQ!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            }
+        ],
+        "UriDescription": "Child nodes of the given node.",
+        "EndpointType": "ChildNodes",
+        "Pages": {
+            "Total": 19,
+            "Start": 11,
+            "Count": 9,
+            "RequestedCount": 10,
+            "FirstPage": "/api/v2/node/zx4Fx!children?start=1\u0026count=10",
+            "LastPage": "/api/v2/node/zx4Fx!children?start=11\u0026count=10",
+            "PrevPage": "/api/v2/node/zx4Fx!children?start=1\u0026count=10"
+        },
+        "Timing": {
+            "Total": {
+                "time": 0.14763,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}
