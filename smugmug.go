@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/armon/go-metrics"
 	"github.com/mrjones/oauth"
 )
 
@@ -34,6 +35,7 @@ type Client struct {
 	pretty    bool
 	baseURL   string
 	uploadURL string
+	metrics   *metrics.Metrics
 
 	User   *UserService
 	Node   *NodeService
@@ -56,12 +58,28 @@ func withServices() Option {
 		if c.uploadURL == "" {
 			c.uploadURL = _uploadURL
 		}
+		if c.metrics == nil {
+			cfg := metrics.DefaultConfig("smugmug")
+			met, err := metrics.New(cfg, &metrics.BlackholeSink{})
+			if err != nil {
+				return err
+			}
+			c.metrics = met
+		}
 		return nil
 	}
 }
 
 // APIOption for configuring API requests
 type APIOption func(url.Values) error
+
+// WithMetrics configures the metrics instance
+func WithMetrics(metrics *metrics.Metrics) Option {
+	return func(c *Client) error {
+		c.metrics = metrics
+		return nil
+	}
+}
 
 // WithPretty enable indention of the req/res from SmugMug (useful for debugging)
 func WithPretty(pretty bool) Option {
