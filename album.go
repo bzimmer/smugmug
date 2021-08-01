@@ -118,7 +118,7 @@ func (s *AlbumService) Albums(ctx context.Context, userID string, options ...API
 	return s.albums(req)
 }
 
-// Albums iterates all albums for the user
+// AlbumsIter iterates all albums for the user
 func (s *AlbumService) AlbumsIter(ctx context.Context, userID string, iter AlbumIterFunc, options ...APIOption) error {
 	q := func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error) {
 		return s.Albums(ctx, userID, options...)

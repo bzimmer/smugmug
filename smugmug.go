@@ -21,12 +21,14 @@ const (
 	_uploadURL = "https://upload.smugmug.com"
 )
 
+// Provider specifies OAuth 1.0 URLs for SmugMug
 var Provider = oauth.ServiceProvider{
 	RequestTokenUrl:   "https://api.smugmug.com/services/oauth/1.0a/getRequestToken",
 	AuthorizeTokenUrl: "https://api.smugmug.com/services/oauth/1.0a/authorize",
 	AccessTokenUrl:    "https://api.smugmug.com/services/oauth/1.0a/getAccessToken",
 }
 
+// Client provides SmugMug connectivity
 type Client struct {
 	client    *http.Client
 	pretty    bool
@@ -102,6 +104,8 @@ func WithPagination(start, count int) APIOption {
 	}
 }
 
+// WithSorting specifies sorting direction and method
+// The allowable values change with the context (eg albums, nodes, folders)
 func WithSorting(direction, method string) APIOption {
 	return func(v url.Values) error {
 		v.Del("SortDirection")

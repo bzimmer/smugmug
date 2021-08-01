@@ -29,6 +29,7 @@ type fsUploadable struct {
 	images     map[string]*smugmug.Image
 }
 
+// FsUploadableOption enables configuration of uploadable creation
 type FsUploadableOption func(c *fsUploadable)
 
 // WithExtensions configures which extensions (inclusive of '.') are supported
@@ -63,6 +64,7 @@ func WithImages(albumID string, images map[string]*smugmug.Image) FsUploadableOp
 	}
 }
 
+// NewFsUploadable returns a newly instantiated FsUploadable instance
 func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
 	p := &fsUploadable{skip: true, replace: true}
 	for i := range options {

@@ -139,7 +139,7 @@ func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node
 	return s.nodes(req)
 }
 
-// Search iterates all search results (does not traverse)
+// SearchIter iterates all search results (does not traverse)
 func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options ...APIOption) error {
 	return s.iter(ctx, s.Search, iter, options...)
 }

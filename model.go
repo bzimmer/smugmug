@@ -48,6 +48,11 @@ type FormattedValue struct {
 	Text string `json:"text"`
 }
 
+type FormattedValues struct {
+	Name        *FormattedValue `json:"Name"`
+	Description *FormattedValue `json:"Description"`
+}
+
 type APIEndpoint struct {
 	URI            string `json:"Uri"`
 	Locator        string `json:"Locator"`
@@ -56,33 +61,35 @@ type APIEndpoint struct {
 	EndpointType   string `json:"EndpointType"`
 }
 
+type UserURIs struct {
+	BioImage           *APIEndpoint `json:"BioImage"`
+	CoverImage         *APIEndpoint `json:"CoverImage"`
+	Features           *APIEndpoint `json:"Features"`
+	Folder             *APIEndpoint `json:"Folder"`
+	Node               *APIEndpoint `json:"Node"`
+	SiteSettings       *APIEndpoint `json:"SiteSettings"`
+	URLPathLookup      *APIEndpoint `json:"UrlPathLookup"`
+	UserAlbums         *APIEndpoint `json:"UserAlbums"`
+	UserFeaturedAlbums *APIEndpoint `json:"UserFeaturedAlbums"`
+	UserGeoMedia       *APIEndpoint `json:"UserGeoMedia"`
+	UserImageSearch    *APIEndpoint `json:"UserImageSearch"`
+	UserPopularMedia   *APIEndpoint `json:"UserPopularMedia"`
+	UserProfile        *APIEndpoint `json:"UserProfile"`
+	UserRecentImages   *APIEndpoint `json:"UserRecentImages"`
+	UserTopKeywords    *APIEndpoint `json:"UserTopKeywords"`
+}
+
 type User struct {
-	NickName       string `json:"NickName"`
-	ViewPassHint   string `json:"ViewPassHint"`
-	RefTag         string `json:"RefTag"`
-	Name           string `json:"Name"`
-	QuickShare     bool   `json:"QuickShare"`
-	URI            string `json:"Uri"`
-	WebURI         string `json:"WebUri"`
-	URIDescription string `json:"UriDescription"`
-	URIs           struct {
-		BioImage           *APIEndpoint `json:"BioImage"`
-		CoverImage         *APIEndpoint `json:"CoverImage"`
-		Features           *APIEndpoint `json:"Features"`
-		Folder             *APIEndpoint `json:"Folder"`
-		Node               *APIEndpoint `json:"Node"`
-		SiteSettings       *APIEndpoint `json:"SiteSettings"`
-		URLPathLookup      *APIEndpoint `json:"UrlPathLookup"`
-		UserAlbums         *APIEndpoint `json:"UserAlbums"`
-		UserFeaturedAlbums *APIEndpoint `json:"UserFeaturedAlbums"`
-		UserGeoMedia       *APIEndpoint `json:"UserGeoMedia"`
-		UserImageSearch    *APIEndpoint `json:"UserImageSearch"`
-		UserPopularMedia   *APIEndpoint `json:"UserPopularMedia"`
-		UserProfile        *APIEndpoint `json:"UserProfile"`
-		UserRecentImages   *APIEndpoint `json:"UserRecentImages"`
-		UserTopKeywords    *APIEndpoint `json:"UserTopKeywords"`
-	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	NickName       string   `json:"NickName"`
+	ViewPassHint   string   `json:"ViewPassHint"`
+	RefTag         string   `json:"RefTag"`
+	Name           string   `json:"Name"`
+	QuickShare     bool     `json:"QuickShare"`
+	URI            string   `json:"Uri"`
+	WebURI         string   `json:"WebUri"`
+	URIDescription string   `json:"UriDescription"`
+	URIs           UserURIs `json:"Uris"`
+	ResponseLevel  string   `json:"ResponseLevel"`
 	// expansions
 	Node   *Node   `json:"Node"`
 	Folder *Folder `json:"Folder"`
@@ -102,6 +109,32 @@ type UserResponse struct {
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`
 	Message    string                      `json:"Message"`
+}
+
+type AlbumURIs struct {
+	AlbumShareUris             *APIEndpoint `json:"AlbumShareUris"`
+	Node                       *APIEndpoint `json:"Node"`
+	NodeCoverImage             *APIEndpoint `json:"NodeCoverImage"`
+	User                       *APIEndpoint `json:"User"`
+	Folder                     *APIEndpoint `json:"Folder"`
+	ParentFolders              *APIEndpoint `json:"ParentFolders"`
+	HighlightImage             *APIEndpoint `json:"HighlightImage"`
+	AddSamplePhotos            *APIEndpoint `json:"AddSamplePhotos"`
+	AlbumHighlightImage        *APIEndpoint `json:"AlbumHighlightImage"`
+	AlbumImages                *APIEndpoint `json:"AlbumImages"`
+	AlbumPopularMedia          *APIEndpoint `json:"AlbumPopularMedia"`
+	AlbumGeoMedia              *APIEndpoint `json:"AlbumGeoMedia"`
+	AlbumComments              *APIEndpoint `json:"AlbumComments"`
+	MoveAlbumImages            *APIEndpoint `json:"MoveAlbumImages"`
+	CollectImages              *APIEndpoint `json:"CollectImages"`
+	ApplyAlbumTemplate         *APIEndpoint `json:"ApplyAlbumTemplate"`
+	DeleteAlbumImages          *APIEndpoint `json:"DeleteAlbumImages"`
+	UploadFromExternalResource *APIEndpoint `json:"UploadFromExternalResource"`
+	UploadFromURI              *APIEndpoint `json:"UploadFromUri"`
+	AlbumGrants                *APIEndpoint `json:"AlbumGrants"`
+	AlbumDownload              *APIEndpoint `json:"AlbumDownload"`
+	AlbumPrices                *APIEndpoint `json:"AlbumPrices"`
+	AlbumPricelistExclusions   *APIEndpoint `json:"AlbumPricelistExclusions"`
 }
 
 type Album struct {
@@ -164,32 +197,8 @@ type Album struct {
 	URI                    string     `json:"Uri"`
 	WebURI                 string     `json:"WebUri"`
 	URIDescription         string     `json:"UriDescription"`
-	URIs                   struct {
-		AlbumShareUris             *APIEndpoint `json:"AlbumShareUris"`
-		Node                       *APIEndpoint `json:"Node"`
-		NodeCoverImage             *APIEndpoint `json:"NodeCoverImage"`
-		User                       *APIEndpoint `json:"User"`
-		Folder                     *APIEndpoint `json:"Folder"`
-		ParentFolders              *APIEndpoint `json:"ParentFolders"`
-		HighlightImage             *APIEndpoint `json:"HighlightImage"`
-		AddSamplePhotos            *APIEndpoint `json:"AddSamplePhotos"`
-		AlbumHighlightImage        *APIEndpoint `json:"AlbumHighlightImage"`
-		AlbumImages                *APIEndpoint `json:"AlbumImages"`
-		AlbumPopularMedia          *APIEndpoint `json:"AlbumPopularMedia"`
-		AlbumGeoMedia              *APIEndpoint `json:"AlbumGeoMedia"`
-		AlbumComments              *APIEndpoint `json:"AlbumComments"`
-		MoveAlbumImages            *APIEndpoint `json:"MoveAlbumImages"`
-		CollectImages              *APIEndpoint `json:"CollectImages"`
-		ApplyAlbumTemplate         *APIEndpoint `json:"ApplyAlbumTemplate"`
-		DeleteAlbumImages          *APIEndpoint `json:"DeleteAlbumImages"`
-		UploadFromExternalResource *APIEndpoint `json:"UploadFromExternalResource"`
-		UploadFromURI              *APIEndpoint `json:"UploadFromUri"`
-		AlbumGrants                *APIEndpoint `json:"AlbumGrants"`
-		AlbumDownload              *APIEndpoint `json:"AlbumDownload"`
-		AlbumPrices                *APIEndpoint `json:"AlbumPrices"`
-		AlbumPricelistExclusions   *APIEndpoint `json:"AlbumPricelistExclusions"`
-	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	URIs                   AlbumURIs  `json:"Uris"`
+	ResponseLevel          string     `json:"ResponseLevel"`
 	// expansions
 	User           *User   `json:"User"`
 	Node           *Node   `json:"Node"`
@@ -239,70 +248,69 @@ type AlbumResponse struct {
 	Message    string                      `json:"Message"`
 }
 
+type ImageURIs struct {
+	// Album and ImageAlbum are used in different context but should be identical
+	Album                         *APIEndpoint `json:"Album"`
+	AlbumImageMetadata            *APIEndpoint `json:"AlbumImageMetadata"`
+	AlbumImagePricelistExclusions *APIEndpoint `json:"AlbumImagePricelistExclusions"`
+	AlbumImageShareUris           *APIEndpoint `json:"AlbumImageShareUris"`
+	Image                         *APIEndpoint `json:"Image"`
+	ImageAlbum                    *APIEndpoint `json:"ImageAlbum"`
+	ImageComments                 *APIEndpoint `json:"ImageComments"`
+	ImageMetadata                 *APIEndpoint `json:"ImageMetadata"`
+	ImagePricelistExclusions      *APIEndpoint `json:"ImagePricelistExclusions"`
+	ImagePrices                   *APIEndpoint `json:"ImagePrices"`
+	ImageSizeDetails              *APIEndpoint `json:"ImageSizeDetails"`
+	ImageSizes                    *APIEndpoint `json:"ImageSizes"`
+	LargestImage                  *APIEndpoint `json:"LargestImage"`
+	PointOfInterest               *APIEndpoint `json:"PointOfInterest"`
+	PointOfInterestCrops          *APIEndpoint `json:"PointOfInterestCrops"`
+	Regions                       *APIEndpoint `json:"Regions"`
+}
+
 type Image struct {
 	// Date             *time.Time `json:"Date"` // deprecated, use DateTimeUploaded
 	// Watermark        string     `json:"Watermark"` // deprecated
-	Title            string     `json:"Title"`
-	Caption          string     `json:"Caption"`
-	Keywords         string     `json:"Keywords"`
-	KeywordArray     []string   `json:"KeywordArray"`
-	Latitude         Coordinate `json:"Latitude"`
-	Longitude        Coordinate `json:"Longitude"`
-	Altitude         int        `json:"Altitude"`
-	Hidden           bool       `json:"Hidden"`
-	ThumbnailURL     string     `json:"ThumbnailUrl"`
-	FileName         string     `json:"FileName"`
-	Processing       bool       `json:"Processing"`
-	UploadKey        string     `json:"UploadKey"`
-	DateTimeUploaded *time.Time `json:"DateTimeUploaded"`
-	DateTimeOriginal *time.Time `json:"DateTimeOriginal"`
-	Format           string     `json:"Format"`
-	OriginalHeight   int        `json:"OriginalHeight"`
-	OriginalWidth    int        `json:"OriginalWidth"`
-	OriginalSize     int        `json:"OriginalSize"`
-	LastUpdated      *time.Time `json:"LastUpdated"`
-	Collectable      bool       `json:"Collectable"`
-	IsArchive        bool       `json:"IsArchive"`
-	IsVideo          bool       `json:"IsVideo"`
-	CanEdit          bool       `json:"CanEdit"`
-	CanBuy           bool       `json:"CanBuy"`
-	Protected        bool       `json:"Protected"`
-	ImageKey         string     `json:"ImageKey"`
-	Serial           int        `json:"Serial"`
-	ArchivedURI      string     `json:"ArchivedUri"`
-	ArchivedSize     int        `json:"ArchivedSize"`
-	ArchivedMD5      string     `json:"ArchivedMD5"`
-	CanShare         bool       `json:"CanShare"`
-	Comments         bool       `json:"Comments"`
-	ShowKeywords     bool       `json:"ShowKeywords"`
-	FormattedValues  struct {
-		Caption  *FormattedValue `json:"Caption"`
-		FileName *FormattedValue `json:"FileName"`
-	} `json:"FormattedValues"`
-	URI            string `json:"Uri"`
-	URIDescription string `json:"UriDescription"`
-	URIs           struct {
-		// Album and ImageAlbum are used in different context but should be identical
-		Album                         *APIEndpoint `json:"Album"`
-		AlbumImageMetadata            *APIEndpoint `json:"AlbumImageMetadata"`
-		AlbumImagePricelistExclusions *APIEndpoint `json:"AlbumImagePricelistExclusions"`
-		AlbumImageShareUris           *APIEndpoint `json:"AlbumImageShareUris"`
-		Image                         *APIEndpoint `json:"Image"`
-		ImageAlbum                    *APIEndpoint `json:"ImageAlbum"`
-		ImageComments                 *APIEndpoint `json:"ImageComments"`
-		ImageMetadata                 *APIEndpoint `json:"ImageMetadata"`
-		ImagePricelistExclusions      *APIEndpoint `json:"ImagePricelistExclusions"`
-		ImagePrices                   *APIEndpoint `json:"ImagePrices"`
-		ImageSizeDetails              *APIEndpoint `json:"ImageSizeDetails"`
-		ImageSizes                    *APIEndpoint `json:"ImageSizes"`
-		LargestImage                  *APIEndpoint `json:"LargestImage"`
-		PointOfInterest               *APIEndpoint `json:"PointOfInterest"`
-		PointOfInterestCrops          *APIEndpoint `json:"PointOfInterestCrops"`
-		Regions                       *APIEndpoint `json:"Regions"`
-	} `json:"Uris"`
-	Movable bool   `json:"Movable"`
-	Origin  string `json:"Origin"`
-	WebURI  string `json:"WebUri"`
+	Title            string           `json:"Title"`
+	Caption          string           `json:"Caption"`
+	Keywords         string           `json:"Keywords"`
+	KeywordArray     []string         `json:"KeywordArray"`
+	Latitude         Coordinate       `json:"Latitude"`
+	Longitude        Coordinate       `json:"Longitude"`
+	Altitude         int              `json:"Altitude"`
+	Hidden           bool             `json:"Hidden"`
+	ThumbnailURL     string           `json:"ThumbnailUrl"`
+	FileName         string           `json:"FileName"`
+	Processing       bool             `json:"Processing"`
+	UploadKey        string           `json:"UploadKey"`
+	DateTimeUploaded *time.Time       `json:"DateTimeUploaded"`
+	DateTimeOriginal *time.Time       `json:"DateTimeOriginal"`
+	Format           string           `json:"Format"`
+	OriginalHeight   int              `json:"OriginalHeight"`
+	OriginalWidth    int              `json:"OriginalWidth"`
+	OriginalSize     int              `json:"OriginalSize"`
+	LastUpdated      *time.Time       `json:"LastUpdated"`
+	Collectable      bool             `json:"Collectable"`
+	IsArchive        bool             `json:"IsArchive"`
+	IsVideo          bool             `json:"IsVideo"`
+	CanEdit          bool             `json:"CanEdit"`
+	CanBuy           bool             `json:"CanBuy"`
+	Protected        bool             `json:"Protected"`
+	ImageKey         string           `json:"ImageKey"`
+	Serial           int              `json:"Serial"`
+	ArchivedURI      string           `json:"ArchivedUri"`
+	ArchivedSize     int              `json:"ArchivedSize"`
+	ArchivedMD5      string           `json:"ArchivedMD5"`
+	CanShare         bool             `json:"CanShare"`
+	Comments         bool             `json:"Comments"`
+	ShowKeywords     bool             `json:"ShowKeywords"`
+	FormattedValues  *FormattedValues `json:"FormattedValues"`
+	URI              string           `json:"Uri"`
+	URIDescription   string           `json:"UriDescription"`
+	URIs             ImageURIs        `json:"Uris"`
+	Movable          bool             `json:"Movable"`
+	Origin           string           `json:"Origin"`
+	WebURI           string           `json:"WebUri"`
 	// expansions
 	Album            *Album            `json:"Album"`
 	ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
@@ -379,54 +387,53 @@ type ImageSizes struct {
 	URIDescription   string `json:"UriDescription,omitempty"`
 }
 
+type NodeURIs struct {
+	Album          *APIEndpoint `json:"Album"`
+	ChildNodes     *APIEndpoint `json:"ChildNodes"`
+	FolderByID     *APIEndpoint `json:"FolderByID"`
+	HighlightImage *APIEndpoint `json:"HighlightImage"`
+	MoveNodes      *APIEndpoint `json:"MoveNodes"`
+	NodeComments   *APIEndpoint `json:"NodeComments"`
+	NodeCoverImage *APIEndpoint `json:"NodeCoverImage"`
+	NodeGrants     *APIEndpoint `json:"NodeGrants"`
+	NodePageDesign *APIEndpoint `json:"NodePageDesign"`
+	ParentNode     *APIEndpoint `json:"ParentNode"`
+	ParentNodes    *APIEndpoint `json:"ParentNodes"`
+	User           *APIEndpoint `json:"User"`
+}
+
 type Node struct {
-	CoverImageURI         string     `json:"CoverImageUri"`
-	Description           string     `json:"Description"`
-	HideOwner             bool       `json:"HideOwner"`
-	HighlightImageURI     string     `json:"HighlightImageUri"`
-	Name                  string     `json:"Name"`
-	Keywords              []string   `json:"Keywords"`
-	Password              string     `json:"Password"`
-	PasswordHint          string     `json:"PasswordHint"`
-	Privacy               string     `json:"Privacy"`
-	SecurityType          string     `json:"SecurityType"`
-	ShowCoverImage        bool       `json:"ShowCoverImage"`
-	SmugSearchable        string     `json:"SmugSearchable"`
-	SortDirection         string     `json:"SortDirection"`
-	SortMethod            string     `json:"SortMethod"`
-	Type                  string     `json:"Type"`
-	URLName               string     `json:"UrlName"`
-	WorldSearchable       string     `json:"WorldSearchable"`
-	DateAdded             *time.Time `json:"DateAdded"`
-	DateModified          *time.Time `json:"DateModified"`
-	EffectivePrivacy      string     `json:"EffectivePrivacy"`
-	EffectiveSecurityType string     `json:"EffectiveSecurityType"`
-	FormattedValues       struct {
-		Name        *FormattedValue `json:"Name"`
-		Description *FormattedValue `json:"Description"`
-	} `json:"FormattedValues"`
-	HasChildren    bool   `json:"HasChildren"`
-	IsRoot         bool   `json:"IsRoot"`
-	NodeID         string `json:"NodeID"`
-	URLPath        string `json:"UrlPath"`
-	URI            string `json:"Uri"`
-	WebURI         string `json:"WebUri"`
-	URIDescription string `json:"UriDescription"`
-	URIs           struct {
-		Album          *APIEndpoint `json:"Album"`
-		ChildNodes     *APIEndpoint `json:"ChildNodes"`
-		FolderByID     *APIEndpoint `json:"FolderByID"`
-		HighlightImage *APIEndpoint `json:"HighlightImage"`
-		MoveNodes      *APIEndpoint `json:"MoveNodes"`
-		NodeComments   *APIEndpoint `json:"NodeComments"`
-		NodeCoverImage *APIEndpoint `json:"NodeCoverImage"`
-		NodeGrants     *APIEndpoint `json:"NodeGrants"`
-		NodePageDesign *APIEndpoint `json:"NodePageDesign"`
-		ParentNode     *APIEndpoint `json:"ParentNode"`
-		ParentNodes    *APIEndpoint `json:"ParentNodes"`
-		User           *APIEndpoint `json:"User"`
-	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	CoverImageURI         string           `json:"CoverImageUri"`
+	Description           string           `json:"Description"`
+	HideOwner             bool             `json:"HideOwner"`
+	HighlightImageURI     string           `json:"HighlightImageUri"`
+	Name                  string           `json:"Name"`
+	Keywords              []string         `json:"Keywords"`
+	Password              string           `json:"Password"`
+	PasswordHint          string           `json:"PasswordHint"`
+	Privacy               string           `json:"Privacy"`
+	SecurityType          string           `json:"SecurityType"`
+	ShowCoverImage        bool             `json:"ShowCoverImage"`
+	SmugSearchable        string           `json:"SmugSearchable"`
+	SortDirection         string           `json:"SortDirection"`
+	SortMethod            string           `json:"SortMethod"`
+	Type                  string           `json:"Type"`
+	URLName               string           `json:"UrlName"`
+	WorldSearchable       string           `json:"WorldSearchable"`
+	DateAdded             *time.Time       `json:"DateAdded"`
+	DateModified          *time.Time       `json:"DateModified"`
+	EffectivePrivacy      string           `json:"EffectivePrivacy"`
+	EffectiveSecurityType string           `json:"EffectiveSecurityType"`
+	FormattedValues       *FormattedValues `json:"FormattedValues"`
+	HasChildren           bool             `json:"HasChildren"`
+	IsRoot                bool             `json:"IsRoot"`
+	NodeID                string           `json:"NodeID"`
+	URLPath               string           `json:"UrlPath"`
+	URI                   string           `json:"Uri"`
+	WebURI                string           `json:"WebUri"`
+	URIDescription        string           `json:"UriDescription"`
+	URIs                  NodeURIs         `json:"Uris"`
+	ResponseLevel         string           `json:"ResponseLevel"`
 	// expansions
 	User           *User   `json:"User"`
 	Album          *Album  `json:"Album"`
@@ -466,6 +473,23 @@ type NodeResponse struct {
 	Message    string                      `json:"Message"`
 }
 
+type FolderURIs struct {
+	AlbumList            *APIEndpoint `json:"AlbumList"`
+	FolderAlbums         *APIEndpoint `json:"FolderAlbums"`
+	FolderByID           *APIEndpoint `json:"FolderByID"`
+	FolderHighlightImage *APIEndpoint `json:"FolderHighlightImage"`
+	FolderList           *APIEndpoint `json:"FolderList"`
+	FolderPages          *APIEndpoint `json:"FolderPages"`
+	Folders              *APIEndpoint `json:"Folders"`
+	FolderSearch         *APIEndpoint `json:"FolderSearch"`
+	HighlightImage       *APIEndpoint `json:"HighlightImage"`
+	Node                 *APIEndpoint `json:"Node"`
+	ParentFolder         *APIEndpoint `json:"ParentFolder"`
+	ParentFolders        *APIEndpoint `json:"ParentFolders"`
+	Size                 *APIEndpoint `json:"Size"`
+	User                 *APIEndpoint `json:"User"`
+}
+
 type Folder struct {
 	Name           string     `json:"Name"`
 	URLName        string     `json:"UrlName"`
@@ -483,23 +507,8 @@ type Folder struct {
 	URI            string     `json:"Uri"`
 	WebURI         string     `json:"WebUri"`
 	URIDescription string     `json:"UriDescription"`
-	URIs           struct {
-		AlbumList            *APIEndpoint `json:"AlbumList"`
-		FolderAlbums         *APIEndpoint `json:"FolderAlbums"`
-		FolderByID           *APIEndpoint `json:"FolderByID"`
-		FolderHighlightImage *APIEndpoint `json:"FolderHighlightImage"`
-		FolderList           *APIEndpoint `json:"FolderList"`
-		FolderPages          *APIEndpoint `json:"FolderPages"`
-		Folders              *APIEndpoint `json:"Folders"`
-		FolderSearch         *APIEndpoint `json:"FolderSearch"`
-		HighlightImage       *APIEndpoint `json:"HighlightImage"`
-		Node                 *APIEndpoint `json:"Node"`
-		ParentFolder         *APIEndpoint `json:"ParentFolder"`
-		ParentFolders        *APIEndpoint `json:"ParentFolders"`
-		Size                 *APIEndpoint `json:"Size"`
-		User                 *APIEndpoint `json:"User"`
-	} `json:"Uris"`
-	ResponseLevel string `json:"ResponseLevel"`
+	URIs           FolderURIs `json:"Uris"`
+	ResponseLevel  string     `json:"ResponseLevel"`
 }
 
 type FolderResponse struct {
