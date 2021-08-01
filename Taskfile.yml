@@ -4,6 +4,12 @@ version: '3'
 
 dotenv: ['.env']
 
+vars:
+  CWD:
+    sh: git rev-parse --show-toplevel
+  DIST:
+    "{{.CWD}}/.dist"
+
 tasks:
   default:
     cmds:
@@ -13,3 +19,15 @@ tasks:
     desc: Run the smugmug demo
     cmds:
       - go run cmd/demo/*.go {{.CLI_ARGS}}
+
+  test:
+    desc: Run tests
+    cmds:
+      - mkdir -p {{.DIST}}
+      - go test -count=1 -covermode count -coverprofile {{.DIST}}/coverage.txt github.com/bzimmer/smugmug github.com/bzimmer/smugmug/uploadable/filesystem
+
+  cover:
+    desc: Visualize test coverage
+    deps: [test]
+    cmds:
+      - go tool cover -html={{.DIST}}/coverage.txt

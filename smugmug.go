@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/mrjones/oauth"
@@ -14,8 +15,10 @@ import (
 
 const (
 	batchSize = 100
-	baseURL   = "https://api.smugmug.com/api/v2"
 	userAgent = "github.com/bzimmer/smugmug"
+
+	_baseURL   = "https://api.smugmug.com/api/v2"
+	_uploadURL = "https://upload.smugmug.com"
 )
 
 var Provider = oauth.ServiceProvider{
@@ -25,13 +28,16 @@ var Provider = oauth.ServiceProvider{
 }
 
 type Client struct {
-	client *http.Client
-	pretty bool
+	client    *http.Client
+	pretty    bool
+	baseURL   string
+	uploadURL string
 
-	User  *UserService
-	Node  *NodeService
-	Album *AlbumService
-	Image *ImageService
+	User   *UserService
+	Node   *NodeService
+	Album  *AlbumService
+	Image  *ImageService
+	Upload *UploadService
 }
 
 func withServices() Option {
@@ -40,6 +46,14 @@ func withServices() Option {
 		c.Node = &NodeService{c}
 		c.Album = &AlbumService{c}
 		c.Image = &ImageService{c}
+		c.Upload = &UploadService{c}
+
+		if c.baseURL == "" {
+			c.baseURL = _baseURL
+		}
+		if c.uploadURL == "" {
+			c.uploadURL = _uploadURL
+		}
 		return nil
 	}
 }
@@ -51,6 +65,22 @@ type APIOption func(url.Values) error
 func WithPretty(pretty bool) Option {
 	return func(c *Client) error {
 		c.pretty = pretty
+		return nil
+	}
+}
+
+// WithBaseURL specifies the base url
+func WithBaseURL(baseURL string) Option {
+	return func(c *Client) error {
+		c.baseURL = baseURL
+		return nil
+	}
+}
+
+// WithUploadURL specifies the upload url
+func WithUploadURL(uploadURL string) Option {
+	return func(c *Client) error {
+		c.uploadURL = uploadURL
 		return nil
 	}
 }
@@ -74,12 +104,19 @@ func WithPagination(start, count int) APIOption {
 
 func WithSorting(direction, method string) APIOption {
 	return func(v url.Values) error {
-		v.Set("SortDirection", direction)
-		v.Set("SortMethod", method)
+		v.Del("SortDirection")
+		if direction != "" {
+			v.Set("SortDirection", direction)
+		}
+		v.Del("SortMethod")
+		if method != "" {
+			v.Set("SortMethod", method)
+		}
 		return nil
 	}
 }
 
+// WithFilters queries SmugMug for only the attributes in the filter list
 func WithFilters(filters ...string) APIOption {
 	return func(v url.Values) error {
 		v.Set("_filter", strings.Join(filters, ","))
@@ -91,8 +128,14 @@ func WithFilters(filters ...string) APIOption {
 // The scope is a URI representing a user, album, node, or folder
 func WithSearch(scope, text string) APIOption {
 	return func(v url.Values) error {
-		v.Set("Text", text)
-		v.Set("Scope", scope)
+		v.Del("Text")
+		if text != "" {
+			v.Set("Text", text)
+		}
+		v.Del("Scope")
+		if scope != "" {
+			v.Set("Scope", scope)
+		}
 		return nil
 	}
 }
@@ -106,15 +149,14 @@ func NewHTTPClient(consumerKey, consumerSecret, accessToken, accessTokenSecret s
 
 func (c *Client) newRequest(ctx context.Context, method, uri string, options []APIOption) (*http.Request, error) {
 	if strings.HasPrefix("!", uri) {
-		uri = fmt.Sprintf("%s%s", baseURL, uri)
+		uri = fmt.Sprintf("%s%s", c.baseURL, uri)
 	} else {
-		uri = fmt.Sprintf("%s/%s", baseURL, uri)
+		uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	}
 
 	v := url.Values{}
-	if c.pretty {
-		v.Set("_pretty", "true")
-	}
+	v.Set("_pretty", strconv.FormatBool(c.pretty))
+
 	for _, opt := range options {
 		if err := opt(v); err != nil {
 			return nil, err

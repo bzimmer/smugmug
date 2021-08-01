@@ -1,0 +1,387 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/node/zx4Fx"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "PATCH": {
+                "Permissions": [
+                    "Modify"
+                ]
+            },
+            "DELETE": {
+                "Permissions": [
+                    "Modify"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Output": [
+            {
+                "Name": "CoverImageUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "Image"
+                ]
+            },
+            {
+                "Name": "Description",
+                "Description": "Human-readable description for this node. May contain basic HTML. Some node types display this to the user; some merely use it for search engine optimization.",
+                "Type": "Text",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 65535
+            },
+            {
+                "Name": "HideOwner",
+                "Description": "Whether to hide the identity of this node's owner from visitors. Only applicable to Album nodes.",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "HighlightImageUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "Image"
+                ]
+            },
+            {
+                "Name": "Name",
+                "Description": "Human-readable name for this node.",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": 254
+            },
+            {
+                "Name": "Keywords",
+                "Description": "Array of keywords describing the content of this node. Some node types use this for search engine optimization.",
+                "Type": "Array",
+                "ITEM_TYPE": "Varchar",
+                "MIN_COUNT": 0,
+                "MAX_COUNT": "INFINITY"
+            },
+            {
+                "Name": "Password",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 50
+            },
+            {
+                "Name": "PasswordHint",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255
+            },
+            {
+                "Name": "Privacy",
+                "Description": "Privacy level for this node. NOTE: This may be overridden by a more restrictive privacy setting inherited from one of this node's ancestors. See EffectivePrivacy.",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Public",
+                    "Unlisted",
+                    "Private"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "SecurityType",
+                "Description": "Security type for this node. NOTE: This may be overridden by a more restrictive security setting inherited from one of this node's ancestors. See EffectiveSecurityType.",
+                "Type": "Select",
+                "OPTIONS": [
+                    "None",
+                    "Password",
+                    "GrantAccess"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "ShowCoverImage",
+                "Description": "Whether or not to display the cover image when possible.",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "SmugSearchable",
+                "Description": "Acceptable values differ for root nodes and child nodes.\n\nRoot nodes: No, Local, LocalUser, Yes\nChild nodes: No, Inherit from User",
+                "Type": "Select",
+                "OPTIONS": [
+                    "No",
+                    "Local",
+                    "LocalUser",
+                    "Yes",
+                    "Inherit from User"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "SortDirection",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Ascending",
+                    "Descending"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "SortMethod",
+                "Type": "Select",
+                "OPTIONS": [
+                    "SortIndex",
+                    "Name",
+                    "DateAdded",
+                    "DateModified"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "Type",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Album",
+                    "Page",
+                    "Folder",
+                    "System Album",
+                    "System Page"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "UrlName",
+                "Description": "This is usually a URL-friendly version of the human-readable name. Must start with a capital letter.",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": 60
+            },
+            {
+                "Name": "WorldSearchable",
+                "Description": "Acceptable values differ for root nodes and child nodes.\n\nRoot nodes: No, HomeOnly, Yes\nChild nodes: No, Inherit from User",
+                "Type": "Select",
+                "OPTIONS": [
+                    "No",
+                    "HomeOnly",
+                    "Yes",
+                    "Inherit from User"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "DateAdded",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "DateModified",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "EffectivePrivacy",
+                "Description": "Effective privacy level of this node. This takes into account the effect of privacy settings from this node's ancestors.",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Public",
+                    "Unlisted",
+                    "Private"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "EffectiveSecurityType",
+                "Description": "Effective security type of this node. This takes into account the effect of security settings from this node's ancestors.",
+                "Type": "Select",
+                "OPTIONS": [
+                    "None",
+                    "Password",
+                    "GrantAccess"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "FormattedValues",
+                "Description": "Alternative versions of certain fields formatted for use in different contexts.",
+                "Type": "Hash"
+            },
+            {
+                "Name": "HasChildren",
+                "Description": "Whether this node contains any child nodes.",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "IsRoot",
+                "Description": "Whether this node is the owner's root node.",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "NodeID",
+                "Description": "This node's ID",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "SortIndex",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "UrlPath",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            }
+        ],
+        "ResponseLevels": [
+            "Full",
+            "Public",
+            "Password",
+            "GrantAccess"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "node"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "nodeid",
+                "param_value": "zx4Fx"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/node/zx4Fx",
+        "Locator": "Node",
+        "LocatorType": "Object",
+        "Node": {
+            "Description": "",
+            "Name": "",
+            "Keywords": [],
+            "PasswordHint": "",
+            "SecurityType": "None",
+            "ShowCoverImage": false,
+            "SortDirection": "Ascending",
+            "SortMethod": "SortIndex",
+            "Type": "Folder",
+            "UrlName": "",
+            "DateAdded": "2013-07-13T22:44:07+00:00",
+            "DateModified": "2013-07-28T00:27:50+00:00",
+            "EffectiveSecurityType": "None",
+            "FormattedValues": {
+                "Name": {
+                    "html": ""
+                },
+                "Description": {
+                    "html": "",
+                    "text": ""
+                }
+            },
+            "HasChildren": true,
+            "IsRoot": true,
+            "NodeID": "zx4Fx",
+            "UrlPath": "/",
+            "Uri": "/api/v2/node/zx4Fx",
+            "WebUri": "https://cmac.smugmug.com",
+            "UriDescription": "Node with the given id.",
+            "Uris": {
+                "FolderByID": {
+                    "Uri": "/api/v2/folder/id/zx4Fx",
+                    "Locator": "Folder",
+                    "LocatorType": "Object",
+                    "UriDescription": "Get folder by its ID",
+                    "EndpointType": "FolderByID"
+                },
+                "ParentNodes": {
+                    "Uri": "/api/v2/node/zx4Fx!parents",
+                    "Locator": "Node",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                    "EndpointType": "ParentNodes"
+                },
+                "User": {
+                    "Uri": "/api/v2/user/cmac",
+                    "Locator": "User",
+                    "LocatorType": "Object",
+                    "UriDescription": "User By Nickname",
+                    "EndpointType": "User"
+                },
+                "NodeCoverImage": {
+                    "Uri": "/api/v2/node/zx4Fx!cover",
+                    "Locator": "Image",
+                    "LocatorType": "Object",
+                    "UriDescription": "Cover image for a folder, album, or page",
+                    "EndpointType": "NodeCoverImage"
+                },
+                "HighlightImage": {
+                    "Uri": "/api/v2/highlight/node/zx4Fx",
+                    "Locator": "Image",
+                    "LocatorType": "Object",
+                    "UriDescription": "Highlight image for a folder, album, or page",
+                    "EndpointType": "HighlightImage"
+                },
+                "NodeComments": {
+                    "Uri": "/api/v2/node/zx4Fx!comments",
+                    "Locator": "Comment",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Comments on a Node",
+                    "EndpointType": "NodeComments"
+                },
+                "ChildNodes": {
+                    "Uri": "/api/v2/node/zx4Fx!children",
+                    "Locator": "Node",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Child nodes of the given node.",
+                    "EndpointType": "ChildNodes"
+                }
+            },
+            "ResponseLevel": "Public"
+        },
+        "UriDescription": "Node with the given id.",
+        "EndpointType": "Node",
+        "Timing": {
+            "Total": {
+                "time": 0.11138,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}

@@ -12,6 +12,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/bzimmer/smugmug"
+	"github.com/bzimmer/smugmug/uploadable/filesystem"
 )
 
 var mg *smugmug.Client
@@ -110,10 +111,10 @@ func main() {
 						return err
 					}
 					i := 0
-					return mg.Album.AlbumsIter(c.Context, user.NickName, func(album *smugmug.Album) error {
+					return mg.Album.AlbumsIter(c.Context, user.NickName, func(album *smugmug.Album) (bool, error) {
 						fmt.Printf("[%04d] [%s] %s\n", i, album.AlbumKey, album.URLName)
 						i++
-						return nil
+						return true, nil
 					})
 				},
 			},
@@ -128,7 +129,7 @@ func main() {
 				Action: func(c *cli.Context) error {
 					img := c.Bool("images")
 					enc := json.NewEncoder(c.App.Writer)
-					f := func(node *smugmug.Node) error {
+					f := func(node *smugmug.Node) (bool, error) {
 						switch node.Type {
 						case "Album":
 							log.Info().
@@ -139,11 +140,11 @@ func main() {
 								Int("imageCount", node.Album.ImageCount).
 								Msg("images")
 							if img {
-								return mg.Image.ImagesIter(c.Context, node.Album.AlbumKey, func(image *smugmug.Image) error {
+								return true, mg.Image.ImagesIter(c.Context, node.Album.AlbumKey, func(image *smugmug.Image) (bool, error) {
 									if image.Caption == "" {
-										return nil
+										return true, nil
 									}
-									return enc.Encode(map[string]interface{}{
+									return true, enc.Encode(map[string]interface{}{
 										"filename":  image.FileName,
 										"caption":   image.Caption,
 										"latitude":  image.Latitude,
@@ -156,7 +157,7 @@ func main() {
 						default:
 							log.Info().Str("nodeID", node.NodeID).Str("name", node.Name).Str("type", node.Type).Msg("children")
 						}
-						return nil
+						return true, nil
 					}
 					nodeID := c.Args().First()
 					return mg.Node.ChildrenIter(c.Context, nodeID, f, smugmug.WithExpansions("Album", "FolderByID", "HighlightImage", "User"))
@@ -172,10 +173,10 @@ func main() {
 					i := 0
 					return mg.Node.SearchIter(
 						c.Context,
-						func(node *smugmug.Node) error {
+						func(node *smugmug.Node) (bool, error) {
 							fmt.Printf("[%04d] [%s] %s %s\n", i, node.NodeID, node.URI, node.Name)
 							i++
-							return nil
+							return true, nil
 						},
 						smugmug.WithExpansions("ParentNode"),
 						smugmug.WithSearch(user.URI, c.Args().First()))
@@ -192,13 +193,13 @@ func main() {
 					fmt.Println(" " + album.HighlightImage.FileName)
 					fmt.Printf(" %03d images\n", album.ImageCount)
 
-					f := func(image *smugmug.Image) error {
+					f := func(image *smugmug.Image) (bool, error) {
 						cover := " "
 						if album.HighlightImage.FileName == image.FileName {
 							cover = "*"
 						}
 						fmt.Printf("%s  %s | %s %s |\n", cover, image.FileName, image.ImageKey, image.Caption)
-						return nil
+						return true, nil
 					}
 					return mg.Image.ImagesIter(c.Context, album.AlbumKey, f)
 				},
@@ -212,8 +213,8 @@ func main() {
 					}
 					log.Info().Str("scope", user.URIs.Node.URI).Msg("search")
 					albums, pages, err := mg.Album.Search(c.Context,
-						smugmug.WithFilters("Name", "LastUpdated"),
-						smugmug.WithSorting("", "Last Updated"),
+						smugmug.WithFilters("Name", "LastUpdated", "AlbumKey"),
+						smugmug.WithSorting("", "LastUpdated"),
 						smugmug.WithSearch(user.URIs.Node.URI, c.Args().First()),
 					)
 					if err != nil {
@@ -223,26 +224,15 @@ func main() {
 					fmt.Printf(" total %d\n", pages.Total)
 
 					for _, album := range albums {
-						fmt.Printf("  %s -- %s\n", album.LastUpdated, album.Name)
+						fmt.Printf("  %s -- %s -- %s\n", album.LastUpdated, album.Name, album.AlbumKey)
 					}
-					return nil
-				},
-			},
-			{
-				Name: "image",
-				Action: func(c *cli.Context) error {
-					img, err := mg.Image.Image(c.Context, c.Args().First(), smugmug.WithExpansions("ImageSizeDetails"))
-					if err != nil {
-						return err
-					}
-					fmt.Printf(" %s %s\n", img.FileName, img.ImageSizeDetails.ImageSizeLarge.URL)
 					return nil
 				},
 			},
 			{
 				Name: "walk",
 				Action: func(c *cli.Context) error {
-					return mg.Node.Walk(c.Context, c.Args().First(), func(node *smugmug.Node) error {
+					return mg.Node.Walk(c.Context, c.Args().First(), func(node *smugmug.Node) (bool, error) {
 						switch node.Type {
 						case "Album":
 							log.Info().
@@ -253,48 +243,79 @@ func main() {
 								Int("imageCount", node.Album.ImageCount).
 								Msg("images")
 						case "Folder":
-							fallthrough
-						case "Node":
 							log.Info().
 								Str("nodeID", node.NodeID).
 								Str("name", node.Name).
 								Str("type", node.Type).
 								Msg("children")
 						}
-						return nil
+						return true, nil
 					}, smugmug.WithExpansions("Album"))
 				},
 			},
-		},
-		Action: func(c *cli.Context) error {
-			user, err := mg.User.AuthUser(c.Context)
-			if err != nil {
-				return err
-			}
-
-			fmt.Println(user.NickName)
-
-			albums, pages, err := mg.Album.Albums(c.Context, user.NickName)
-			if err != nil {
-				return err
-			}
-
-			fmt.Printf(" pages >> %d/%d\n", pages.Count, pages.Total)
-			for i, album := range albums {
-				fmt.Printf(" %s | %s |\n", album.URLName, "")
-				if i == 0 {
-					images, pages, err := mg.Image.Images(c.Context, album.AlbumKey)
+			{
+				Name: "image",
+				Action: func(c *cli.Context) error {
+					img, err := mg.Image.Image(c.Context, c.Args().First(), smugmug.WithExpansions("Album", "ImageAlbum"))
 					if err != nil {
 						return err
 					}
-					fmt.Printf("  pages >> %d/%d\n", pages.Count, pages.Total)
-					for _, image := range images {
-						fmt.Printf("  %s => '%s'\n", image.FileName, image.Caption)
-					}
-				}
-			}
+					log.Info().
+						Str("caption", img.Caption).
+						Str("imageKey", img.ImageKey).
+						Str("albumName", img.Album.Name).
+						Str("albumKey", img.Album.AlbumKey).
+						Msg("image")
+					return nil
+				},
+			},
+			{
+				Name: "upload",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "album",
+						Value:    "",
+						Required: true,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					var n int
 
-			return nil
+					images := make(map[string]*smugmug.Image)
+
+					log.Info().Msg("querying existing gallery images")
+					if err := mg.Image.ImagesIter(c.Context, c.String("album"), func(img *smugmug.Image) (bool, error) {
+						images[img.FileName] = img
+						return true, nil
+					}); err != nil {
+						return err
+					}
+					log.Info().Int("count", len(images)).Msg("existing gallery images")
+
+					u, err := filesystem.NewFsUploadable(
+						filesystem.WithExtensions(".jpg"),
+						filesystem.WithImages(c.String("album"), images),
+					)
+					if err != nil {
+						return err
+					}
+					fsys := filesystem.RelativeFS("/")
+					p := filesystem.NewFsUploadables(fsys, c.Args().Slice(), u)
+					uploadc, errc := mg.Upload.Uploads(c.Context, p)
+					for {
+						select {
+						case err := <-errc:
+							return err
+						case _, ok := <-uploadc:
+							if !ok {
+								log.Info().Int("uploaded", n).Msg("complete")
+								return nil
+							}
+							n++
+						}
+					}
+				},
+			},
 		},
 	}
 	if err := app.RunContext(context.Background(), os.Args); err != nil {

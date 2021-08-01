@@ -11,7 +11,7 @@ import (
 type AlbumService service
 
 // AlbumIterFunc is called for each album in the results
-type AlbumIterFunc func(*Album) error
+type AlbumIterFunc func(*Album) (bool, error)
 
 type albumsQueryFunc func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error)
 
@@ -81,8 +81,10 @@ func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterF
 		}
 		i += pages.Count
 		for _, album := range albums {
-			if err := f(album); err != nil {
+			if ok, err := f(album); err != nil {
 				return err
+			} else if !ok {
+				return nil
 			}
 		}
 		if i == pages.Total {

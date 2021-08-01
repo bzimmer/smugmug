@@ -11,25 +11,27 @@ import (
 type NodeService service
 
 // NodeIterFunc is called for each node in the results
-type NodeIterFunc func(*Node) error
+type NodeIterFunc func(*Node) (bool, error)
 
 type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
 
 func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error {
-	i := 0
+	current := 0
 	page := WithPagination(1, batchSize)
 	for {
 		nodes, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
 			return err
 		}
-		i += pages.Count
+		current += pages.Count
 		for _, node := range nodes {
-			if err := f(node); err != nil {
+			if ok, err := f(node); err != nil {
 				return err
+			} else if !ok {
+				return nil
 			}
 		}
-		if i == pages.Total {
+		if current == pages.Total {
 			return nil
 		}
 		page = WithPagination(pages.Start+pages.Count, batchSize)
@@ -65,12 +67,14 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 		}
 		node.HighlightImage = res.Image
 	}
-	if val, ok := expansions[node.URIs.ParentNode.URI]; ok {
-		res := struct{ Node *Node }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
+	if node.URIs.ParentNode != nil {
+		if val, ok := expansions[node.URIs.ParentNode.URI]; ok {
+			res := struct{ Node *Node }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			node.Parent = res.Node
 		}
-		node.Parent = res.Node
 	}
 	switch node.Type {
 	case "Folder":
@@ -143,26 +147,32 @@ func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options
 // Walk traverses all children of the node rooted at `nodeID`
 func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, options ...APIOption) error {
 	k := &stack{}
-	k.Push(nodeID)
+	k.push(nodeID, nil)
 	for {
-		nid, ok := k.Pop()
+		nid, ok := k.pop()
 		if !ok {
 			return nil
 		}
-		node, err := s.Node(ctx, nid, options...)
-		if err != nil {
-			return err
+		node := nid.node
+		if node == nil {
+			var err error
+			node, err = s.Node(ctx, nid.id, options...)
+			if err != nil {
+				return err
+			}
 		}
-		if err := fn(node); err != nil {
+		if ok, err := fn(node); err != nil {
 			return err
+		} else if !ok {
+			return nil
 		}
 		switch node.Type {
 		case "Album":
 			// ignore, no children
 		case "Folder":
-			if err := s.ChildrenIter(ctx, nid, func(node *Node) error {
-				k.Push(node.NodeID)
-				return nil
+			if err := s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {
+				k.push(node.NodeID, node)
+				return true, nil
 			}, options...); err != nil {
 				return err
 			}
@@ -172,23 +182,23 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 	}
 }
 
-type stack []string
-
-func (s *stack) IsEmpty() bool {
-	return len(*s) == 0
+type item struct {
+	id   string
+	node *Node
 }
 
-func (s *stack) Push(str string) {
-	*s = append(*s, str)
+type stack []*item
+
+func (s *stack) push(id string, node *Node) {
+	*s = append(*s, &item{id: id, node: node})
 }
 
-func (s *stack) Pop() (string, bool) {
-	if s.IsEmpty() {
-		return "", false
-	} else {
-		index := len(*s) - 1
-		element := (*s)[index]
-		*s = (*s)[:index]
-		return element, true
+func (s *stack) pop() (*item, bool) {
+	if len(*s) == 0 {
+		return nil, false
 	}
+	index := len(*s) - 1
+	element := (*s)[index]
+	*s = (*s)[:index]
+	return element, true
 }

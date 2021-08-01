@@ -1,0 +1,10 @@
+{
+    "Image": {
+      "AlbumImageUri": "/api/v2/album/7dFHSm/image/CVvj69L-0",
+      "ImageUri": "/api/v2/image/CVvj69L-0",
+      "StatusImageReplaceUri": null,
+      "URL": "https://something.cc/Test/n-DQcbP6/i-CVvj69L"
+    },
+    "method": "smugmug.images.upload",
+    "stat": "ok"
+  }

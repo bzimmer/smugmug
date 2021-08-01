@@ -1,0 +1,226 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/node/zx4Fx!children?start=11\u0026count=10"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "POST": {
+                "Permissions": [
+                    "Modify"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "ParameterDescription": {
+            "Select": "Select one option. Options should pass only the \"Value\"."
+        },
+        "Parameters": {
+            "GET": [
+                {
+                    "Name": "Type",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "All",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "All",
+                        "Folder Album Page",
+                        "Folder",
+                        "Album",
+                        "Page",
+                        "System Album"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                },
+                {
+                    "Name": "SortMethod",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Organizer",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "DateAdded",
+                        "DateModified",
+                        "Name",
+                        "Organizer"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                },
+                {
+                    "Name": "SortDirection",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "Ascending",
+                    "Type": "Select",
+                    "OPTIONS": [
+                        "Ascending",
+                        "Descending"
+                    ],
+                    "MIN_COUNT": 1,
+                    "MAX_COUNT": 1
+                }
+            ]
+        },
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Notes": [
+            "_multiargs does not work at this endpoint"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "node"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "nodeid",
+                "param_value": "zx4Fx"
+            },
+            {
+                "type": "action",
+                "text": "children"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/node/zx4Fx!children?start=11\u0026count=10",
+        "Locator": "Node",
+        "LocatorType": "Objects",
+        "Node": [
+            {
+                "Description": "",
+                "Name": "Black lives matter protest",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Black-lives-matter-protest",
+                "DateAdded": "2020-06-01T03:10:54+00:00",
+                "DateModified": "2020-06-01T03:11:56+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Black lives matter protest"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "q2qP7F",
+                "SortIndex": 1590981054,
+                "UrlPath": "/Events/Black-lives-matter-protest",
+                "Uri": "/api/v2/node/q2qP7F",
+                "WebUri": "https://cmac.smugmug.com/Events/Black-lives-matter-protest",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/jbBNhR",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/q2qP7F!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/q2qP7F!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/q2qP7F!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/q2qP7F",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/q2qP7F!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            }
+        ],
+        "UriDescription": "Child nodes of the given node.",
+        "EndpointType": "ChildNodes",
+        "Pages": {
+            "Total": 11,
+            "Start": 11,
+            "Count": 1,
+            "RequestedCount": 10,
+            "FirstPage": "/api/v2/node/zx4Fx!children?start=1\u0026count=10",
+            "LastPage": "/api/v2/node/zx4Fx!children?start=11\u0026count=10",
+            "PrevPage": "/api/v2/node/zx4Fx!children?start=1\u0026count=10"
+        },
+        "Timing": {
+            "Total": {
+                "time": 0.09279,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}
