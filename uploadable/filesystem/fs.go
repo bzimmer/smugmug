@@ -11,8 +11,12 @@ type relativeFS struct {
 	root string
 }
 
-func (rfs *relativeFS) Open(name string) (fs.File, error) {
-	name, err := filepath.Rel(rfs.root, name)
+func (rfs *relativeFS) Open(name string) (f fs.File, err error) {
+	name, err = filepath.Abs(name)
+	if err != nil {
+		return nil, err
+	}
+	name, err = filepath.Rel(rfs.root, name)
 	if err != nil {
 		return nil, err
 	}
@@ -20,6 +24,10 @@ func (rfs *relativeFS) Open(name string) (fs.File, error) {
 }
 
 // RelativeFS returns an fs.FS instance relative to `dir`
-func RelativeFS(dir string) fs.FS {
-	return &relativeFS{FS: os.DirFS(dir), root: dir}
+func RelativeFS(dir string) (fs.FS, error) {
+	name, err := filepath.Abs(dir)
+	if err != nil {
+		return nil, err
+	}
+	return &relativeFS{FS: os.DirFS(name), root: dir}, nil
 }

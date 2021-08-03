@@ -1,0 +1,1298 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/album/2XrGxm?_expand=HighlightImage,AlbumHighlightImage,Node,Folder,User"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "PATCH": {
+                "Permissions": [
+                    "Modify"
+                ]
+            },
+            "DELETE": {
+                "Permissions": [
+                    "Modify"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Output": [
+            {
+                "Name": "NiceName",
+                "Description": "Use UrlName instead",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": 60,
+                "Deprecated": "2014-11-20"
+            },
+            {
+                "Name": "UrlName",
+                "Description": "A human-readable name for use in the URL",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": 60
+            },
+            {
+                "Name": "Title",
+                "Description": "Use Name instead",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255,
+                "Deprecated": "2014-11-20"
+            },
+            {
+                "Name": "Name",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255
+            },
+            {
+                "Name": "PrintmarkUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "Printmark"
+                ]
+            },
+            {
+                "Name": "WatermarkUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "Watermark"
+                ]
+            },
+            {
+                "Name": "ThemeUri",
+                "Description": "Only applies to legacy accounts",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "Theme"
+                ]
+            },
+            {
+                "Name": "TemplateUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "Template"
+                ]
+            },
+            {
+                "Name": "AllowDownloads",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Backprinting",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255
+            },
+            {
+                "Name": "BoutiquePackaging",
+                "Type": "Select",
+                "OPTIONS": [
+                    "No",
+                    "Yes",
+                    "Inherit from User"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "CanRank",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Clean",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Comments",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Description",
+                "Type": "Text",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 65535
+            },
+            {
+                "Name": "DownloadPassword",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 50
+            },
+            {
+                "Name": "EXIF",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "External",
+                "Description": "An old setting that no longer has any function",
+                "Type": "Boolean",
+                "Deprecated": "2015-09-08"
+            },
+            {
+                "Name": "FamilyEdit",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Filenames",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "FriendEdit",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Geography",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Header",
+                "Description": "Appearance",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Custom",
+                    "SmugMug"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "HideOwner",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "InterceptShipping",
+                "Description": "Personal Delivery",
+                "Type": "Select",
+                "OPTIONS": [
+                    "No",
+                    "Yes",
+                    "Inherit from User"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "Keywords",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255
+            },
+            {
+                "Name": "LargestSize",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Medium",
+                    "Large",
+                    "XLarge",
+                    "X2Large",
+                    "X3Large",
+                    "X4Large",
+                    "X5Large",
+                    "4K",
+                    "5K",
+                    "Original"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "PackagingBranding",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Password",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 50
+            },
+            {
+                "Name": "PasswordHint",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": 255
+            },
+            {
+                "Name": "Printable",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Privacy",
+                "Description": "\"Private\" is not supported on legacy accounts",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Public",
+                    "Unlisted",
+                    "Private"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "ProofDays",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "ProofDigital",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Protected",
+                "Description": "Right-Click Protection",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Share",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Slideshow",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "SmugSearchable",
+                "Type": "Select",
+                "OPTIONS": [
+                    "No",
+                    "Inherit from User"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "SortDirection",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Ascending",
+                    "Descending"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "SortMethod",
+                "Type": "Select",
+                "OPTIONS": [
+                    "Position",
+                    "Caption",
+                    "Filename",
+                    "Date Uploaded",
+                    "Date Modified",
+                    "Date Taken"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "SquareThumbs",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "UploadKey",
+                "Description": "Guest UploadKey",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Watermark",
+                "Description": "Automatically apply watermark to uploaded images?",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "WorldSearchable",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "SecurityType",
+                "Type": "Select",
+                "OPTIONS": [
+                    "None",
+                    "Password",
+                    "GrantAccess"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1
+            },
+            {
+                "Name": "CommerceLightbox",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "HighlightAlbumImageUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "AlbumImage"
+                ]
+            },
+            {
+                "Name": "AlbumTemplateUri",
+                "Description": "Specify default album presets by providing an AlbumTemplateUri.",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": [
+                    "AlbumTemplate"
+                ]
+            },
+            {
+                "Name": "AlbumKey",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "CanBuy",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "CanFavorite",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "FavoriteAlbumUrl",
+                "Type": "FullUrl",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Date",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "LastUpdated",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "ImagesLastUpdated",
+                "Description": "The last time at which images were added, removed, or rearranged in this album",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "NodeID",
+                "Type": "Varchar",
+                "MIN_CHARS": 1,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "OriginalSizes",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "TotalSizes",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "ImageCount",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "UrlPath",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "CanShare",
+                "Description": "Does the owner of this album want it to be shareable?",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "HasDownloadPassword",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Packages",
+                "Description": "Are any packages available for album",
+                "Type": "Boolean"
+            }
+        ],
+        "Notes": [
+            "To sort images manually first set SortMethod to Position",
+            "When selecting SortMethod=Position, SortMethod is automatically set to Ascending",
+            "NiceName is deprecated; use UrlName instead",
+            "Title is deprecated; use Name instead",
+            "AlbumHighlightImage is deprecated, use HighlightImage instead"
+        ],
+        "ResponseLevels": [
+            "Full",
+            "Password",
+            "Public",
+            "GrantAccess"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "album"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "albumkey",
+                "param_value": "2XrGxm"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/album/2XrGxm",
+        "Locator": "Album",
+        "LocatorType": "Object",
+        "Album": {
+            "NiceName": "Santa-Cruz-fungus-festival-2019",
+            "UrlName": "Santa-Cruz-fungus-festival-2019",
+            "Title": "Santa Cruz fungus festival 2019",
+            "Name": "Santa Cruz fungus festival 2019",
+            "AllowDownloads": true,
+            "Description": "",
+            "EXIF": true,
+            "External": true,
+            "Filenames": false,
+            "Geography": true,
+            "Keywords": "",
+            "PasswordHint": "",
+            "Protected": false,
+            "SortDirection": "Ascending",
+            "SortMethod": "Date Taken",
+            "SecurityType": "None",
+            "CommerceLightbox": false,
+            "AlbumKey": "2XrGxm",
+            "CanBuy": true,
+            "CanFavorite": false,
+            "LastUpdated": "2019-01-13T08:17:42+00:00",
+            "ImagesLastUpdated": "2019-01-13T08:18:37+00:00",
+            "NodeID": "jM739r",
+            "ImageCount": 33,
+            "UrlPath": "/Events/Santa-Cruz-fungus-festival-2019",
+            "CanShare": true,
+            "HasDownloadPassword": false,
+            "Packages": false,
+            "Uri": "/api/v2/album/2XrGxm",
+            "WebUri": "https://cmac.smugmug.com/Events/Santa-Cruz-fungus-festival-2019",
+            "UriDescription": "Album by key",
+            "Uris": {
+                "AlbumShareUris": {
+                    "Uri": "/api/v2/album/2XrGxm!shareuris",
+                    "Locator": "AlbumShareUris",
+                    "LocatorType": "Object",
+                    "UriDescription": "URIs that are useful for sharing",
+                    "EndpointType": "AlbumShareUris"
+                },
+                "Node": {
+                    "Uri": "/api/v2/node/jM739r",
+                    "Locator": "Node",
+                    "LocatorType": "Object",
+                    "UriDescription": "Node with the given id.",
+                    "EndpointType": "Node"
+                },
+                "NodeCoverImage": {
+                    "Uri": "/api/v2/node/jM739r!cover",
+                    "Locator": "Image",
+                    "LocatorType": "Object",
+                    "UriDescription": "Cover image for a folder, album, or page",
+                    "EndpointType": "NodeCoverImage"
+                },
+                "User": {
+                    "Uri": "/api/v2/user/cmac",
+                    "Locator": "User",
+                    "LocatorType": "Object",
+                    "UriDescription": "User By Nickname",
+                    "EndpointType": "User",
+                    "DocUri": "https://api.smugmug.com/api/v2/doc/reference/user.html"
+                },
+                "Folder": {
+                    "Uri": "/api/v2/folder/user/cmac/Events",
+                    "Locator": "Folder",
+                    "LocatorType": "Object",
+                    "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                    "EndpointType": "Folder"
+                },
+                "ParentFolders": {
+                    "Uri": "/api/v2/folder/user/cmac/Events!parents",
+                    "Locator": "Folder",
+                    "LocatorType": "Objects",
+                    "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                    "EndpointType": "ParentFolders"
+                },
+                "HighlightImage": {
+                    "Uri": "/api/v2/highlight/node/jM739r",
+                    "Locator": "Image",
+                    "LocatorType": "Object",
+                    "UriDescription": "Highlight image for a folder, album, or page",
+                    "EndpointType": "HighlightImage"
+                },
+                "AddSamplePhotos": {
+                    "Uri": "/api/v2/album/2XrGxm!addsamplephotos",
+                    "UriDescription": "Add sample photos to Album",
+                    "EndpointType": "AddSamplePhotos"
+                },
+                "AlbumHighlightImage": {
+                    "Uri": "/api/v2/album/2XrGxm!highlightimage",
+                    "Locator": "AlbumImage",
+                    "LocatorType": "Object",
+                    "UriDescription": "Highlight image for album",
+                    "EndpointType": "AlbumHighlightImage"
+                },
+                "AlbumImages": {
+                    "Uri": "/api/v2/album/2XrGxm!images",
+                    "Locator": "AlbumImage",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Images from album",
+                    "EndpointType": "AlbumImages"
+                },
+                "AlbumPopularMedia": {
+                    "Uri": "/api/v2/album/2XrGxm!popularmedia",
+                    "Locator": "AlbumImage",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Popular images from album",
+                    "EndpointType": "AlbumPopularMedia"
+                },
+                "AlbumGeoMedia": {
+                    "Uri": "/api/v2/album/2XrGxm!geomedia",
+                    "Locator": "AlbumImage",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Geotagged images from album",
+                    "EndpointType": "AlbumGeoMedia"
+                },
+                "AlbumComments": {
+                    "Uri": "/api/v2/album/2XrGxm!comments",
+                    "Locator": "Comment",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Comments on album",
+                    "EndpointType": "AlbumComments"
+                },
+                "AlbumDownload": {
+                    "Uri": "/api/v2/album/2XrGxm!download",
+                    "Locator": "Download",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Download album",
+                    "EndpointType": "AlbumDownload"
+                },
+                "AlbumPrices": {
+                    "Uri": "/api/v2/album/2XrGxm!prices",
+                    "Locator": "CatalogSkuPrice",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Purchasable Skus",
+                    "EndpointType": "AlbumPrices"
+                },
+                "AlbumPricelistExclusions": {
+                    "Uri": "/api/v2/album/2XrGxm!pricelistexclusions",
+                    "Locator": "AlbumPricelistExclusions",
+                    "LocatorType": "Object",
+                    "UriDescription": "Pricelist information for an Album",
+                    "EndpointType": "AlbumPricelistExclusions"
+                }
+            },
+            "ResponseLevel": "Public"
+        },
+        "UriDescription": "Album by key",
+        "EndpointType": "Album",
+        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html",
+        "Timing": {
+            "Total": {
+                "time": 0.12536,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok",
+    "Expansions": {
+        "/api/v2/node/jM739r": {
+            "Uri": "/api/v2/node/jM739r",
+            "Locator": "Node",
+            "LocatorType": "Object",
+            "Node": {
+                "Description": "",
+                "Name": "Santa Cruz fungus festival 2019",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Santa-Cruz-fungus-festival-2019",
+                "DateAdded": "2019-01-13T08:09:48+00:00",
+                "DateModified": "2019-01-13T08:17:42+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Santa Cruz fungus festival 2019"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "jM739r",
+                "SortIndex": 4,
+                "UrlPath": "/Events/Santa-Cruz-fungus-festival-2019",
+                "Uri": "/api/v2/node/jM739r",
+                "WebUri": "https://cmac.smugmug.com/Events/Santa-Cruz-fungus-festival-2019",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/2XrGxm",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/jM739r!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/jM739r!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/jM739r!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/jM739r",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/jM739r!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "Node with the given id.",
+            "EndpointType": "Node"
+        },
+        "/api/v2/user/cmac": {
+            "Uri": "/api/v2/user/cmac",
+            "Locator": "User",
+            "LocatorType": "Object",
+            "User": {
+                "NickName": "cmac",
+                "ViewPassHint": "",
+                "RefTag": "TEjaxa2MF2LJ6",
+                "Name": "Chris MacAskill (Baldy)",
+                "QuickShare": true,
+                "Uri": "/api/v2/user/cmac",
+                "WebUri": "https://cmac.smugmug.com",
+                "UriDescription": "User By Nickname",
+                "Uris": {
+                    "BioImage": {
+                        "Uri": "/api/v2/user/cmac!bioimage",
+                        "Locator": "BioImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "User BioImage",
+                        "EndpointType": "BioImage"
+                    },
+                    "CoverImage": {
+                        "Uri": "/api/v2/user/cmac!coverimage",
+                        "Locator": "CoverImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "User CoverImage",
+                        "EndpointType": "CoverImage"
+                    },
+                    "UserProfile": {
+                        "Uri": "/api/v2/user/cmac!profile",
+                        "Locator": "UserProfile",
+                        "LocatorType": "Object",
+                        "UriDescription": "User's profile information",
+                        "EndpointType": "UserProfile"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/zx4Fx",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/cmac",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "Features": {
+                        "Uri": "/api/v2/user/cmac!features",
+                        "Locator": "Features",
+                        "LocatorType": "Object",
+                        "UriDescription": "User's account features information",
+                        "EndpointType": "Features"
+                    },
+                    "SiteSettings": {
+                        "Uri": "/api/v2/user/cmac!sitesettings",
+                        "Locator": "SiteSettings",
+                        "LocatorType": "Object",
+                        "UriDescription": "User site settings",
+                        "EndpointType": "SiteSettings"
+                    },
+                    "UserAlbums": {
+                        "Uri": "/api/v2/user/cmac!albums",
+                        "Locator": "Album",
+                        "LocatorType": "Objects",
+                        "UriDescription": "All of user's albums",
+                        "EndpointType": "UserAlbums"
+                    },
+                    "UserCollections": {
+                        "Uri": "/api/v2/user/cmac!collections",
+                        "Locator": "Collection",
+                        "LocatorType": "Objects",
+                        "UriDescription": "All of user's collections",
+                        "EndpointType": "UserCollections"
+                    },
+                    "UserGeoMedia": {
+                        "Uri": "/api/v2/user/cmac!geomedia",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images for user",
+                        "EndpointType": "UserGeoMedia"
+                    },
+                    "UserPopularMedia": {
+                        "Uri": "/api/v2/user/cmac!popularmedia",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "User's popular images",
+                        "EndpointType": "UserPopularMedia"
+                    },
+                    "UserFeaturedAlbums": {
+                        "Uri": "/api/v2/user/cmac!featuredalbums",
+                        "Locator": "Album",
+                        "LocatorType": "Objects",
+                        "UriDescription": "User's featured albums",
+                        "EndpointType": "UserFeaturedAlbums"
+                    },
+                    "UserRecentImages": {
+                        "Uri": "/api/v2/user/cmac!recentimages",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "User's recent images",
+                        "EndpointType": "UserRecentImages"
+                    },
+                    "UserImageSearch": {
+                        "Uri": "/api/v2/user/cmac!imagesearch",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Search for user images",
+                        "EndpointType": "UserImageSearch"
+                    },
+                    "UserTopKeywords": {
+                        "Uri": "/api/v2/user/cmac!topkeywords",
+                        "Locator": "UserTopKeywords",
+                        "LocatorType": "Object",
+                        "UriDescription": "User's top keywords",
+                        "EndpointType": "UserTopKeywords"
+                    },
+                    "UrlPathLookup": {
+                        "Uri": "/api/v2/user/cmac!urlpathlookup",
+                        "Locator": "Folder,Album,Page",
+                        "LocatorType": "Object",
+                        "UriDescription": "Lookup user's folder, album, or page by path",
+                        "EndpointType": "UrlPathLookup"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "User By Nickname",
+            "EndpointType": "User",
+            "DocUri": "https://api.smugmug.com/api/v2/doc/reference/user.html"
+        },
+        "/api/v2/folder/user/cmac/Events": {
+            "Uri": "/api/v2/folder/user/cmac/Events",
+            "Locator": "Folder",
+            "LocatorType": "Object",
+            "Folder": {
+                "Name": "Events",
+                "UrlName": "Events",
+                "SecurityType": "None",
+                "SortMethod": "SortIndex",
+                "SortDirection": "Ascending",
+                "Description": "",
+                "Keywords": "",
+                "PasswordHint": "",
+                "DateAdded": "2013-07-13T22:44:59+00:00",
+                "DateModified": "2020-06-01T03:11:56+00:00",
+                "UrlPath": "/Events",
+                "NodeID": "kTR76",
+                "IsEmpty": false,
+                "Uri": "/api/v2/folder/user/cmac/Events",
+                "WebUri": "https://cmac.smugmug.com/Events",
+                "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/kTR76",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/kTR76",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/cmac!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "ParentFolder": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!parent",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent folder",
+                        "EndpointType": "ParentFolder"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/kTR76",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "FolderHighlightImage": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!highlightimage",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for folder",
+                        "EndpointType": "FolderHighlightImage"
+                    },
+                    "Folders": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!folders",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Folders inside of the folder",
+                        "EndpointType": "Folders"
+                    },
+                    "FolderList": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!folderlist",
+                        "Locator": "FolderList",
+                        "LocatorType": "List",
+                        "UriDescription": "Recursive list of all of the user's folders",
+                        "EndpointType": "FolderList"
+                    },
+                    "FolderAlbums": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!albums",
+                        "Locator": "Album",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Albums inside of the folder",
+                        "EndpointType": "FolderAlbums"
+                    },
+                    "AlbumList": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!albumlist",
+                        "Locator": "AlbumList",
+                        "LocatorType": "List",
+                        "UriDescription": "List of user's albums",
+                        "EndpointType": "AlbumList"
+                    },
+                    "FolderSearch": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!search",
+                        "Locator": "FolderByID",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Search for folders",
+                        "EndpointType": "FolderSearch"
+                    },
+                    "FolderPages": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!pages",
+                        "Locator": "Page",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Pages inside of the folder",
+                        "EndpointType": "FolderPages"
+                    },
+                    "Size": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!size",
+                        "Locator": "Size",
+                        "LocatorType": "Object",
+                        "UriDescription": "Size of folder",
+                        "EndpointType": "Size"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "A folder or legacy (sub)category by UrlPath",
+            "EndpointType": "Folder"
+        },
+        "/api/v2/highlight/node/jM739r": {
+            "Uri": "/api/v2/highlight/node/jM739r",
+            "Locator": "Image",
+            "LocatorType": "Object",
+            "Image": {
+                "Title": "",
+                "Caption": "",
+                "Keywords": "fungi; 0051",
+                "KeywordArray": [
+                    "fungi",
+                    "0051"
+                ],
+                "Watermark": "No",
+                "Latitude": "0.00000000000000",
+                "Longitude": "0.00000000000000",
+                "Altitude": 0,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-RSN4vQt/0/Th/i-RSN4vQt-Th.jpg",
+                "FileName": "fungi-0051.jpg",
+                "Processing": false,
+                "UploadKey": "7952669755",
+                "Date": "2019-01-13T08:10:37+00:00",
+                "DateTimeUploaded": "2019-01-13T08:10:37+00:00",
+                "DateTimeOriginal": "2019-01-12T21:06:08+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 5504,
+                "OriginalWidth": 5348,
+                "OriginalSize": 20957333,
+                "LastUpdated": "2019-01-13T08:10:43+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "Watermarked": false,
+                "ImageKey": "RSN4vQt",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Events/Santa-Cruz-fungus-festival-2019/i-RSN4vQt/0/5755f138/D/fungi-0051-D.jpg",
+                "ArchivedSize": 20957333,
+                "ArchivedMD5": "a1a77d576d40054684c4d5f54512b165",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "",
+                        "text": ""
+                    },
+                    "FileName": {
+                        "html": "fungi-0051.jpg",
+                        "text": "fungi-0051.jpg"
+                    }
+                },
+                "Uri": "/api/v2/image/RSN4vQt-0",
+                "UriDescription": "Image by key",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/RSN4vQt-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/RSN4vQt-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/RSN4vQt-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/RSN4vQt!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/RSN4vQt!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/RSN4vQt!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/RSN4vQt!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/RSN4vQt!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/RSN4vQt!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/RSN4vQt!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    }
+                }
+            },
+            "UriDescription": "Highlight image for a folder, album, or page",
+            "EndpointType": "HighlightImage"
+        },
+        "/api/v2/album/2XrGxm!highlightimage": {
+            "Uri": "/api/v2/album/2XrGxm!highlightimage",
+            "Locator": "AlbumImage",
+            "LocatorType": "Object",
+            "AlbumImage": {
+                "Title": "",
+                "Caption": "",
+                "Keywords": "fungi; 2298",
+                "KeywordArray": [
+                    "fungi",
+                    "2298"
+                ],
+                "Watermark": "No",
+                "Latitude": "36.96928333333300",
+                "Longitude": "-122.02780833333000",
+                "Altitude": 1,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-m52qZJK/0/Th/i-m52qZJK-Th.jpg",
+                "FileName": "fungi-2298.jpg",
+                "Processing": false,
+                "UploadKey": "7952678388",
+                "Date": "2019-01-13T08:18:00+00:00",
+                "DateTimeUploaded": "2019-01-13T08:18:00+00:00",
+                "DateTimeOriginal": "2019-01-12T20:23:07+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 3024,
+                "OriginalWidth": 4032,
+                "OriginalSize": 6567736,
+                "LastUpdated": "2019-01-13T08:18:02+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "Watermarked": false,
+                "ImageKey": "m52qZJK",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Events/Santa-Cruz-fungus-festival-2019/i-m52qZJK/0/9bfb02f3/D/fungi-2298-D.jpg",
+                "ArchivedSize": 6567736,
+                "ArchivedMD5": "5d5cbbb399e7db3adaae34a1ba963944",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "",
+                        "text": ""
+                    },
+                    "FileName": {
+                        "html": "fungi-2298.jpg",
+                        "text": "fungi-2298.jpg"
+                    }
+                },
+                "Uri": "/api/v2/album/2XrGxm/image/m52qZJK-0",
+                "UriDescription": "Image from album",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/m52qZJK-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/m52qZJK-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/m52qZJK-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/m52qZJK!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/m52qZJK!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/m52qZJK!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/m52qZJK!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/m52qZJK!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/m52qZJK!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/m52qZJK!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    },
+                    "Album": {
+                        "Uri": "/api/v2/album/2XrGxm",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "Image": {
+                        "Uri": "/api/v2/image/m52qZJK-0",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Image by key",
+                        "EndpointType": "Image"
+                    },
+                    "AlbumImagePricelistExclusions": {
+                        "Uri": "/api/v2/album/2XrGxm/image/m52qZJK-0!pricelistexclusions",
+                        "Locator": "AlbumImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an album image",
+                        "EndpointType": "AlbumImagePricelistExclusions"
+                    },
+                    "AlbumImageMetadata": {
+                        "Uri": "/api/v2/album/2XrGxm/image/m52qZJK-0!metadata",
+                        "Locator": "AlbumImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for AlbumImage",
+                        "EndpointType": "AlbumImageMetadata"
+                    },
+                    "AlbumImageShareUris": {
+                        "Uri": "/api/v2/album/2XrGxm/image/m52qZJK-0!shareuris",
+                        "Locator": "AlbumImageShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumImageShareUris"
+                    }
+                },
+                "Movable": true,
+                "Origin": "Album",
+                "WebUri": "https://cmac.smugmug.com/Events/Santa-Cruz-fungus-festival-2019/i-m52qZJK"
+            },
+            "UriDescription": "Highlight image for album",
+            "EndpointType": "AlbumHighlightImage"
+        }
+    }
+}

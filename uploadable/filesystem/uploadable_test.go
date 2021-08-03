@@ -14,7 +14,7 @@ func TestUploadable(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	albumID := "Du82xY"
+	albumKey := "Du82xY"
 
 	tests := []struct {
 		filename string
@@ -44,7 +44,7 @@ func TestUploadable(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 
-		options := append(tt.options, filesystem.WithImages(albumID, tt.images))
+		options := append(tt.options, filesystem.WithImages(albumKey, tt.images))
 		fsup, err := filesystem.NewFsUploadable(options...)
 		a.NoError(err)
 

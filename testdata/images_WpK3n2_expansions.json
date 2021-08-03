@@ -1,0 +1,957 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/album/WpK3n2!images?_expand=Album"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "POST": {
+                "Permissions": [
+                    "Add"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "ParameterDescription": {
+            "Varchar": "Variable length text from MIN_CHARS to MAX_CHARS (MAX_CHARS = INFINITY meaning arbitrary length)"
+        },
+        "Parameters": {
+            "GET": [
+                {
+                    "Name": "FileNames",
+                    "Required": false,
+                    "ReadOnly": false,
+                    "Default": "",
+                    "Description": "A list of filenames (percent-encoded and comma-separated); if used, an image will only be included in the result set if its file name is in the list",
+                    "Type": "Varchar",
+                    "MIN_CHARS": 0,
+                    "MAX_CHARS": "INFINITY"
+                }
+            ]
+        },
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Notes": [
+            "_multiargs does not work at this endpoint"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "album"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "albumkey",
+                "param_value": "WpK3n2"
+            },
+            {
+                "type": "action",
+                "text": "images"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/album/WpK3n2!images",
+        "Locator": "AlbumImage",
+        "LocatorType": "Objects",
+        "AlbumImage": [
+            {
+                "Title": "",
+                "Caption": "MY21 Pan America Riding Photography",
+                "Keywords": "201482; pan; RA1250S; 02299; RA1250S Pan America Special; Pan America Special; HarleyDavidson Pan America Special; Revolution Max; Riding; MY21; Model Year 2021; Model Year 21; 2021",
+                "KeywordArray": [
+                    "201482",
+                    "pan",
+                    "RA1250S",
+                    "02299",
+                    "RA1250S Pan America Special",
+                    "Pan America Special",
+                    "HarleyDavidson Pan America Special",
+                    "Revolution Max",
+                    "Riding",
+                    "MY21",
+                    "Model Year 2021",
+                    "Model Year 21",
+                    "2021"
+                ],
+                "Watermark": "No",
+                "Latitude": "0.00000000000000",
+                "Longitude": "0.00000000000000",
+                "Altitude": 0,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-xmX6nxr/0/Th/i-xmX6nxr-Th.jpg",
+                "FileName": "201482_pan-am_ra1250s_02299.jpg",
+                "Processing": false,
+                "UploadKey": "10312757811",
+                "Date": "2021-03-22T17:24:13+00:00",
+                "DateTimeUploaded": "2021-03-22T17:24:13+00:00",
+                "DateTimeOriginal": "2020-11-09T22:03:33+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 5464,
+                "OriginalWidth": 8192,
+                "OriginalSize": 10196885,
+                "LastUpdated": "2021-03-22T17:24:16+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "Watermarked": false,
+                "ImageKey": "xmX6nxr",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Motorcycles/Harley-Pan-America/i-xmX6nxr/0/226f9a1b/D/201482_pan-am_ra1250s_02299-D.jpg",
+                "ArchivedSize": 10196885,
+                "ArchivedMD5": "1dcf4919bb3bd2ff26eca7af4bcc1f60",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "MY21 Pan America Riding Photography",
+                        "text": "MY21 Pan America Riding Photography"
+                    },
+                    "FileName": {
+                        "html": "201482_pan-am_ra1250s_02299.jpg",
+                        "text": "201482_pan-am_ra1250s_02299.jpg"
+                    }
+                },
+                "Uri": "/api/v2/album/WpK3n2/image/xmX6nxr-0",
+                "UriDescription": "Image from album",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/xmX6nxr-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/xmX6nxr-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/xmX6nxr-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/xmX6nxr!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/xmX6nxr!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/xmX6nxr!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/xmX6nxr!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/xmX6nxr!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/xmX6nxr!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/xmX6nxr!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    },
+                    "Album": {
+                        "Uri": "/api/v2/album/WpK3n2",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album",
+                        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+                    },
+                    "Image": {
+                        "Uri": "/api/v2/image/xmX6nxr-0",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Image by key",
+                        "EndpointType": "Image"
+                    },
+                    "AlbumImagePricelistExclusions": {
+                        "Uri": "/api/v2/album/WpK3n2/image/xmX6nxr-0!pricelistexclusions",
+                        "Locator": "AlbumImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an album image",
+                        "EndpointType": "AlbumImagePricelistExclusions"
+                    },
+                    "AlbumImageMetadata": {
+                        "Uri": "/api/v2/album/WpK3n2/image/xmX6nxr-0!metadata",
+                        "Locator": "AlbumImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for AlbumImage",
+                        "EndpointType": "AlbumImageMetadata"
+                    },
+                    "AlbumImageShareUris": {
+                        "Uri": "/api/v2/album/WpK3n2/image/xmX6nxr-0!shareuris",
+                        "Locator": "AlbumImageShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumImageShareUris"
+                    }
+                },
+                "Movable": true,
+                "Origin": "Album",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles/Harley-Pan-America/i-xmX6nxr"
+            },
+            {
+                "Title": "",
+                "Caption": "MY21 Pan America Photography. Riding",
+                "Keywords": "201482; pan; RA1250S; 01971; RA1250S Pan America Special; Pan America Special; HarleyDavidson Pan America Special; Revolution Max; MY21; Model Year 2021; Model Year 21; 2021",
+                "KeywordArray": [
+                    "201482",
+                    "pan",
+                    "RA1250S",
+                    "01971",
+                    "RA1250S Pan America Special",
+                    "Pan America Special",
+                    "HarleyDavidson Pan America Special",
+                    "Revolution Max",
+                    "MY21",
+                    "Model Year 2021",
+                    "Model Year 21",
+                    "2021"
+                ],
+                "Watermark": "No",
+                "Latitude": "0.00000000000000",
+                "Longitude": "0.00000000000000",
+                "Altitude": 0,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-3HFNmtB/0/Th/i-3HFNmtB-Th.jpg",
+                "FileName": "201482_pan-am_ra1250s_01971.jpg",
+                "Processing": false,
+                "UploadKey": "10312758372",
+                "Date": "2021-03-22T17:24:26+00:00",
+                "DateTimeUploaded": "2021-03-22T17:24:26+00:00",
+                "DateTimeOriginal": "2020-11-11T02:13:45+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 5504,
+                "OriginalWidth": 8256,
+                "OriginalSize": 13487796,
+                "LastUpdated": "2021-03-22T17:24:29+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "Watermarked": false,
+                "ImageKey": "3HFNmtB",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Motorcycles/Harley-Pan-America/i-3HFNmtB/0/47fc4dd5/D/201482_pan-am_ra1250s_01971-D.jpg",
+                "ArchivedSize": 13487796,
+                "ArchivedMD5": "76857e47339e4395556f82f1ff07f3a0",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "MY21 Pan America Photography. Riding",
+                        "text": "MY21 Pan America Photography. Riding"
+                    },
+                    "FileName": {
+                        "html": "201482_pan-am_ra1250s_01971.jpg",
+                        "text": "201482_pan-am_ra1250s_01971.jpg"
+                    }
+                },
+                "Uri": "/api/v2/album/WpK3n2/image/3HFNmtB-0",
+                "UriDescription": "Image from album",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/3HFNmtB-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/3HFNmtB-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/3HFNmtB-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/3HFNmtB!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/3HFNmtB!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/3HFNmtB!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/3HFNmtB!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/3HFNmtB!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/3HFNmtB!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/3HFNmtB!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    },
+                    "Album": {
+                        "Uri": "/api/v2/album/WpK3n2",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album",
+                        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+                    },
+                    "Image": {
+                        "Uri": "/api/v2/image/3HFNmtB-0",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Image by key",
+                        "EndpointType": "Image"
+                    },
+                    "AlbumImagePricelistExclusions": {
+                        "Uri": "/api/v2/album/WpK3n2/image/3HFNmtB-0!pricelistexclusions",
+                        "Locator": "AlbumImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an album image",
+                        "EndpointType": "AlbumImagePricelistExclusions"
+                    },
+                    "AlbumImageMetadata": {
+                        "Uri": "/api/v2/album/WpK3n2/image/3HFNmtB-0!metadata",
+                        "Locator": "AlbumImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for AlbumImage",
+                        "EndpointType": "AlbumImageMetadata"
+                    },
+                    "AlbumImageShareUris": {
+                        "Uri": "/api/v2/album/WpK3n2/image/3HFNmtB-0!shareuris",
+                        "Locator": "AlbumImageShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumImageShareUris"
+                    }
+                },
+                "Movable": true,
+                "Origin": "Album",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles/Harley-Pan-America/i-3HFNmtB"
+            },
+            {
+                "Title": "",
+                "Caption": "MY21 Pan America Riding Photography",
+                "Keywords": "201482; pan; RA1250S; 00465; RA1250S Pan America Special; Pan America Special; HarleyDavidson Pan America Special; RA1250 Pan America; Pan America; RA1250; HarleyDavidson Pan America; Revolution Max; Riding; MY21; Model Year 2021; Model Year 21; 2021",
+                "KeywordArray": [
+                    "201482",
+                    "pan",
+                    "RA1250S",
+                    "00465",
+                    "RA1250S Pan America Special",
+                    "Pan America Special",
+                    "HarleyDavidson Pan America Special",
+                    "RA1250 Pan America",
+                    "Pan America",
+                    "RA1250",
+                    "HarleyDavidson Pan America",
+                    "Revolution Max",
+                    "Riding",
+                    "MY21",
+                    "Model Year 2021",
+                    "Model Year 21",
+                    "2021"
+                ],
+                "Watermark": "No",
+                "Latitude": "0.00000000000000",
+                "Longitude": "0.00000000000000",
+                "Altitude": 0,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-p5SrLwV/0/Th/i-p5SrLwV-Th.jpg",
+                "FileName": "201482_pan-am_ra1250s_00465.jpg",
+                "Processing": false,
+                "UploadKey": "10312758491",
+                "Date": "2021-03-22T17:24:28+00:00",
+                "DateTimeUploaded": "2021-03-22T17:24:28+00:00",
+                "DateTimeOriginal": "2020-11-09T19:03:23+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 5464,
+                "OriginalWidth": 8192,
+                "OriginalSize": 9258980,
+                "LastUpdated": "2021-03-22T17:24:31+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "Watermarked": false,
+                "ImageKey": "p5SrLwV",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Motorcycles/Harley-Pan-America/i-p5SrLwV/0/2db23c83/D/201482_pan-am_ra1250s_00465-D.jpg",
+                "ArchivedSize": 9258980,
+                "ArchivedMD5": "cd00feab907831dad70444dcbe8bfc42",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "MY21 Pan America Riding Photography",
+                        "text": "MY21 Pan America Riding Photography"
+                    },
+                    "FileName": {
+                        "html": "201482_pan-am_ra1250s_00465.jpg",
+                        "text": "201482_pan-am_ra1250s_00465.jpg"
+                    }
+                },
+                "Uri": "/api/v2/album/WpK3n2/image/p5SrLwV-0",
+                "UriDescription": "Image from album",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/p5SrLwV-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/p5SrLwV-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/p5SrLwV-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/p5SrLwV!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/p5SrLwV!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/p5SrLwV!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/p5SrLwV!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/p5SrLwV!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/p5SrLwV!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/p5SrLwV!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    },
+                    "Album": {
+                        "Uri": "/api/v2/album/WpK3n2",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album",
+                        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+                    },
+                    "Image": {
+                        "Uri": "/api/v2/image/p5SrLwV-0",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Image by key",
+                        "EndpointType": "Image"
+                    },
+                    "AlbumImagePricelistExclusions": {
+                        "Uri": "/api/v2/album/WpK3n2/image/p5SrLwV-0!pricelistexclusions",
+                        "Locator": "AlbumImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an album image",
+                        "EndpointType": "AlbumImagePricelistExclusions"
+                    },
+                    "AlbumImageMetadata": {
+                        "Uri": "/api/v2/album/WpK3n2/image/p5SrLwV-0!metadata",
+                        "Locator": "AlbumImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for AlbumImage",
+                        "EndpointType": "AlbumImageMetadata"
+                    },
+                    "AlbumImageShareUris": {
+                        "Uri": "/api/v2/album/WpK3n2/image/p5SrLwV-0!shareuris",
+                        "Locator": "AlbumImageShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumImageShareUris"
+                    }
+                },
+                "Movable": true,
+                "Origin": "Album",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles/Harley-Pan-America/i-p5SrLwV"
+            },
+            {
+                "Title": "",
+                "Caption": "",
+                "Keywords": "Harley",
+                "KeywordArray": [
+                    "Harley"
+                ],
+                "Watermark": "No",
+                "Latitude": "0.00000000000000",
+                "Longitude": "0.00000000000000",
+                "Altitude": 0,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-QnK2gVb/0/Th/i-QnK2gVb-Th.jpg",
+                "FileName": "Harley.jpg",
+                "Processing": false,
+                "UploadKey": "10625039820",
+                "Date": "2021-06-30T01:16:38+00:00",
+                "DateTimeUploaded": "2021-06-30T01:16:38+00:00",
+                "DateTimeOriginal": "2021-06-30T01:08:32+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 5464,
+                "OriginalWidth": 8192,
+                "OriginalSize": 22151091,
+                "LastUpdated": "2021-06-30T01:16:41+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "Watermarked": false,
+                "ImageKey": "QnK2gVb",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Motorcycles/Harley-Pan-America/i-QnK2gVb/0/8caec306/D/Harley-D.jpg",
+                "ArchivedSize": 22151091,
+                "ArchivedMD5": "f0f531afc376d6c14c00d4ed1c4a2474",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "",
+                        "text": ""
+                    },
+                    "FileName": {
+                        "html": "Harley.jpg",
+                        "text": "Harley.jpg"
+                    }
+                },
+                "Uri": "/api/v2/album/WpK3n2/image/QnK2gVb-0",
+                "UriDescription": "Image from album",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/QnK2gVb-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/QnK2gVb-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/QnK2gVb-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/QnK2gVb!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/QnK2gVb!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/QnK2gVb!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/QnK2gVb!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/QnK2gVb!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/QnK2gVb!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/QnK2gVb!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    },
+                    "Album": {
+                        "Uri": "/api/v2/album/WpK3n2",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album",
+                        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+                    },
+                    "Image": {
+                        "Uri": "/api/v2/image/QnK2gVb-0",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Image by key",
+                        "EndpointType": "Image"
+                    },
+                    "AlbumImagePricelistExclusions": {
+                        "Uri": "/api/v2/album/WpK3n2/image/QnK2gVb-0!pricelistexclusions",
+                        "Locator": "AlbumImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an album image",
+                        "EndpointType": "AlbumImagePricelistExclusions"
+                    },
+                    "AlbumImageMetadata": {
+                        "Uri": "/api/v2/album/WpK3n2/image/QnK2gVb-0!metadata",
+                        "Locator": "AlbumImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for AlbumImage",
+                        "EndpointType": "AlbumImageMetadata"
+                    },
+                    "AlbumImageShareUris": {
+                        "Uri": "/api/v2/album/WpK3n2/image/QnK2gVb-0!shareuris",
+                        "Locator": "AlbumImageShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumImageShareUris"
+                    }
+                },
+                "Movable": true,
+                "Origin": "Album",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles/Harley-Pan-America/i-QnK2gVb"
+            }
+        ],
+        "UriDescription": "Images from album",
+        "EndpointType": "AlbumImages",
+        "Pages": {
+            "Total": 4,
+            "Start": 1,
+            "Count": 4,
+            "RequestedCount": 100,
+            "FirstPage": "/api/v2/album/WpK3n2!images?start=1\u0026count=100",
+            "LastPage": "/api/v2/album/WpK3n2!images?start=1\u0026count=100"
+        },
+        "Timing": {
+            "Total": {
+                "time": 0.15636,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok",
+    "Expansions": {
+        "/api/v2/album/WpK3n2": {
+            "Uri": "/api/v2/album/WpK3n2",
+            "Locator": "Album",
+            "LocatorType": "Object",
+            "Album": {
+                "NiceName": "Harley-Pan-America",
+                "UrlName": "Harley-Pan-America",
+                "Title": "Harley Pan America",
+                "Name": "Harley Pan America",
+                "AllowDownloads": true,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "Filenames": false,
+                "Geography": true,
+                "Keywords": "",
+                "PasswordHint": "",
+                "Protected": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "Position",
+                "SecurityType": "None",
+                "CommerceLightbox": true,
+                "AlbumKey": "WpK3n2",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "LastUpdated": "2021-06-30T01:16:38+00:00",
+                "ImagesLastUpdated": "2021-06-30T01:16:44+00:00",
+                "NodeID": "rKqRPj",
+                "ImageCount": 4,
+                "UrlPath": "/Motorcycles/Harley-Pan-America",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/WpK3n2",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles/Harley-Pan-America",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/WpK3n2!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/rKqRPj",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/rKqRPj!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/cmac/Motorcycles",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/cmac/Motorcycles!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/rKqRPj",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AddSamplePhotos": {
+                        "Uri": "/api/v2/album/WpK3n2!addsamplephotos",
+                        "UriDescription": "Add sample photos to Album",
+                        "EndpointType": "AddSamplePhotos"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/WpK3n2!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/WpK3n2!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/WpK3n2!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/WpK3n2!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/WpK3n2!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "AlbumDownload": {
+                        "Uri": "/api/v2/album/WpK3n2!download",
+                        "Locator": "Download",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Download album",
+                        "EndpointType": "AlbumDownload"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/WpK3n2!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/WpK3n2!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "Album by key",
+            "EndpointType": "Album",
+            "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+        }
+    }
+}

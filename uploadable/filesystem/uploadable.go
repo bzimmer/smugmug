@@ -25,7 +25,7 @@ type FsUploadable interface {
 type fsUploadable struct {
 	skip       bool
 	replace    bool
-	albumID    string
+	albumKey   string
 	extensions []string
 	metrics    *metrics.Metrics
 	images     map[string]*smugmug.Image
@@ -66,10 +66,10 @@ func WithSkip(skip bool) FsUploadableOption {
 }
 
 // WithImages maps basenames from the album to existing images
-func WithImages(albumID string, images map[string]*smugmug.Image) FsUploadableOption {
+func WithImages(albumKey string, images map[string]*smugmug.Image) FsUploadableOption {
 	return func(c *fsUploadable) {
 		c.images = images
-		c.albumID = albumID
+		c.albumKey = albumKey
 	}
 }
 
@@ -82,8 +82,8 @@ func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
 	if p.images == nil {
 		p.images = make(map[string]*smugmug.Image)
 	}
-	if p.albumID == "" {
-		return nil, errors.New("missing albumID")
+	if p.albumKey == "" {
+		return nil, errors.New("missing albumKey")
 	}
 	if p.metrics == nil {
 		p.metrics = metrics.Default()
@@ -101,7 +101,7 @@ func (p *fsUploadable) Uploadable(fsys fs.FS, filename string) (*smugmug.Uploada
 	if err != nil {
 		return nil, err
 	}
-	up.AlbumID = p.albumID
+	up.AlbumKey = p.albumKey
 	img, ok := p.images[up.Name]
 	if ok {
 		if p.skip && up.MD5 == img.ArchivedMD5 {

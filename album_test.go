@@ -17,8 +17,54 @@ func TestAlbum(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
+	tests := []struct {
+		albumKey string
+		filename string
+		f        func(*smugmug.Album, error)
+	}{
+		{
+			albumKey: "RM4BL2",
+			f: func(album *smugmug.Album, err error) {
+				a.Error(err)
+				a.Nil(album)
+			},
+		},
+		{
+			albumKey: "RM4BL2",
+			filename: "testdata/album_RM4BL2.json",
+			f: func(album *smugmug.Album, err error) {
+				a.NoError(err)
+				a.NotNil(album)
+			},
+		},
+	}
+
+	for i := range tests {
+		test := tests[i]
+		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if test.filename == "" {
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
+			fp, err := os.Open(test.filename)
+			a.NoError(err)
+			_, err = io.Copy(w, fp)
+			a.NoError(err)
+		}))
+		defer svr.Close()
+
+		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+		a.NoError(err)
+		test.f(mg.Album.Album(context.Background(), test.albumKey))
+	}
+}
+
+func TestAlbumExpansions(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/album_RM4BL2.json")
+		fp, err := os.Open("testdata/album_2XrGxm_expansions.json")
 		a.NoError(err)
 		_, err = io.Copy(w, fp)
 		a.NoError(err)
@@ -27,9 +73,17 @@ func TestAlbum(t *testing.T) {
 
 	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 	a.NoError(err)
-	user, err := mg.Album.Album(context.Background(), "RM4BL2")
+	album, err := mg.Album.Album(context.Background(), "2XrGxm",
+		smugmug.WithExpansions("Node", "Folder", "AlbumHighlightImage", "AlbumImage", "User"))
 	a.NoError(err)
-	a.NotNil(user)
+	a.NotNil(album)
+	a.NotNil(album.Node)
+	a.NotNil(album.User)
+	a.Equal("cmac", album.User.NickName)
+	a.NotNil(album.Folder)
+	a.Equal("Events", album.Folder.Name)
+	a.NotNil(album.HighlightImage)
+	a.Equal("7952669755", album.HighlightImage.UploadKey)
 }
 
 func TestAlbumSearch(t *testing.T) {
@@ -69,7 +123,7 @@ func TestAlbumSearchIter(t *testing.T) {
 					a.Equal("HNxNF4", album.AlbumKey)
 				}
 				return true, nil
-			}, smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("HighlightImage"))
+			}, smugmug.WithSearch("", "Marmot"))
 			a.Equal(20, n)
 			return err
 		},
@@ -82,7 +136,7 @@ func TestAlbumSearchIter(t *testing.T) {
 					a.Equal("HNxNF4", album.AlbumKey)
 				}
 				return true, nil
-			}, smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("HighlightImage"))
+			}, smugmug.WithSearch("", "Marmot"))
 			a.Equal(20, n)
 			return err
 		},

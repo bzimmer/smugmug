@@ -536,8 +536,8 @@ type Uploadable struct {
 	MD5 string
 	// Replaces is the URI of an image to replace
 	Replaces string
-	// AlbumID is the album into which the file will be uploaded
-	AlbumID string
+	// AlbumKey is the album into which the file will be uploaded
+	AlbumKey string
 	// Reader holds the image data for uploading
 	Reader io.Reader
 }

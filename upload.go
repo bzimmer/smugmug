@@ -25,14 +25,8 @@ const concurrency = 5
 
 // Upload an image to an album
 func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, error) {
-	/*
-		Documentation on the upload process is available at SmugMug
-
-		https://api.smugmug.com/api/v2/doc/reference/upload.html
-	*/
-
-	if up.AlbumID == "" {
-		return nil, errors.New("missing albumID")
+	if up.AlbumKey == "" {
+		return nil, errors.New("missing albumKey")
 	}
 
 	uri := fmt.Sprintf("%s/%s", s.client.uploadURL, up.Name)
@@ -47,7 +41,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 		"Content-Length":      strconv.FormatInt(up.Size, 10),
 		"User-Agent":          userAgent,
 		"X-Smug-Version":      "v2",
-		"X-Smug-AlbumUri":     "/api/v2/album/" + up.AlbumID,
+		"X-Smug-AlbumUri":     "/api/v2/album/" + up.AlbumKey,
 		"X-Smug-ResponseType": "JSON",
 	}
 
@@ -68,7 +62,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 			log.Error().
 				Err(err).
 				Str("name", up.Name).
-				Str("album", up.AlbumID).
+				Str("album", up.AlbumKey).
 				Dur("elapsed", elapsed).
 				Str("status", "fail").
 				Msg("upload")
@@ -76,7 +70,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 			s.client.metrics.IncrCounter([]string{"upload", "success"}, 1)
 			log.Info().
 				Str("name", up.Name).
-				Str("album", up.AlbumID).
+				Str("album", up.AlbumKey).
 				Dur("elapsed", elapsed).
 				Str("uri", res.UploadedImage.ImageURI).
 				Str("status", "success").
@@ -87,7 +81,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 
 	log.Info().
 		Str("name", up.Name).
-		Str("album", up.AlbumID).
+		Str("album", up.AlbumKey).
 		Str("replaces", up.Replaces).
 		Str("status", "uploading").
 		Msg("upload")

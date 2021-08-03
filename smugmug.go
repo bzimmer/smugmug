@@ -175,33 +175,19 @@ func (c *Client) newRequest(ctx context.Context, method, uri string, options []A
 	} else {
 		uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	}
-
-	v := url.Values{}
-	v.Set("_pretty", strconv.FormatBool(c.pretty))
-
+	v := url.Values{"_pretty": {strconv.FormatBool(c.pretty)}}
 	for _, opt := range options {
 		if err := opt(v); err != nil {
 			return nil, err
 		}
 	}
-
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
-	}
-
-	u, err := url.Parse(uri)
+	uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+	req, err := http.NewRequestWithContext(ctx, method, uri, nil)
 	if err != nil {
 		return nil, err
 	}
-
-	req, err := http.NewRequestWithContext(ctx, method, u.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", userAgent)
-
 	return req, nil
 }

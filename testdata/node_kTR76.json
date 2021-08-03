@@ -2,7 +2,7 @@
     "Request": {
         "Version": "v2",
         "Method": "GET",
-        "Uri": "/api/v2/node/kTR76"
+        "Uri": "/api/v2/node/kTR76?_expand=User,HighlightImage,ParentNode,Album,FolderByID"
     },
     "Options": {
         "MethodDetails": {
@@ -347,7 +347,8 @@
                     "Locator": "User",
                     "LocatorType": "Object",
                     "UriDescription": "User By Nickname",
-                    "EndpointType": "User"
+                    "EndpointType": "User",
+                    "DocUri": "https://api.smugmug.com/api/v2/doc/reference/user.html"
                 },
                 "NodeCoverImage": {
                     "Uri": "/api/v2/node/kTR76!cover",
@@ -384,12 +385,494 @@
         "EndpointType": "Node",
         "Timing": {
             "Total": {
-                "time": 0.07001,
+                "time": 0.13811,
                 "cycles": 1,
                 "objects": 0
             }
         }
     },
     "Code": 200,
-    "Message": "Ok"
+    "Message": "Ok",
+    "Expansions": {
+        "/api/v2/folder/id/kTR76": {
+            "Uri": "/api/v2/folder/id/kTR76",
+            "Locator": "Folder",
+            "LocatorType": "Object",
+            "Folder": {
+                "Name": "Events",
+                "UrlName": "Events",
+                "SecurityType": "None",
+                "SortMethod": "SortIndex",
+                "SortDirection": "Ascending",
+                "Description": "",
+                "Keywords": "",
+                "PasswordHint": "",
+                "DateAdded": "2013-07-13T22:44:59+00:00",
+                "DateModified": "2020-06-01T03:11:56+00:00",
+                "UrlPath": "/Events",
+                "NodeID": "kTR76",
+                "IsEmpty": false,
+                "Uri": "/api/v2/folder/user/cmac/Events",
+                "WebUri": "https://cmac.smugmug.com/Events",
+                "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/kTR76",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/kTR76",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/cmac!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "ParentFolder": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!parent",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent folder",
+                        "EndpointType": "ParentFolder"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/kTR76",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "FolderHighlightImage": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!highlightimage",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for folder",
+                        "EndpointType": "FolderHighlightImage"
+                    },
+                    "Folders": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!folders",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Folders inside of the folder",
+                        "EndpointType": "Folders"
+                    },
+                    "FolderList": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!folderlist",
+                        "Locator": "FolderList",
+                        "LocatorType": "List",
+                        "UriDescription": "Recursive list of all of the user's folders",
+                        "EndpointType": "FolderList"
+                    },
+                    "FolderAlbums": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!albums",
+                        "Locator": "Album",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Albums inside of the folder",
+                        "EndpointType": "FolderAlbums"
+                    },
+                    "AlbumList": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!albumlist",
+                        "Locator": "AlbumList",
+                        "LocatorType": "List",
+                        "UriDescription": "List of user's albums",
+                        "EndpointType": "AlbumList"
+                    },
+                    "FolderSearch": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!search",
+                        "Locator": "FolderByID",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Search for folders",
+                        "EndpointType": "FolderSearch"
+                    },
+                    "FolderPages": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!pages",
+                        "Locator": "Page",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Pages inside of the folder",
+                        "EndpointType": "FolderPages"
+                    },
+                    "Size": {
+                        "Uri": "/api/v2/folder/user/cmac/Events!size",
+                        "Locator": "Size",
+                        "LocatorType": "Object",
+                        "UriDescription": "Size of folder",
+                        "EndpointType": "Size"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "Get folder by its ID",
+            "EndpointType": "FolderByID"
+        },
+        "/api/v2/node/kTR76!parent": {
+            "Uri": "/api/v2/node/kTR76!parent",
+            "Locator": "Node",
+            "LocatorType": "Object",
+            "Node": {
+                "Description": "",
+                "Name": "",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "",
+                "DateAdded": "2013-07-13T22:44:07+00:00",
+                "DateModified": "2013-07-28T00:27:50+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": ""
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": true,
+                "NodeID": "zx4Fx",
+                "UrlPath": "/",
+                "Uri": "/api/v2/node/zx4Fx",
+                "WebUri": "https://cmac.smugmug.com",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/zx4Fx",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/zx4Fx!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/zx4Fx!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/zx4Fx",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/zx4Fx!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/zx4Fx!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "Parent node of the given node.",
+            "EndpointType": "ParentNode"
+        },
+        "/api/v2/user/cmac": {
+            "Uri": "/api/v2/user/cmac",
+            "Locator": "User",
+            "LocatorType": "Object",
+            "User": {
+                "NickName": "cmac",
+                "ViewPassHint": "",
+                "RefTag": "TEjaxa2MF2LJ6",
+                "Name": "Chris MacAskill (Baldy)",
+                "QuickShare": true,
+                "Uri": "/api/v2/user/cmac",
+                "WebUri": "https://cmac.smugmug.com",
+                "UriDescription": "User By Nickname",
+                "Uris": {
+                    "BioImage": {
+                        "Uri": "/api/v2/user/cmac!bioimage",
+                        "Locator": "BioImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "User BioImage",
+                        "EndpointType": "BioImage"
+                    },
+                    "CoverImage": {
+                        "Uri": "/api/v2/user/cmac!coverimage",
+                        "Locator": "CoverImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "User CoverImage",
+                        "EndpointType": "CoverImage"
+                    },
+                    "UserProfile": {
+                        "Uri": "/api/v2/user/cmac!profile",
+                        "Locator": "UserProfile",
+                        "LocatorType": "Object",
+                        "UriDescription": "User's profile information",
+                        "EndpointType": "UserProfile"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/zx4Fx",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/cmac",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "Features": {
+                        "Uri": "/api/v2/user/cmac!features",
+                        "Locator": "Features",
+                        "LocatorType": "Object",
+                        "UriDescription": "User's account features information",
+                        "EndpointType": "Features"
+                    },
+                    "SiteSettings": {
+                        "Uri": "/api/v2/user/cmac!sitesettings",
+                        "Locator": "SiteSettings",
+                        "LocatorType": "Object",
+                        "UriDescription": "User site settings",
+                        "EndpointType": "SiteSettings"
+                    },
+                    "UserAlbums": {
+                        "Uri": "/api/v2/user/cmac!albums",
+                        "Locator": "Album",
+                        "LocatorType": "Objects",
+                        "UriDescription": "All of user's albums",
+                        "EndpointType": "UserAlbums"
+                    },
+                    "UserCollections": {
+                        "Uri": "/api/v2/user/cmac!collections",
+                        "Locator": "Collection",
+                        "LocatorType": "Objects",
+                        "UriDescription": "All of user's collections",
+                        "EndpointType": "UserCollections"
+                    },
+                    "UserGeoMedia": {
+                        "Uri": "/api/v2/user/cmac!geomedia",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images for user",
+                        "EndpointType": "UserGeoMedia"
+                    },
+                    "UserPopularMedia": {
+                        "Uri": "/api/v2/user/cmac!popularmedia",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "User's popular images",
+                        "EndpointType": "UserPopularMedia"
+                    },
+                    "UserFeaturedAlbums": {
+                        "Uri": "/api/v2/user/cmac!featuredalbums",
+                        "Locator": "Album",
+                        "LocatorType": "Objects",
+                        "UriDescription": "User's featured albums",
+                        "EndpointType": "UserFeaturedAlbums"
+                    },
+                    "UserRecentImages": {
+                        "Uri": "/api/v2/user/cmac!recentimages",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "User's recent images",
+                        "EndpointType": "UserRecentImages"
+                    },
+                    "UserImageSearch": {
+                        "Uri": "/api/v2/user/cmac!imagesearch",
+                        "Locator": "Image",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Search for user images",
+                        "EndpointType": "UserImageSearch"
+                    },
+                    "UserTopKeywords": {
+                        "Uri": "/api/v2/user/cmac!topkeywords",
+                        "Locator": "UserTopKeywords",
+                        "LocatorType": "Object",
+                        "UriDescription": "User's top keywords",
+                        "EndpointType": "UserTopKeywords"
+                    },
+                    "UrlPathLookup": {
+                        "Uri": "/api/v2/user/cmac!urlpathlookup",
+                        "Locator": "Folder,Album,Page",
+                        "LocatorType": "Object",
+                        "UriDescription": "Lookup user's folder, album, or page by path",
+                        "EndpointType": "UrlPathLookup"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            "UriDescription": "User By Nickname",
+            "EndpointType": "User",
+            "DocUri": "https://api.smugmug.com/api/v2/doc/reference/user.html"
+        },
+        "/api/v2/highlight/node/kTR76": {
+            "Uri": "/api/v2/highlight/node/kTR76",
+            "Locator": "Image",
+            "LocatorType": "Object",
+            "Image": {
+                "Title": "",
+                "Caption": "Everyone loved the pyro maniac sculptures and other fire-breathing things.",
+                "Keywords": "\"maker faire\"",
+                "KeywordArray": [
+                    "maker faire"
+                ],
+                "Watermark": "No",
+                "Latitude": "0.00000000000000",
+                "Longitude": "0.00000000000000",
+                "Altitude": 0,
+                "Hidden": false,
+                "ThumbnailUrl": "https://photos.smugmug.com/photos/i-XnWgT7c/0/Th/i-XnWgT7c-Th.jpg",
+                "FileName": "333X5131.JPG",
+                "Processing": false,
+                "UploadKey": "288995075",
+                "Date": "2008-05-03T22:16:28+00:00",
+                "DateTimeUploaded": "2008-05-03T22:16:28+00:00",
+                "DateTimeOriginal": "2008-05-03T19:05:30+00:00",
+                "Format": "JPG",
+                "OriginalHeight": 2907,
+                "OriginalWidth": 2304,
+                "OriginalSize": 1030157,
+                "LastUpdated": "2012-12-21T06:46:38+00:00",
+                "Collectable": true,
+                "IsArchive": false,
+                "IsVideo": false,
+                "ComponentFileTypes": [],
+                "CanEdit": false,
+                "CanBuy": true,
+                "Protected": false,
+                "ImageKey": "XnWgT7c",
+                "Serial": 0,
+                "ArchivedUri": "https://photos.smugmug.com/Events/Maker-Faire-2008/i-XnWgT7c/0/3e7972f4/D/333X5131-D.jpg",
+                "ArchivedSize": 1030157,
+                "ArchivedMD5": "1c663ef9994d8ee336989169d1c33a1f",
+                "CanShare": true,
+                "Comments": true,
+                "ShowKeywords": true,
+                "FormattedValues": {
+                    "Caption": {
+                        "html": "Everyone loved the pyro maniac sculptures and other fire-breathing things.",
+                        "text": "Everyone loved the pyro maniac sculptures and other fire-breathing things."
+                    },
+                    "FileName": {
+                        "html": "333X5131.JPG",
+                        "text": "333X5131.JPG"
+                    }
+                },
+                "Uri": "/api/v2/image/XnWgT7c-0",
+                "UriDescription": "Image by key",
+                "Uris": {
+                    "LargestImage": {
+                        "Uri": "/api/v2/image/XnWgT7c-0!largestimage",
+                        "Locator": "LargestImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Largest size available for image",
+                        "EndpointType": "LargestImage"
+                    },
+                    "ImageSizes": {
+                        "Uri": "/api/v2/image/XnWgT7c-0!sizes",
+                        "Locator": "ImageSizes",
+                        "LocatorType": "Object",
+                        "UriDescription": "Sizes available for image",
+                        "EndpointType": "ImageSizes"
+                    },
+                    "ImageSizeDetails": {
+                        "Uri": "/api/v2/image/XnWgT7c-0!sizedetails",
+                        "Locator": "ImageSizeDetails",
+                        "LocatorType": "Object",
+                        "UriDescription": "Detailed size information for image",
+                        "EndpointType": "ImageSizeDetails"
+                    },
+                    "PointOfInterest": {
+                        "Uri": "/api/v2/image/XnWgT7c!pointofinterest",
+                        "Locator": "PointOfInterest",
+                        "LocatorType": "Object",
+                        "UriDescription": "Point of interest for image",
+                        "EndpointType": "PointOfInterest"
+                    },
+                    "PointOfInterestCrops": {
+                        "Uri": "/api/v2/image/XnWgT7c!poicrops",
+                        "Locator": "PointOfInterestCrops",
+                        "LocatorType": "List",
+                        "UriDescription": "PointOfInterest Crops for image",
+                        "EndpointType": "PointOfInterestCrops"
+                    },
+                    "Regions": {
+                        "Uri": "/api/v2/image/XnWgT7c!regions",
+                        "Locator": "Region",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Regions for image",
+                        "EndpointType": "Regions"
+                    },
+                    "ImageComments": {
+                        "Uri": "/api/v2/image/XnWgT7c!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on image",
+                        "EndpointType": "ImageComments"
+                    },
+                    "ImageMetadata": {
+                        "Uri": "/api/v2/image/XnWgT7c!metadata",
+                        "Locator": "ImageMetadata",
+                        "LocatorType": "Object",
+                        "UriDescription": "Metadata for image",
+                        "EndpointType": "ImageMetadata"
+                    },
+                    "ImagePrices": {
+                        "Uri": "/api/v2/image/XnWgT7c!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "ImagePrices"
+                    },
+                    "ImagePricelistExclusions": {
+                        "Uri": "/api/v2/image/XnWgT7c!pricelistexclusions",
+                        "Locator": "ImagePricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an image",
+                        "EndpointType": "ImagePricelistExclusions"
+                    }
+                }
+            },
+            "UriDescription": "Highlight image for a folder, album, or page",
+            "EndpointType": "HighlightImage"
+        }
+    }
 }

@@ -18,7 +18,7 @@ jobs:
       run: go test ./...
       if: matrix.os == 'macos-latest' || matrix.os == 'windows-latest'
     - name: Test Coverage
-      run: go test -coverprofile=coverage.out -covermode=atomic
+      run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
       if: matrix.os == 'ubuntu-latest'
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2

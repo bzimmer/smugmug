@@ -17,19 +17,65 @@ func TestNode(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/node_zx4Fx.json")
-		a.NoError(err)
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
-	}))
-	defer svr.Close()
+	tests := []struct {
+		f      func(*smugmug.Node, error)
+		fn     string
+		nodeID string
+	}{
+		{
+			nodeID: "zx4Fx",
+			f: func(node *smugmug.Node, err error) {
+				a.Error(err)
+				a.Nil(node)
+			},
+		},
+		{
+			nodeID: "zx4Fx",
+			fn:     "testdata/node_zx4Fx.json",
+			f: func(node *smugmug.Node, err error) {
+				a.NoError(err)
+				a.NotNil(node)
+			},
+		},
+		{
+			nodeID: "kTR76",
+			fn:     "testdata/node_kTR76.json",
+			f: func(node *smugmug.Node, err error) {
+				a.NoError(err)
+				a.NotNil(node)
+				a.Equal("Folder", node.Type)
+				a.Equal("kTR76", node.Folder.NodeID)
+				a.Equal("zx4Fx", node.Parent.NodeID)
+			},
+		},
+		{
+			nodeID: "JDVkPQ",
+			fn:     "testdata/node_JDVkPQ.json",
+			f: func(node *smugmug.Node, err error) {
+				a.NoError(err)
+				a.NotNil(node)
+				a.Equal("Album", node.Type)
+			},
+		},
+	}
 
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-	a.NoError(err)
-	user, err := mg.Node.Node(context.Background(), "zx4Fx")
-	a.NoError(err)
-	a.NotNil(user)
+	for i := range tests {
+		test := tests[i]
+		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if test.fn == "" {
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
+			fp, err := os.Open(test.fn)
+			a.NoError(err)
+			_, err = io.Copy(w, fp)
+			a.NoError(err)
+		}))
+		defer svr.Close()
+		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+		a.NoError(err)
+		test.f(mg.Node.Node(context.Background(), test.nodeID))
+	}
 }
 
 func TestNodes(t *testing.T) {
