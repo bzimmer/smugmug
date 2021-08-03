@@ -17,7 +17,7 @@ tasks:
     desc: Run tests
     cmds:
       - mkdir -p {{.DIST}}
-      - go test -count=1 -covermode count -coverprofile {{.DIST}}/coverage.txt github.com/bzimmer/smugmug github.com/bzimmer/smugmug/uploadable/filesystem
+      - go test -count=1 -race -covermode atomic -coverprofile {{.DIST}}/coverage.txt ./...
 
   cover:
     desc: Visualize test coverage
