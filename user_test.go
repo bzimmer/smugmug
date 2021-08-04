@@ -18,7 +18,7 @@ func TestAuthUser(t *testing.T) {
 	a := assert.New(t)
 
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/authuser_cmac.json")
+		fp, err := os.Open("testdata/user_cmac.json")
 		a.NoError(err)
 		defer fp.Close()
 		_, err = io.Copy(w, fp)

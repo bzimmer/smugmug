@@ -16,14 +16,14 @@ type NodeIterFunc func(*Node) (bool, error)
 type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
 
 func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error {
-	current := 0
+	n := 0
 	page := WithPagination(1, batchSize)
 	for {
 		nodes, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
 			return err
 		}
-		current += pages.Count
+		n += pages.Count
 		for _, node := range nodes {
 			if ok, err := f(node); err != nil {
 				return err
@@ -31,7 +31,7 @@ func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc
 				return nil
 			}
 		}
-		if current == pages.Total {
+		if n == pages.Total {
 			return nil
 		}
 		page = WithPagination(pages.Start+pages.Count, batchSize)

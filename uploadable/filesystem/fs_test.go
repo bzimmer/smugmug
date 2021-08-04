@@ -16,8 +16,18 @@ func TestRelativeFS(t *testing.T) {
 	dir, err := os.Getwd()
 	a.NoError(err)
 
-	fs := filesystem.RelativeFS(dir)
-	fp, err := fs.Open(filepath.Join(dir, "fs_test.go"))
+	tests := []string{
+		"fs_test.go",
+		"./fs_test.go",
+		filepath.Join(dir, "fs_test.go"),
+	}
+
+	fs, err := filesystem.RelativeFS(dir)
 	a.NoError(err)
-	defer fp.Close()
+	for i := range tests {
+		test := tests[i]
+		fp, err := fs.Open(test)
+		a.NoError(err)
+		a.NoError(fp.Close())
+	}
 }

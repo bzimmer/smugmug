@@ -35,20 +35,20 @@ func TestUpload(t *testing.T) {
 	a.Error(err)
 	a.Nil(upload)
 
-	up.AlbumID = "7dFHSm"
+	up.AlbumKey = "7dFHSm"
 	upload, err = mg.Upload.Upload(context.Background(), up)
 	a.NoError(err)
 	a.NotNil(upload)
 }
 
 type testUploadables struct {
-	albumID string
+	albumKey string
 }
 
 func (t *testUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
 	errs := make(chan error)
 	uploadables := make(chan *smugmug.Uploadable, 1)
-	uploadables <- &smugmug.Uploadable{Name: "DSC33556.jpg", AlbumID: t.albumID}
+	uploadables <- &smugmug.Uploadable{Name: "DSC33556.jpg", AlbumKey: t.albumKey}
 
 	close(errs)
 	close(uploadables)
@@ -61,11 +61,11 @@ func TestUploads(t *testing.T) {
 	a := assert.New(t)
 
 	tests := []struct {
-		albumID string
-		fail    bool
+		albumKey string
+		fail     bool
 	}{
-		{albumID: "", fail: true},
-		{albumID: "7dFHSm", fail: false},
+		{albumKey: "", fail: true},
+		{albumKey: "7dFHSm", fail: false},
 	}
 
 	for i := range tests {
@@ -82,7 +82,7 @@ func TestUploads(t *testing.T) {
 		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithUploadURL(svr.URL))
 		a.NoError(err)
 
-		uploadables := &testUploadables{test.albumID}
+		uploadables := &testUploadables{test.albumKey}
 		uploadc, errc := mg.Upload.Uploads(context.Background(), uploadables)
 		a.NotNil(uploadc)
 		a.NotNil(errc)

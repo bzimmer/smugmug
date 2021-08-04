@@ -1,0 +1,530 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/image/mQRcX2V-0?_expand=ImageSizeDetails"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "PATCH": {
+                "Permissions": [
+                    "Modify"
+                ]
+            },
+            "DELETE": {
+                "Permissions": [
+                    "Modify"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Output": [
+            {
+                "Name": "Title",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Caption",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Keywords",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "KeywordArray",
+                "Type": "Array",
+                "ITEM_TYPE": "Varchar",
+                "MIN_COUNT": 0,
+                "MAX_COUNT": "INFINITY"
+            },
+            {
+                "Name": "Watermark",
+                "Type": "Select",
+                "OPTIONS": [
+                    "No",
+                    "Yes",
+                    "Inherit from Album"
+                ],
+                "MIN_COUNT": 1,
+                "MAX_COUNT": 1,
+                "Deprecated": "2014-11-20"
+            },
+            {
+                "Name": "Latitude",
+                "Type": "DECIMAL",
+                "PRECISION": 16,
+                "SCALE": 14,
+                "SIGNED": true
+            },
+            {
+                "Name": "Longitude",
+                "Type": "DECIMAL",
+                "PRECISION": 17,
+                "SCALE": 14,
+                "SIGNED": true
+            },
+            {
+                "Name": "Altitude",
+                "Type": "Integer",
+                "MIN_VALUE": 0,
+                "MAX_VALUE": 16777215
+            },
+            {
+                "Name": "Hidden",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ThumbnailUrl",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": []
+            },
+            {
+                "Name": "FileName",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Processing",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "UploadKey",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Date",
+                "Description": "Use DateTimeUploaded",
+                "Type": "DateTimeISO8601",
+                "Deprecated": "2020-07-17"
+            },
+            {
+                "Name": "DateTimeUploaded",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "DateTimeOriginal",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "Format",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "OriginalHeight",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "OriginalWidth",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "OriginalSize",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "LastUpdated",
+                "Type": "DateTimeISO8601"
+            },
+            {
+                "Name": "Collectable",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "IsArchive",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "IsVideo",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ComponentFileTypes",
+                "Type": "Hash"
+            },
+            {
+                "Name": "CanEdit",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "CanBuy",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Protected",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "EZProject",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Watermarked",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ImageKey",
+                "Type": "Varchar",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "Serial",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "ArchivedUri",
+                "Type": "Uri",
+                "MAX_LENGTH": "INFINITY",
+                "Locator": []
+            },
+            {
+                "Name": "ArchivedSize",
+                "Type": "Integer",
+                "MIN_VALUE": "NEGATIVE_INFINITY",
+                "MAX_VALUE": "POSITIVE_INFINITY"
+            },
+            {
+                "Name": "ArchivedMD5",
+                "Type": "Text",
+                "MIN_CHARS": 0,
+                "MAX_CHARS": "INFINITY"
+            },
+            {
+                "Name": "CanShare",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "Comments",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ShowKeywords",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "FormattedValues",
+                "Description": "Alternative versions of certain fields formatted for use in different contexts.",
+                "Type": "Hash"
+            }
+        ],
+        "Notes": [
+            "The Uri returned by this endpoint may not exist if it was recently uploaded and is being processed",
+            "\"Watermark\" has been deprecated in favor of \"Watermarked\".\n        \"Watermarked\" will only be present for images with a known watermarked state",
+            "Photo sizes, including Original, without a \"Size\" or \"MD5\" property, will be generated dynamically upon request",
+            "\"ArchivedUri\", \"ArchivedSize\" and \"ArchivedMD5\" refer to the untouched version of the photo originally uploaded"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "image"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "imagekey",
+                "param_value": "mQRcX2V-0"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/image/mQRcX2V-0",
+        "Locator": "Image",
+        "LocatorType": "Object",
+        "Image": {
+            "Title": "",
+            "Caption": "",
+            "Keywords": "flowers",
+            "KeywordArray": [
+                "flowers"
+            ],
+            "Watermark": "No",
+            "Latitude": "0.00000000000000",
+            "Longitude": "0.00000000000000",
+            "Altitude": 0,
+            "Hidden": false,
+            "ThumbnailUrl": "https://photos.smugmug.com/photos/i-mQRcX2V/0/Th/i-mQRcX2V-Th.jpg",
+            "FileName": "flowers--7.jpg",
+            "Processing": false,
+            "UploadKey": "9503818787",
+            "Date": "2020-06-01T03:11:34+00:00",
+            "DateTimeUploaded": "2020-06-01T03:11:34+00:00",
+            "DateTimeOriginal": "2020-06-01T01:02:40+00:00",
+            "Format": "JPG",
+            "OriginalHeight": 2667,
+            "OriginalWidth": 4000,
+            "OriginalSize": 4992259,
+            "LastUpdated": "2020-06-01T03:11:35+00:00",
+            "Collectable": true,
+            "IsArchive": false,
+            "IsVideo": false,
+            "ComponentFileTypes": [],
+            "CanEdit": false,
+            "CanBuy": true,
+            "Protected": false,
+            "Watermarked": false,
+            "ImageKey": "mQRcX2V",
+            "Serial": 0,
+            "CanShare": true,
+            "Comments": true,
+            "ShowKeywords": true,
+            "FormattedValues": {
+                "Caption": {
+                    "html": "",
+                    "text": ""
+                },
+                "FileName": {
+                    "html": "flowers--7.jpg",
+                    "text": "flowers--7.jpg"
+                }
+            },
+            "Uri": "/api/v2/image/mQRcX2V-0",
+            "UriDescription": "Image by key",
+            "Uris": {
+                "LargestImage": {
+                    "Uri": "/api/v2/image/mQRcX2V-0!largestimage",
+                    "Locator": "LargestImage",
+                    "LocatorType": "Object",
+                    "UriDescription": "Largest size available for image",
+                    "EndpointType": "LargestImage"
+                },
+                "ImageSizes": {
+                    "Uri": "/api/v2/image/mQRcX2V-0!sizes",
+                    "Locator": "ImageSizes",
+                    "LocatorType": "Object",
+                    "UriDescription": "Sizes available for image",
+                    "EndpointType": "ImageSizes"
+                },
+                "ImageSizeDetails": {
+                    "Uri": "/api/v2/image/mQRcX2V-0!sizedetails",
+                    "Locator": "ImageSizeDetails",
+                    "LocatorType": "Object",
+                    "UriDescription": "Detailed size information for image",
+                    "EndpointType": "ImageSizeDetails"
+                },
+                "PointOfInterest": {
+                    "Uri": "/api/v2/image/mQRcX2V!pointofinterest",
+                    "Locator": "PointOfInterest",
+                    "LocatorType": "Object",
+                    "UriDescription": "Point of interest for image",
+                    "EndpointType": "PointOfInterest"
+                },
+                "PointOfInterestCrops": {
+                    "Uri": "/api/v2/image/mQRcX2V!poicrops",
+                    "Locator": "PointOfInterestCrops",
+                    "LocatorType": "List",
+                    "UriDescription": "PointOfInterest Crops for image",
+                    "EndpointType": "PointOfInterestCrops"
+                },
+                "Regions": {
+                    "Uri": "/api/v2/image/mQRcX2V!regions",
+                    "Locator": "Region",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Regions for image",
+                    "EndpointType": "Regions"
+                },
+                "ImageComments": {
+                    "Uri": "/api/v2/image/mQRcX2V!comments",
+                    "Locator": "Comment",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Comments on image",
+                    "EndpointType": "ImageComments"
+                },
+                "ImageMetadata": {
+                    "Uri": "/api/v2/image/mQRcX2V!metadata",
+                    "Locator": "ImageMetadata",
+                    "LocatorType": "Object",
+                    "UriDescription": "Metadata for image",
+                    "EndpointType": "ImageMetadata"
+                },
+                "ImagePrices": {
+                    "Uri": "/api/v2/image/mQRcX2V!prices",
+                    "Locator": "CatalogSkuPrice",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Purchasable Skus",
+                    "EndpointType": "ImagePrices"
+                },
+                "ImagePricelistExclusions": {
+                    "Uri": "/api/v2/image/mQRcX2V!pricelistexclusions",
+                    "Locator": "ImagePricelistExclusions",
+                    "LocatorType": "Object",
+                    "UriDescription": "Pricelist information for an image",
+                    "EndpointType": "ImagePricelistExclusions"
+                }
+            }
+        },
+        "UriDescription": "Image by key",
+        "EndpointType": "Image",
+        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/image.html",
+        "Timing": {
+            "Total": {
+                "time": 0.27683,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok",
+    "Expansions": {
+        "/api/v2/image/mQRcX2V-0!sizedetails": {
+            "Uri": "/api/v2/image/mQRcX2V-0!sizedetails",
+            "Locator": "ImageSizeDetails",
+            "LocatorType": "Object",
+            "ImageSizeDetails": {
+                "ImageUrlTemplate": "https://photos.smugmug.com/photos/i-mQRcX2V/0/#size#/i-mQRcX2V-#size#.jpg",
+                "UsableSizes": [
+                    "ImageSizeTiny",
+                    "ImageSizeThumb",
+                    "ImageSizeSmall",
+                    "ImageSizeMedium",
+                    "ImageSizeLarge",
+                    "ImageSizeXLarge",
+                    "ImageSizeX2Large",
+                    "ImageSizeX3Large",
+                    "ImageSizeX4Large",
+                    "ImageSizeX5Large",
+                    "ImageSize4K"
+                ],
+                "ImageSizeTiny": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/Ti/i-mQRcX2V-Ti.jpg",
+                    "Ext": "jpg",
+                    "Height": 100,
+                    "Width": 100,
+                    "Size": 11530,
+                    "Watermarked": false
+                },
+                "ImageSizeThumb": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/Th/i-mQRcX2V-Th.jpg",
+                    "Ext": "jpg",
+                    "Height": 150,
+                    "Width": 150,
+                    "Size": 16832,
+                    "Watermarked": false
+                },
+                "ImageSizeSmall": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/S/i-mQRcX2V-S.jpg",
+                    "Ext": "jpg",
+                    "Height": 267,
+                    "Width": 400,
+                    "Size": 47962,
+                    "Watermarked": false
+                },
+                "ImageSizeMedium": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/M/i-mQRcX2V-M.jpg",
+                    "Ext": "jpg",
+                    "Height": 400,
+                    "Width": 600,
+                    "Size": 83008,
+                    "Watermarked": false
+                },
+                "ImageSizeLarge": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/L/i-mQRcX2V-L.jpg",
+                    "Ext": "jpg",
+                    "Height": 533,
+                    "Width": 800,
+                    "Size": 123275,
+                    "Watermarked": false
+                },
+                "ImageSizeXLarge": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/XL/i-mQRcX2V-XL.jpg",
+                    "Ext": "jpg",
+                    "Height": 683,
+                    "Width": 1024,
+                    "Size": 183856,
+                    "Watermarked": false
+                },
+                "ImageSizeX2Large": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/X2/i-mQRcX2V-X2.jpg",
+                    "Ext": "jpg",
+                    "Height": 853,
+                    "Width": 1279,
+                    "Size": 253349,
+                    "Watermarked": false
+                },
+                "ImageSizeX3Large": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/X3/i-mQRcX2V-X3.jpg",
+                    "Ext": "jpg",
+                    "Height": 1067,
+                    "Width": 1600,
+                    "Size": 353857,
+                    "Watermarked": false
+                },
+                "ImageSizeX4Large": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/X4/i-mQRcX2V-X4.jpg",
+                    "Ext": "jpg",
+                    "Height": 1366,
+                    "Width": 2048,
+                    "Watermarked": false
+                },
+                "ImageSizeX5Large": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/X5/i-mQRcX2V-X5.jpg",
+                    "Ext": "jpg",
+                    "Height": 1707,
+                    "Width": 2560,
+                    "Size": 759281,
+                    "Watermarked": false
+                },
+                "ImageSize4K": {
+                    "Url": "https://photos.smugmug.com/photos/i-mQRcX2V/0/4K/i-mQRcX2V-4K.jpg",
+                    "Ext": "jpg",
+                    "Height": 2560,
+                    "Width": 3840,
+                    "Size": 3553990,
+                    "Watermarked": false
+                },
+                "Uri": "/api/v2/image/mQRcX2V-0!sizedetails",
+                "UriDescription": "Detailed size information for image"
+            },
+            "UriDescription": "Detailed size information for image",
+            "EndpointType": "ImageSizeDetails"
+        }
+    }
+}

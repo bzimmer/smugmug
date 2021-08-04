@@ -23,13 +23,6 @@ func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessa
 		}
 		album.User = res.User
 	}
-	if val, ok := expansions[album.URIs.AlbumHighlightImage.URI]; ok { // deprecated but supported
-		res := struct{ AlbumImage *Image }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
-		}
-		album.HighlightImage = res.AlbumImage
-	}
 	if val, ok := expansions[album.URIs.HighlightImage.URI]; ok {
 		res := struct{ Image *Image }{}
 		if err := json.Unmarshal(*val, &res); err != nil {
@@ -72,14 +65,14 @@ func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...AP
 }
 
 func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterFunc, options ...APIOption) error {
-	i := 0
+	n := 0
 	page := WithPagination(1, batchSize)
 	for {
 		albums, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
 			return err
 		}
-		i += pages.Count
+		n += pages.Count
 		for _, album := range albums {
 			if ok, err := f(album); err != nil {
 				return err
@@ -87,7 +80,7 @@ func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterF
 				return nil
 			}
 		}
-		if i == pages.Total {
+		if n == pages.Total {
 			return nil
 		}
 		page = WithPagination(pages.Start+pages.Count, batchSize)
@@ -120,10 +113,9 @@ func (s *AlbumService) Albums(ctx context.Context, userID string, options ...API
 
 // AlbumsIter iterates all albums for the user
 func (s *AlbumService) AlbumsIter(ctx context.Context, userID string, iter AlbumIterFunc, options ...APIOption) error {
-	q := func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error) {
+	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error) {
 		return s.Albums(ctx, userID, options...)
-	}
-	return s.iter(ctx, q, iter, options...)
+	}, iter, options...)
 }
 
 // Search returns a single page of search results
