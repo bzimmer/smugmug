@@ -18,12 +18,14 @@ func TestImage(t *testing.T) {
 	a := assert.New(t)
 
 	tests := []struct {
+		name       string
 		imageKey   string
 		expansions []string
 		filename   string
 		f          func(*smugmug.Image, error)
 	}{
 		{
+			name:       "missing image",
 			imageKey:   "VPB9RVH-0",
 			expansions: []string{},
 			f: func(image *smugmug.Image, err error) {
@@ -32,6 +34,7 @@ func TestImage(t *testing.T) {
 			},
 		},
 		{
+			name:       "single image",
 			imageKey:   "VPB9RVH-0",
 			filename:   "testdata/image_VPB9RVH-0.json",
 			expansions: []string{},
@@ -42,6 +45,7 @@ func TestImage(t *testing.T) {
 			},
 		},
 		{
+			name:       "image size details expansion",
 			imageKey:   "mQRcX2V-0",
 			filename:   "testdata/image_mQRcX2V-0_expansions.json",
 			expansions: []string{"ImageSizeDetails"},
@@ -54,23 +58,25 @@ func TestImage(t *testing.T) {
 	}
 	for i := range tests {
 		test := tests[i]
-		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if test.filename == "" {
-				w.WriteHeader(http.StatusForbidden)
-				return
-			}
-			fp, err := os.Open(test.filename)
-			a.NoError(err)
-			defer fp.Close()
-			_, err = io.Copy(w, fp)
-			a.NoError(err)
-		}))
-		defer svr.Close()
+		t.Run(test.name, func(t *testing.T) {
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if test.filename == "" {
+					w.WriteHeader(http.StatusForbidden)
+					return
+				}
+				fp, err := os.Open(test.filename)
+				a.NoError(err)
+				defer fp.Close()
+				_, err = io.Copy(w, fp)
+				a.NoError(err)
+			}))
+			defer svr.Close()
 
-		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-		a.NoError(err)
-		image, err := mg.Image.Image(context.Background(), test.imageKey, smugmug.WithExpansions(test.expansions...))
-		test.f(image, err)
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+			image, err := mg.Image.Image(context.Background(), test.imageKey, smugmug.WithExpansions(test.expansions...))
+			test.f(image, err)
+		})
 	}
 }
 

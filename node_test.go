@@ -83,11 +83,14 @@ func TestNodes(t *testing.T) {
 	a := assert.New(t)
 
 	tests := []struct {
-		f   func(*smugmug.Client) error
-		res map[int]string
+		name   string
+		status int
+		fail   bool
+		res    map[int]string
+		f      func(*smugmug.Client) error
 	}{
-		// search iteration for search results
 		{
+			name: "search iteration for search results",
 			f: func(mg *smugmug.Client) error {
 				var n int
 				err := mg.Node.SearchIter(context.Background(), func(node *smugmug.Node) (bool, error) {
@@ -102,8 +105,8 @@ func TestNodes(t *testing.T) {
 				1: "testdata/node_children_zx4Fx_page_2.json",
 			},
 		},
-		// node iteration of children
 		{
+			name: "node iteration of children",
 			f: func(mg *smugmug.Client) error {
 				var n int
 				err := mg.Node.ChildrenIter(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
@@ -118,8 +121,8 @@ func TestNodes(t *testing.T) {
 				1: "testdata/node_children_zx4Fx_page_2.json",
 			},
 		},
-		// node walk iteration
 		{
+			name: "node walk iteration",
 			f: func(mg *smugmug.Client) error {
 				var n int
 				err := mg.Node.Walk(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
@@ -136,26 +139,77 @@ func TestNodes(t *testing.T) {
 				2: "testdata/node_children_zx4Fx_albums_page_2.json",
 			},
 		},
+		{
+			name: "node walk with type `unknown`",
+			fail: true,
+			f: func(mg *smugmug.Client) error {
+				return mg.Node.Walk(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+					return true, nil
+				})
+			},
+			res: map[int]string{
+				0: "testdata/node_zx4Fx_type_unknown.json",
+			},
+		},
+		{
+			name: "parents",
+			f: func(mg *smugmug.Client) error {
+				var parents []string
+				err := mg.Node.ParentsIter(context.Background(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
+					parents = append(parents, node.NodeID)
+					return true, nil
+				})
+				a.Equal(3, len(parents))
+				a.Equal([]string{"g8CLb2", "T8q7k", "zx4Fx"}, parents)
+				return err
+			},
+			res: map[int]string{
+				0: "testdata/node_g8CLb2_parents.json",
+			},
+		},
+		{
+			name:   "parents fail",
+			status: http.StatusForbidden,
+			f: func(mg *smugmug.Client) error {
+				parents, _, err := mg.Node.Parents(context.Background(), "g8CLb2")
+				a.Error(err)
+				a.Nil(parents)
+				return nil
+			},
+			res: map[int]string{
+				0: "testdata/node_g8CLb2_parents.json",
+			},
+		},
 	}
 
 	for i := range tests {
 		test := tests[i]
+		t.Run(test.name, func(t *testing.T) {
+			var j int
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if test.status != 0 {
+					w.WriteHeader(test.status)
+					return
+				}
+				fn, ok := test.res[j]
+				a.True(ok, "missing file for iteration {%d}", j)
+				fp, err := os.Open(fn)
+				a.NoError(err)
+				defer fp.Close()
+				_, err = io.Copy(w, fp)
+				a.NoError(err)
+				j++
+			}))
+			defer svr.Close()
 
-		var j int
-		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			fn, ok := test.res[j]
-			a.True(ok, "missing file for iteration {%d}", j)
-			fp, err := os.Open(fn)
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
-			defer fp.Close()
-			_, err = io.Copy(w, fp)
-			a.NoError(err)
-			j++
-		}))
-		defer svr.Close()
-
-		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-		a.NoError(err)
-		a.NoError(test.f(mg))
+			err = test.f(mg)
+			if test.fail {
+				a.Error(err)
+			} else {
+				a.NoError(err)
+			}
+		})
 	}
 }

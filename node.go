@@ -122,7 +122,7 @@ func (s *NodeService) Children(ctx context.Context, nodeID string, options ...AP
 	return s.nodes(req)
 }
 
-// ChildrenIter iterates all direct children of the node (does not traverse)
+// ChildrenIter iterates all direct children of the node
 func (s *NodeService) ChildrenIter(ctx context.Context, nodeID string, iter NodeIterFunc, options ...APIOption) error {
 	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
 		return s.Children(ctx, nodeID, options...)
@@ -131,7 +131,21 @@ func (s *NodeService) ChildrenIter(ctx context.Context, nodeID string, iter Node
 
 // Search returns a single page of search results (does not traverse)
 func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
-	uri := "node!search"
+	req, err := s.client.newRequest(ctx, http.MethodGet, "node!search", options)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.nodes(req)
+}
+
+// SearchIter iterates all search results
+func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options ...APIOption) error {
+	return s.iter(ctx, s.Search, iter, options...)
+}
+
+// Parents returns a single page of parent nodes (does not traverse)
+func (s *NodeService) Parents(ctx context.Context, nodeID string, options ...APIOption) ([]*Node, *Pages, error) {
+	uri := fmt.Sprintf("node/%s!parents", nodeID)
 	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
 	if err != nil {
 		return nil, nil, err
@@ -139,9 +153,11 @@ func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node
 	return s.nodes(req)
 }
 
-// SearchIter iterates all search results (does not traverse)
-func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options ...APIOption) error {
-	return s.iter(ctx, s.Search, iter, options...)
+// ParentsIter iterates all parental ancestors
+func (s *NodeService) ParentsIter(ctx context.Context, nodeID string, iter NodeIterFunc, options ...APIOption) error {
+	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
+		return s.Parents(ctx, nodeID, options...)
+	}, iter, options...)
 }
 
 // Walk traverses all children of the node rooted at `nodeID`
