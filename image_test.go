@@ -2,9 +2,11 @@ package smugmug_test
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"testing"
 
@@ -22,6 +24,7 @@ func TestImage(t *testing.T) {
 		imageKey   string
 		expansions []string
 		filename   string
+		options    []smugmug.APIOption
 		f          func(*smugmug.Image, error)
 	}{
 		{
@@ -55,6 +58,16 @@ func TestImage(t *testing.T) {
 				a.NotNil(image.ImageSizeDetails)
 			},
 		},
+		{
+			name: "api option failure",
+			options: []smugmug.APIOption{func(v url.Values) error {
+				return errors.New("fail")
+			}},
+			f: func(image *smugmug.Image, err error) {
+				a.Nil(image)
+				a.Error(err)
+			},
+		},
 	}
 	for i := range tests {
 		test := tests[i]
@@ -74,7 +87,11 @@ func TestImage(t *testing.T) {
 
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
-			image, err := mg.Image.Image(context.Background(), test.imageKey, smugmug.WithExpansions(test.expansions...))
+			opts := []smugmug.APIOption{smugmug.WithExpansions(test.expansions...)}
+			if len(test.options) > 0 {
+				opts = append(opts, test.options...)
+			}
+			image, err := mg.Image.Image(context.Background(), test.imageKey, opts...)
 			test.f(image, err)
 		})
 	}
