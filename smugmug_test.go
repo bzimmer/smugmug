@@ -1,6 +1,7 @@
 package smugmug_test
 
 import (
+	"net/http"
 	"net/url"
 	"testing"
 
@@ -37,4 +38,16 @@ func TestAPIOptions(t *testing.T) {
 	a.Equal("LastUploaded", v.Get("SortMethod"))
 	a.Equal("", v.Get("Scope"))
 	a.Equal("Marmot", v.Get("Text"))
+}
+
+func TestOption(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+	client, err := smugmug.NewClient(
+		smugmug.WithHTTPTracing(true),
+		smugmug.WithHTTPClient(http.DefaultClient),
+		smugmug.WithTransport(http.DefaultTransport),
+	)
+	a.NoError(err)
+	a.NotNil(client)
 }
