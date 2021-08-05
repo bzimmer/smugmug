@@ -1,0 +1,342 @@
+{
+    "Request": {
+        "Version": "v2",
+        "Method": "GET",
+        "Uri": "/api/v2/node/g8CLb2!parents"
+    },
+    "Options": {
+        "MethodDetails": {
+            "OPTIONS": {
+                "Permissions": [
+                    "Read"
+                ]
+            },
+            "GET": {
+                "Permissions": [
+                    "Read"
+                ]
+            }
+        },
+        "Methods": [
+            "OPTIONS",
+            "GET"
+        ],
+        "MediaTypes": [
+            "application/json",
+            "application/vnd.php.serialized",
+            "application/x-msgpack",
+            "text/html",
+            "text/csv"
+        ],
+        "Notes": [
+            "_multiargs does not work at this endpoint"
+        ],
+        "Path": [
+            {
+                "type": "path",
+                "text": "api"
+            },
+            {
+                "type": "path",
+                "text": "v2"
+            },
+            {
+                "type": "path",
+                "text": "node"
+            },
+            {
+                "type": "singleparam",
+                "param_name": "nodeid",
+                "param_value": "g8CLb2"
+            },
+            {
+                "type": "action",
+                "text": "parents"
+            }
+        ]
+    },
+    "Response": {
+        "Uri": "/api/v2/node/g8CLb2!parents",
+        "Locator": "Node",
+        "LocatorType": "Objects",
+        "Node": [
+            {
+                "Description": "",
+                "Name": "Zero Black Forest",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": true,
+                "SortDirection": "Descending",
+                "SortMethod": "DateModified",
+                "Type": "Album",
+                "UrlName": "Zero-Black-Forest",
+                "DateAdded": "2020-08-08T18:12:54+00:00",
+                "DateModified": "2020-10-12T16:12:05+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Zero Black Forest"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": false,
+                "IsRoot": false,
+                "NodeID": "g8CLb2",
+                "SortIndex": 1596910374,
+                "UrlPath": "/Motorcycles/Zero-Black-Forest",
+                "Uri": "/api/v2/node/g8CLb2",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles/Zero-Black-Forest",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "Album": {
+                        "Uri": "/api/v2/album/mpLf8V",
+                        "Locator": "Album",
+                        "LocatorType": "Object",
+                        "UriDescription": "Album by key",
+                        "EndpointType": "Album"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/g8CLb2!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/g8CLb2!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/g8CLb2!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/g8CLb2",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/g8CLb2!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "Motorcycles",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "Motorcycles",
+                "DateAdded": "2013-07-13T22:44:54+00:00",
+                "DateModified": "2021-06-30T01:16:38+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": "Motorcycles"
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": false,
+                "NodeID": "T8q7k",
+                "SortIndex": 16,
+                "UrlPath": "/Motorcycles",
+                "Uri": "/api/v2/node/T8q7k",
+                "WebUri": "https://cmac.smugmug.com/Motorcycles",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/T8q7k",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNode": {
+                        "Uri": "/api/v2/node/T8q7k!parent",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Parent node of the given node.",
+                        "EndpointType": "ParentNode"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/T8q7k!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/T8q7k!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/T8q7k",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/T8q7k!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/T8q7k!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            },
+            {
+                "Description": "",
+                "Name": "",
+                "Keywords": [],
+                "PasswordHint": "",
+                "SecurityType": "None",
+                "ShowCoverImage": false,
+                "SortDirection": "Ascending",
+                "SortMethod": "SortIndex",
+                "Type": "Folder",
+                "UrlName": "",
+                "DateAdded": "2013-07-13T22:44:07+00:00",
+                "DateModified": "2013-07-28T00:27:50+00:00",
+                "EffectiveSecurityType": "None",
+                "FormattedValues": {
+                    "Name": {
+                        "html": ""
+                    },
+                    "Description": {
+                        "html": "",
+                        "text": ""
+                    }
+                },
+                "HasChildren": true,
+                "IsRoot": true,
+                "NodeID": "zx4Fx",
+                "UrlPath": "/",
+                "Uri": "/api/v2/node/zx4Fx",
+                "WebUri": "https://cmac.smugmug.com",
+                "UriDescription": "Node with the given id.",
+                "Uris": {
+                    "FolderByID": {
+                        "Uri": "/api/v2/folder/id/zx4Fx",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "Get folder by its ID",
+                        "EndpointType": "FolderByID"
+                    },
+                    "ParentNodes": {
+                        "Uri": "/api/v2/node/zx4Fx!parents",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+                        "EndpointType": "ParentNodes"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/cmac",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/zx4Fx!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/zx4Fx",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "NodeComments": {
+                        "Uri": "/api/v2/node/zx4Fx!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on a Node",
+                        "EndpointType": "NodeComments"
+                    },
+                    "ChildNodes": {
+                        "Uri": "/api/v2/node/zx4Fx!children",
+                        "Locator": "Node",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Child nodes of the given node.",
+                        "EndpointType": "ChildNodes"
+                    }
+                },
+                "ResponseLevel": "Public"
+            }
+        ],
+        "UriDescription": "Hierarchy of nodes from the given node (inclusive) to the root node.",
+        "EndpointType": "ParentNodes",
+        "Pages": {
+            "Total": 3,
+            "Start": 1,
+            "Count": 3,
+            "RequestedCount": 7,
+            "FirstPage": "/api/v2/node/g8CLb2!parents?start=1\u0026count=7",
+            "LastPage": "/api/v2/node/g8CLb2!parents?start=1\u0026count=7"
+        },
+        "Timing": {
+            "Total": {
+                "time": 0.11438,
+                "cycles": 1,
+                "objects": 0
+            }
+        }
+    },
+    "Code": 200,
+    "Message": "Ok"
+}

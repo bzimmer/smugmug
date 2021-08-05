@@ -353,7 +353,7 @@ type ImageSize struct {
 	Ext    string `json:",omitempty"`
 	Height int    `json:",omitempty"`
 	Width  int    `json:",omitempty"`
-	Size   int    `json:",omitempty"`
+	Size   int64  `json:",omitempty"`
 }
 
 type ImageSizeDetails struct {
