@@ -37,15 +37,6 @@ func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessa
 		}
 		album.Node = res.Node
 	}
-	if album.URIs.Folder != nil {
-		if val, ok := expansions[album.URIs.Folder.URI]; ok {
-			res := struct{ Folder *Folder }{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			album.Folder = res.Folder
-		}
-	}
 	return album, nil
 }
 
@@ -56,7 +47,7 @@ func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...AP
 	if err != nil {
 		return nil, err
 	}
-	res := &AlbumResponse{}
+	res := &albumResponse{}
 	err = s.client.do(req, res)
 	if err != nil {
 		return nil, err
@@ -88,7 +79,7 @@ func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterF
 }
 
 func (s *AlbumService) albums(req *http.Request) ([]*Album, *Pages, error) {
-	res := &AlbumsResponse{}
+	res := &albumsResponse{}
 	err := s.client.do(req, res)
 	if err != nil {
 		return nil, nil, err
@@ -132,4 +123,36 @@ func (s *AlbumService) Search(ctx context.Context, options ...APIOption) ([]*Alb
 // The results of this query might be very large depending on the scope and query
 func (s *AlbumService) SearchIter(ctx context.Context, iter AlbumIterFunc, options ...APIOption) error {
 	return s.iter(ctx, s.Search, iter, options...)
+}
+
+type albumsResponse struct {
+	Response struct {
+		URI            string   `json:"Uri"`
+		Locator        string   `json:"Locator"`
+		LocatorType    string   `json:"LocatorType"`
+		Album          []*Album `json:"Album"`
+		URIDescription string   `json:"UriDescription"`
+		EndpointType   string   `json:"EndpointType"`
+		Pages          *Pages   `json:"Pages"`
+		Timing         *timing  `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+}
+
+type albumResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Album          *Album  `json:"Album"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		DocURI         string  `json:"DocUri"`
+		Timing         *timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }

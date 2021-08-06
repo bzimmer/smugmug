@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"os"
 	"testing"
 
@@ -59,10 +58,17 @@ func TestImage(t *testing.T) {
 			},
 		},
 		{
-			name: "api option failure",
-			options: []smugmug.APIOption{func(v url.Values) error {
-				return errors.New("fail")
-			}},
+			name:    "api option failure",
+			options: []smugmug.APIOption{withError(true)},
+			f: func(image *smugmug.Image, err error) {
+				a.Nil(image)
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+			},
+		},
+		{
+			name:     "fail with bad json",
+			filename: "image_test.go",
 			f: func(image *smugmug.Image, err error) {
 				a.Nil(image)
 				a.Error(err)
@@ -91,7 +97,9 @@ func TestImage(t *testing.T) {
 			if len(test.options) > 0 {
 				opts = append(opts, test.options...)
 			}
-			image, err := mg.Image.Image(context.Background(), test.imageKey, opts...)
+
+			ctx := context.Background()
+			image, err := mg.Image.Image(ctx, test.imageKey, opts...)
 			test.f(image, err)
 		})
 	}
@@ -101,24 +109,73 @@ func TestImages(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/images_WpK3n2_expansions.json")
-		a.NoError(err)
-		defer fp.Close()
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
-	}))
-	defer svr.Close()
+	tests := []struct {
+		name       string
+		albumKey   string
+		expansions []string
+		filename   string
+		options    []smugmug.APIOption
+		f          func(images []*smugmug.Image, pages *smugmug.Pages, err error)
+	}{
+		{
+			name:     "success",
+			albumKey: "WpK3n2",
+			filename: "testdata/images_WpK3n2_expansions.json",
+			options: []smugmug.APIOption{
+				smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("Album"),
+			},
+			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
+				a.NoError(err)
+				a.NotNil(images)
+				a.NotNil(pages)
+				a.Equal(4, pages.Total)
+				a.Equal("WpK3n2", images[0].Album.AlbumKey)
+			},
+		},
+		{
+			name:     "fail with api option error",
+			albumKey: "WpK3n2",
+			filename: "testdata/images_WpK3n2_expansions.json",
+			options:  []smugmug.APIOption{withError(true)},
+			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+				a.Nil(images)
+				a.Nil(pages)
+			},
+		},
+		{
+			name:     "fail with bad json",
+			albumKey: "WpK3n2",
+			filename: "image_test.go",
+			options:  []smugmug.APIOption{withError(true)},
+			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+				a.Nil(images)
+				a.Nil(pages)
+			},
+		},
+	}
 
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-	a.NoError(err)
-	images, pages, err := mg.Image.Images(context.Background(), "WpK3n2",
-		smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("Album"))
-	a.NoError(err)
-	a.NotNil(images)
-	a.NotNil(pages)
-	a.Equal(4, pages.Total)
-	a.Equal("WpK3n2", images[0].Album.AlbumKey)
+	for i := range tests {
+		test := tests[i]
+		t.Run(test.name, func(t *testing.T) {
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				fp, err := os.Open(test.filename)
+				a.NoError(err)
+				defer fp.Close()
+				_, err = io.Copy(w, fp)
+				a.NoError(err)
+			}))
+			defer svr.Close()
+
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+			images, pages, err := mg.Image.Images(context.Background(), test.albumKey, test.options...)
+			test.f(images, pages, err)
+		})
+	}
 }
 
 func TestImagesIter(t *testing.T) {

@@ -41,7 +41,7 @@ func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterF
 }
 
 func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
-	res := &ImagesResponse{}
+	res := &imagesResponse{}
 	err := s.client.do(req, res)
 	if err != nil {
 		return nil, nil, err
@@ -82,7 +82,7 @@ func (s *ImageService) Image(ctx context.Context, imageKey string, options ...AP
 	if err != nil {
 		return nil, err
 	}
-	res := &ImageResponse{}
+	res := &imageResponse{}
 	err = s.client.do(req, res)
 	if err != nil {
 		return nil, err
@@ -105,4 +105,36 @@ func (s *ImageService) ImagesIter(ctx context.Context, albumKey string, iter Ima
 	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Image, *Pages, error) {
 		return s.Images(ctx, albumKey, options...)
 	}, iter, options...)
+}
+
+type imagesResponse struct {
+	Response struct {
+		URI            string   `json:"Uri"`
+		Locator        string   `json:"Locator"`
+		LocatorType    string   `json:"LocatorType"`
+		Images         []*Image `json:"AlbumImage"`
+		URIDescription string   `json:"UriDescription"`
+		EndpointType   string   `json:"EndpointType"`
+		Pages          *Pages   `json:"Pages"`
+		Timing         *timing  `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+}
+
+type imageResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Image          *Image  `json:"Image"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		DocURI         string  `json:"DocUri"`
+		Timing         *timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:",omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }

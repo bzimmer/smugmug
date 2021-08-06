@@ -38,8 +38,17 @@ func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc
 	}
 }
 
+func (s *NodeService) node(req *http.Request) (*Node, error) {
+	res := &nodeResponse{}
+	err := s.client.do(req, res)
+	if err != nil {
+		return nil, err
+	}
+	return s.expand(res.Response.Node, res.Expansions)
+}
+
 func (s *NodeService) nodes(req *http.Request) ([]*Node, *Pages, error) {
-	res := &NodesResponse{}
+	res := &nodesResponse{}
 	err := s.client.do(req, res)
 	if err != nil {
 		return nil, nil, err
@@ -67,8 +76,8 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 		}
 		node.HighlightImage = res.Image
 	}
-	if node.URIs.ParentNode != nil {
-		if val, ok := expansions[node.URIs.ParentNode.URI]; ok {
+	if node.URIs.Parent != nil {
+		if val, ok := expansions[node.URIs.Parent.URI]; ok {
 			res := struct{ Node *Node }{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
@@ -78,13 +87,7 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 	}
 	switch node.Type {
 	case "Folder":
-		if val, ok := expansions[node.URIs.FolderByID.URI]; ok {
-			res := struct{ Folder *Folder }{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			node.Folder = res.Folder
-		}
+		// deprecated
 	case "Album":
 		if val, ok := expansions[node.URIs.Album.URI]; ok {
 			res := struct{ Album *Album }{}
@@ -104,12 +107,7 @@ func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOpt
 	if err != nil {
 		return nil, err
 	}
-	res := &NodeResponse{}
-	err = s.client.do(req, res)
-	if err != nil {
-		return nil, err
-	}
-	return s.expand(res.Response.Node, res.Expansions)
+	return s.node(req)
 }
 
 // Children returns a single page of direct children of the node (does not traverse)
@@ -141,6 +139,16 @@ func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node
 // SearchIter iterates all search results
 func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options ...APIOption) error {
 	return s.iter(ctx, s.Search, iter, options...)
+}
+
+// Parent returns the parent node
+func (s *NodeService) Parent(ctx context.Context, nodeID string, options ...APIOption) (*Node, error) {
+	uri := fmt.Sprintf("node/%s!parent", nodeID)
+	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	if err != nil {
+		return nil, err
+	}
+	return s.node(req)
 }
 
 // Parents returns a single page of parent nodes (does not traverse)
@@ -217,4 +225,35 @@ func (s *stack) pop() (*item, bool) {
 	element := (*s)[index]
 	*s = (*s)[:index]
 	return element, true
+}
+
+type nodesResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Node           []*Node `json:"Node"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		Pages          *Pages  `json:"Pages"`
+		Timing         *timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
+}
+
+type nodeResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		Node           *Node   `json:"Node"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		Timing         *timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }
