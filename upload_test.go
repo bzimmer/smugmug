@@ -105,7 +105,7 @@ func TestUploads(t *testing.T) {
 		case !test.fail:
 			a.Nil(err)
 			a.NotNil(up)
-			a.Equal("/api/v2/image/CVvj69L-0", up.UploadedImage.ImageURI)
+			a.Equal("/api/v2/image/CVvj69L-0", up.ImageURI)
 		}
 	}
 }

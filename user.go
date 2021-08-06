@@ -17,13 +17,6 @@ func (s *UserService) expand(user *User, expansions map[string]*json.RawMessage)
 		}
 		user.Node = res.Node
 	}
-	if val, ok := expansions[user.URIs.Folder.URI]; ok {
-		res := struct{ Folder *Folder }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
-		}
-		user.Folder = res.Folder
-	}
 	return user, nil
 }
 
@@ -33,10 +26,26 @@ func (s *UserService) AuthUser(ctx context.Context, options ...APIOption) (*User
 	if err != nil {
 		return nil, err
 	}
-	res := &UserResponse{}
+	res := &userResponse{}
 	err = s.client.do(req, res)
 	if err != nil {
 		return nil, err
 	}
 	return s.expand(res.Response.User, res.Expansions)
+}
+
+type userResponse struct {
+	Response struct {
+		URI            string  `json:"Uri"`
+		Locator        string  `json:"Locator"`
+		LocatorType    string  `json:"LocatorType"`
+		User           *User   `json:"User"`
+		URIDescription string  `json:"UriDescription"`
+		EndpointType   string  `json:"EndpointType"`
+		DocURI         string  `json:"DocUri"`
+		Timing         *timing `json:"Timing"`
+	} `json:"Response"`
+	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
+	Code       int                         `json:"Code"`
+	Message    string                      `json:"Message"`
 }

@@ -74,14 +74,12 @@ func TestAlbumExpansions(t *testing.T) {
 	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 	a.NoError(err)
 	album, err := mg.Album.Album(context.Background(), "2XrGxm",
-		smugmug.WithExpansions("Node", "Folder", "AlbumHighlightImage", "AlbumImage", "User"))
+		smugmug.WithExpansions("Node", "AlbumHighlightImage", "AlbumImage", "User"))
 	a.NoError(err)
 	a.NotNil(album)
 	a.NotNil(album.Node)
 	a.NotNil(album.User)
 	a.Equal("cmac", album.User.NickName)
-	a.NotNil(album.Folder)
-	a.Equal("Events", album.Folder.Name)
 	a.NotNil(album.HighlightImage)
 	a.Equal("7952669755", album.HighlightImage.UploadKey)
 }

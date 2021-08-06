@@ -24,7 +24,7 @@ type Uploadables interface {
 const concurrency = 5
 
 // Upload an image to an album
-func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, error) {
+func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (res *Upload, err error) {
 	if up.AlbumKey == "" {
 		return nil, errors.New("missing albumKey")
 	}
@@ -53,8 +53,6 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 		req.Header.Set(key, val)
 	}
 
-	var res *Upload
-
 	defer func(t time.Time) {
 		elapsed := time.Since(t)
 		if err != nil {
@@ -72,7 +70,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 				Str("name", up.Name).
 				Str("album", up.AlbumKey).
 				Dur("elapsed", elapsed).
-				Str("uri", res.UploadedImage.ImageURI).
+				Str("uri", res.ImageURI).
 				Str("status", "success").
 				Msg("upload")
 		}
@@ -87,14 +85,13 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 		Msg("upload")
 	s.client.metrics.IncrCounter([]string{"upload", "attempt"}, 1)
 
-	res = &Upload{}
-	err = s.client.do(req, res)
-
+	ur := &uploadResponse{}
+	err = s.client.do(req, ur)
 	if err != nil {
 		return nil, err
 	}
-
-	return res, nil
+	res = ur.Upload()
+	return
 }
 
 // Uploads consumes Uploadables from uploadables, uploads them to SmugMug returning status in Upload instances
@@ -150,5 +147,25 @@ func (s *UploadService) uploads(ctx context.Context,
 				}
 			}
 		}
+	}
+}
+
+type uploadResponse struct {
+	Stat          string `json:"stat"`
+	Method        string `json:"method"`
+	UploadedImage struct {
+		StatusImageReplaceURI string `json:"StatusImageReplaceUri"`
+		ImageURI              string `json:"ImageUri"`
+		AlbumImageURI         string `json:"AlbumImageUri"`
+		URL                   string `json:"URL"`
+	} `json:"Image"`
+}
+
+func (u *uploadResponse) Upload() *Upload {
+	return &Upload{
+		Status:        u.Stat,
+		Method:        u.Method,
+		ImageURI:      u.UploadedImage.ImageURI,
+		AlbumImageURI: u.UploadedImage.AlbumImageURI,
 	}
 }

@@ -2,6 +2,7 @@ package smugmug_test
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -18,14 +19,29 @@ func TestNode(t *testing.T) {
 	a := assert.New(t)
 
 	tests := []struct {
-		f      func(*smugmug.Node, error)
-		fn     string
-		nodeID string
+		f       func(*smugmug.Node, error)
+		fn      string
+		name    string
+		nodeID  string
+		options []smugmug.APIOption
+		parent  bool
 	}{
 		{
+			name:   "no response",
 			nodeID: "zx4Fx",
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
+				a.Nil(node)
+			},
+		},
+		{
+			name:    "api option failure",
+			nodeID:  "zx4Fx",
+			fn:      "testdata/node_zx4Fx.json",
+			options: []smugmug.APIOption{withError(true)},
+			f: func(node *smugmug.Node, err error) {
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
 				a.Nil(node)
 			},
 		},
@@ -44,7 +60,6 @@ func TestNode(t *testing.T) {
 				a.NoError(err)
 				a.NotNil(node)
 				a.Equal("Folder", node.Type)
-				a.Equal("kTR76", node.Folder.NodeID)
 				a.Equal("zx4Fx", node.Parent.NodeID)
 			},
 		},
@@ -57,24 +72,56 @@ func TestNode(t *testing.T) {
 				a.Equal("Album", node.Type)
 			},
 		},
+		{
+			nodeID: "ZFJQ9",
+			fn:     "testdata/node_ZFJQ9_parent.json",
+			parent: true,
+			f: func(node *smugmug.Node, err error) {
+				a.NoError(err)
+				a.NotNil(node)
+				a.Equal("Folder", node.Type)
+				a.Equal("zx4Fx", node.NodeID)
+			},
+		},
+		{
+			nodeID:  "ZFJQ9",
+			fn:      "testdata/node_ZFJQ9_parent.json",
+			parent:  true,
+			options: []smugmug.APIOption{withError(true)},
+			f: func(node *smugmug.Node, err error) {
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+				a.Nil(node)
+			},
+		},
 	}
 
 	for i := range tests {
 		test := tests[i]
-		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if test.fn == "" {
-				w.WriteHeader(http.StatusForbidden)
-				return
+		if test.name == "" {
+			test.name = test.fn
+		}
+		t.Run(test.name, func(t *testing.T) {
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if test.fn == "" {
+					w.WriteHeader(http.StatusForbidden)
+					return
+				}
+				fp, err := os.Open(test.fn)
+				a.NoError(err)
+				_, err = io.Copy(w, fp)
+				a.NoError(err)
+			}))
+			defer svr.Close()
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+
+			q := mg.Node.Node
+			if test.parent {
+				q = mg.Node.Parent
 			}
-			fp, err := os.Open(test.fn)
-			a.NoError(err)
-			_, err = io.Copy(w, fp)
-			a.NoError(err)
-		}))
-		defer svr.Close()
-		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-		a.NoError(err)
-		test.f(mg.Node.Node(context.Background(), test.nodeID))
+			test.f(q(context.Background(), test.nodeID, test.options...))
+		})
 	}
 }
 
@@ -106,6 +153,24 @@ func TestNodes(t *testing.T) {
 			},
 		},
 		{
+			name: "search iteration for search results fail",
+			f: func(mg *smugmug.Client) error {
+				var n int
+				err := mg.Node.SearchIter(context.Background(), func(node *smugmug.Node) (bool, error) {
+					n++
+					return true, nil
+				}, withError(true))
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+				return err
+			},
+			fail: true,
+			res: map[int]string{
+				0: "testdata/node_children_zx4Fx_page_1.json",
+				1: "testdata/node_children_zx4Fx_page_2.json",
+			},
+		},
+		{
 			name: "node iteration of children",
 			f: func(mg *smugmug.Client) error {
 				var n int
@@ -116,6 +181,24 @@ func TestNodes(t *testing.T) {
 				a.Equal(19, n)
 				return err
 			},
+			res: map[int]string{
+				0: "testdata/node_children_zx4Fx_page_1.json",
+				1: "testdata/node_children_zx4Fx_page_2.json",
+			},
+		},
+		{
+			name: "node iteration of children fail",
+			f: func(mg *smugmug.Client) error {
+				var n int
+				err := mg.Node.ChildrenIter(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+					n++
+					return true, nil
+				}, withError(true))
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+				return err
+			},
+			fail: true,
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
 				1: "testdata/node_children_zx4Fx_page_2.json",
@@ -176,6 +259,23 @@ func TestNodes(t *testing.T) {
 				a.Nil(parents)
 				return nil
 			},
+			res: map[int]string{
+				0: "testdata/node_g8CLb2_parents.json",
+			},
+		},
+		{
+			name: "parents fail with api option",
+			f: func(mg *smugmug.Client) error {
+				var parents []string
+				err := mg.Node.ParentsIter(context.Background(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
+					parents = append(parents, node.NodeID)
+					return true, nil
+				}, withError(true))
+				a.Error(err)
+				a.True(errors.Is(err, withErr))
+				return err
+			},
+			fail: true,
 			res: map[int]string{
 				0: "testdata/node_g8CLb2_parents.json",
 			},
