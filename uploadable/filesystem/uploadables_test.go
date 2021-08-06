@@ -3,10 +3,9 @@ package filesystem_test
 import (
 	"context"
 	"errors"
-	"io/fs"
 	"testing"
-	"testing/fstest"
 
+	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/bzimmer/smugmug"
@@ -15,7 +14,7 @@ import (
 
 type testFsUploadable struct{}
 
-func (t *testFsUploadable) Uploadable(fsys fs.FS, filename string) (*smugmug.Uploadable, error) {
+func (t *testFsUploadable) Uploadable(fsys afero.Fs, filename string) (*smugmug.Uploadable, error) {
 	switch filename {
 	case "DSC4321.jpg":
 		return &smugmug.Uploadable{
@@ -32,14 +31,13 @@ func TestUploadables(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	fsys := fstest.MapFS{
-		"DSC4321.jpg": {Data: []byte("this is a test")},
-		"Readme.md":   {Data: []byte("bah")},
-		"Directory":   {Mode: fs.ModeDir},
-	}
+	fs := new(afero.MemMapFs)
+	a.NoError(fs.MkdirAll("Directory", 0755))
+	a.NoError(afero.WriteFile(fs, "DSC4321.jpg", []byte("this is a test"), 0644))
+	a.NoError(afero.WriteFile(fs, "Readme.md", []byte("bah"), 0644))
 
 	filenames := []string{"DSC4321.jpg", "Readme.md", "Directory", "missing.txt"}
-	fu := filesystem.NewFsUploadables(fsys, filenames, &testFsUploadable{})
+	fu := filesystem.NewFsUploadables(fs, filenames, &testFsUploadable{})
 	a.NotNil(fu)
 	upc, errc := fu.Uploadables(context.Background())
 

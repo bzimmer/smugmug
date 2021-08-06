@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/fs"
 	"path/filepath"
 	"strings"
 
 	"github.com/armon/go-metrics"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/bzimmer/smugmug"
 )
@@ -19,7 +19,7 @@ import (
 // FsUploadable creates Uploadable instances
 type FsUploadable interface {
 	// Uploadable creates an Uploadable from a filesystem
-	Uploadable(fs.FS, string) (*smugmug.Uploadable, error)
+	Uploadable(afero.Fs, string) (*smugmug.Uploadable, error)
 }
 
 type fsUploadable struct {
@@ -91,13 +91,13 @@ func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
 	return p, nil
 }
 
-func (p *fsUploadable) Uploadable(fsys fs.FS, filename string) (*smugmug.Uploadable, error) {
+func (p *fsUploadable) Uploadable(fs afero.Fs, filename string) (*smugmug.Uploadable, error) {
 	if !p.supported(filename) {
 		p.metrics.IncrCounter([]string{"fsUploadable", "skip", "unsupported"}, 1)
 		log.Info().Str("reason", "unsupported").Str("path", filename).Msg("skipping")
 		return nil, nil
 	}
-	up, err := p.open(fsys, filename)
+	up, err := p.open(fs, filename)
 	if err != nil {
 		return nil, err
 	}
@@ -116,8 +116,8 @@ func (p *fsUploadable) Uploadable(fsys fs.FS, filename string) (*smugmug.Uploada
 	return up, nil
 }
 
-func (p *fsUploadable) open(fsys fs.FS, path string) (*smugmug.Uploadable, error) {
-	fp, err := fsys.Open(path)
+func (p *fsUploadable) open(fs afero.Fs, path string) (*smugmug.Uploadable, error) {
+	fp, err := fs.Open(path)
 	if err != nil {
 		return nil, err
 	}
