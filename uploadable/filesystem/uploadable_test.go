@@ -26,9 +26,10 @@ func TestUploadable(t *testing.T) {
 	}{
 		{filename: ".DS_Info", none: true},
 		{filename: "DSC1234.jpg", none: true},
-		{filename: "DSC1234.jpg", none: false, options: []filesystem.FsUploadableOption{
-			filesystem.WithExtensions(".jpg"),
-		}},
+		{filename: "DSC1234.jpg", none: false,
+			options: []filesystem.FsUploadableOption{
+				filesystem.WithExtensions(".jpg")},
+		},
 		{filename: "DSC12345.jpg", none: false,
 			images: map[string]*smugmug.Image{
 				"DSC12345.jpg": {

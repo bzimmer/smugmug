@@ -28,12 +28,38 @@ func TestCoordinate(t *testing.T) {
 	tests := []struct {
 		name  string
 		value string
-		fail  bool
+		f     func(c smugmug.Coordinate, err error)
 	}{
-		{name: "float", value: `{"C": 4.0}`},
-		{name: "string", value: `{"C": "4.0"}`},
-		{name: "invalid", value: `{"C": }`, fail: true},
-		{name: "not a float", value: `{"C": "abc"}`, fail: true},
+		{
+			name:  "float",
+			value: `{"C": 4.0}`,
+			f: func(c smugmug.Coordinate, err error) {
+				a.NoError(err)
+				a.Equal(4.0, float64(c))
+			},
+		},
+		{
+			name:  "string",
+			value: `{"C": "4.0"}`,
+			f: func(c smugmug.Coordinate, err error) {
+				a.NoError(err)
+				a.Equal(4.0, float64(c))
+			},
+		},
+		{
+			name:  "invalid",
+			value: `{"C": }`,
+			f: func(c smugmug.Coordinate, err error) {
+				a.Error(err)
+			},
+		},
+		{
+			name:  "not a float",
+			value: `{"C": "abc"}`,
+			f: func(c smugmug.Coordinate, err error) {
+				a.Error(err)
+			},
+		},
 	}
 
 	for i := range tests {
@@ -41,12 +67,7 @@ func TestCoordinate(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			var qq q
 			err := json.Unmarshal([]byte(test.value), &qq)
-			if !test.fail {
-				a.NoError(err)
-				a.Equal(4.0, float64(qq.C))
-			} else {
-				a.Error(err)
-			}
+			test.f(qq.C, err)
 		})
 	}
 }

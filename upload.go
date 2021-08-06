@@ -90,7 +90,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (res *Upload
 	if err != nil {
 		return nil, err
 	}
-	res = ur.Upload()
+	res = ur.Upload(up)
 	return
 }
 
@@ -161,8 +161,9 @@ type uploadResponse struct {
 	} `json:"Image"`
 }
 
-func (u *uploadResponse) Upload() *Upload {
+func (u *uploadResponse) Upload(up *Uploadable) *Upload {
 	return &Upload{
+		Uploadable:    up,
 		Status:        u.Stat,
 		Method:        u.Method,
 		ImageURI:      u.UploadedImage.ImageURI,

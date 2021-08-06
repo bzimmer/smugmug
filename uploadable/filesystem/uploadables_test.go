@@ -39,7 +39,7 @@ func TestUploadables(t *testing.T) {
 	filenames := []string{"DSC4321.jpg", "Readme.md", "Directory", "missing.txt"}
 	fu := filesystem.NewFsUploadables(fs, filenames, &testFsUploadable{})
 	a.NotNil(fu)
-	upc, errc := fu.Uploadables(context.Background())
+	upc, errc := fu.Uploadables(context.TODO())
 
 	up := <-upc
 	a.NotNil(up)

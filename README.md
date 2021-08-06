@@ -1,6 +1,6 @@
 # smugmug
 
-![build](https://github.com/bzimmer/smugmug/actions/workflows/build.yaml/badge.svg)
+[![build](https://github.com/bzimmer/smugmug/actions/workflows/build.yaml/badge.svg)](https://github.com/bzimmer/smugmug)
 [![codecov](https://codecov.io/gh/bzimmer/smugmug/branch/main/graph/badge.svg?token=MP6A7Z0BDQ)](https://codecov.io/gh/bzimmer/smugmug)
 
 A functional approach to the SmugMug API.
@@ -38,6 +38,4 @@ The methods ending in `Iter` (eg, `NodesIter` or `ImagesIter`) use the paging me
 all results and accept a typed callback function to provide a flexible mechanism for application-specific logic.
 
 In addition to the `Iter` functions, the `NodeService` also supports iteration of parent and children nodes as
-well as providing `Walk` which allows the complete traversal of the node tree (`Folder`s and `Album`s).
-
-
+well as providing `Walk` which allows the complete traversal of the node tree.

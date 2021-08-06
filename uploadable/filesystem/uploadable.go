@@ -110,6 +110,7 @@ func (p *fsUploadable) Uploadable(fs afero.Fs, filename string) (*smugmug.Upload
 			return nil, nil
 		}
 		if p.replace && img.URIs.Image != nil {
+			p.metrics.IncrCounter([]string{"fsUploadable", "replace"}, 1)
 			up.Replaces = img.URIs.Image.URI
 		}
 	}
