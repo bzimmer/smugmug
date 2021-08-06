@@ -2,8 +2,9 @@ package filesystem_test
 
 import (
 	"testing"
-	"testing/fstest"
 
+	"github.com/armon/go-metrics"
+	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/bzimmer/smugmug"
@@ -41,24 +42,27 @@ func TestUploadable(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		tt := tt
+	for i := range tests {
+		test := tests[i]
+		t.Run(test.filename, func(t *testing.T) {
+			fs := new(afero.MemMapFs)
+			a.NoError(afero.WriteFile(fs, test.filename, []byte("this is a test"), 0644))
 
-		options := append(tt.options, filesystem.WithImages(albumKey, tt.images))
-		fsup, err := filesystem.NewFsUploadable(options...)
-		a.NoError(err)
+			mt := &metrics.Metrics{}
+			options := append(test.options,
+				filesystem.WithImages(albumKey, test.images),
+				filesystem.WithMetrics(mt))
+			fsup, err := filesystem.NewFsUploadable(options...)
+			a.NoError(err)
 
-		fsys := fstest.MapFS{
-			tt.filename: {Data: []byte("this is a test")},
-		}
-
-		up, err := fsup.Uploadable(fsys, tt.filename)
-		a.NoError(err)
-		switch tt.none {
-		case true:
-			a.Nil(up)
-		case false:
-			a.NotNil(up)
-		}
+			up, err := fsup.Uploadable(fs, test.filename)
+			a.NoError(err)
+			switch test.none {
+			case true:
+				a.Nil(up)
+			case false:
+				a.NotNil(up)
+			}
+		})
 	}
 }

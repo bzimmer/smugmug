@@ -5,21 +5,22 @@ import (
 	"io/fs"
 
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 	"golang.org/x/sync/errgroup"
 
 	"github.com/bzimmer/smugmug"
 )
 
 type fsUploadables struct {
-	fsys       fs.FS
+	fs         afero.Fs
 	filenames  []string
 	uploadable FsUploadable
 }
 
 // NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
 //  from files on the filesystem
-func NewFsUploadables(fsys fs.FS, filenames []string, uploadable FsUploadable) smugmug.Uploadables {
-	return &fsUploadables{fsys: fsys, filenames: filenames, uploadable: uploadable}
+func NewFsUploadables(fs afero.Fs, filenames []string, uploadable FsUploadable) smugmug.Uploadables {
+	return &fsUploadables{fs: fs, filenames: filenames, uploadable: uploadable}
 }
 
 func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
@@ -46,7 +47,7 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Upload
 				if !ok {
 					return nil
 				}
-				up, err := p.uploadable.Uploadable(p.fsys, filename)
+				up, err := p.uploadable.Uploadable(p.fs, filename)
 				if err != nil {
 					return err
 				}
@@ -81,7 +82,7 @@ func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) 
 		defer close(errc)
 		defer close(filenamesc)
 		for _, root := range p.filenames {
-			if err := fs.WalkDir(p.fsys, root, func(path string, info fs.DirEntry, err error) error {
+			if err := afero.Walk(p.fs, root, func(path string, info fs.FileInfo, err error) error {
 				if err != nil {
 					return err
 				}
