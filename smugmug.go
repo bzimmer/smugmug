@@ -169,12 +169,9 @@ func NewHTTPClient(consumerKey, consumerSecret, accessToken, accessTokenSecret s
 	return consumer.MakeHttpClient(token)
 }
 
+// newRequest constructs an http.Request for the uri applying all provided `APIOption`s
 func (c *Client) newRequest(ctx context.Context, method, uri string, options []APIOption) (*http.Request, error) {
-	if strings.HasPrefix("!", uri) {
-		uri = fmt.Sprintf("%s%s", c.baseURL, uri)
-	} else {
-		uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
-	}
+	uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	v := url.Values{"_pretty": {strconv.FormatBool(c.pretty)}}
 	for _, opt := range options {
 		if err := opt(v); err != nil {

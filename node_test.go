@@ -120,7 +120,7 @@ func TestNode(t *testing.T) {
 			if test.parent {
 				q = mg.Node.Parent
 			}
-			test.f(q(context.Background(), test.nodeID, test.options...))
+			test.f(q(context.TODO(), test.nodeID, test.options...))
 		})
 	}
 }
@@ -140,7 +140,7 @@ func TestNodes(t *testing.T) {
 			name: "search iteration for search results",
 			f: func(mg *smugmug.Client) error {
 				var n int
-				err := mg.Node.SearchIter(context.Background(), func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("HighlightImage"))
@@ -156,7 +156,7 @@ func TestNodes(t *testing.T) {
 			name: "search iteration for search results fail",
 			f: func(mg *smugmug.Client) error {
 				var n int
-				err := mg.Node.SearchIter(context.Background(), func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, withError(true))
@@ -174,7 +174,7 @@ func TestNodes(t *testing.T) {
 			name: "node iteration of children",
 			f: func(mg *smugmug.Client) error {
 				var n int
-				err := mg.Node.ChildrenIter(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithExpansions("HighlightImage"))
@@ -190,7 +190,7 @@ func TestNodes(t *testing.T) {
 			name: "node iteration of children fail",
 			f: func(mg *smugmug.Client) error {
 				var n int
-				err := mg.Node.ChildrenIter(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, withError(true))
@@ -208,7 +208,7 @@ func TestNodes(t *testing.T) {
 			name: "node walk iteration",
 			f: func(mg *smugmug.Client) error {
 				var n int
-				err := mg.Node.Walk(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithExpansions("HighlightImage"))
@@ -226,7 +226,7 @@ func TestNodes(t *testing.T) {
 			name: "node walk with type `unknown`",
 			fail: true,
 			f: func(mg *smugmug.Client) error {
-				return mg.Node.Walk(context.Background(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				return mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					return true, nil
 				})
 			},
@@ -238,7 +238,7 @@ func TestNodes(t *testing.T) {
 			name: "parents",
 			f: func(mg *smugmug.Client) error {
 				var parents []string
-				err := mg.Node.ParentsIter(context.Background(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.ParentsIter(context.TODO(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
 					parents = append(parents, node.NodeID)
 					return true, nil
 				})
@@ -254,7 +254,7 @@ func TestNodes(t *testing.T) {
 			name:   "parents fail",
 			status: http.StatusForbidden,
 			f: func(mg *smugmug.Client) error {
-				parents, _, err := mg.Node.Parents(context.Background(), "g8CLb2")
+				parents, _, err := mg.Node.Parents(context.TODO(), "g8CLb2")
 				a.Error(err)
 				a.Nil(parents)
 				return nil
@@ -267,7 +267,7 @@ func TestNodes(t *testing.T) {
 			name: "parents fail with api option",
 			f: func(mg *smugmug.Client) error {
 				var parents []string
-				err := mg.Node.ParentsIter(context.Background(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.ParentsIter(context.TODO(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
 					parents = append(parents, node.NodeID)
 					return true, nil
 				}, withError(true))

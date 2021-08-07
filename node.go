@@ -229,14 +229,8 @@ func (s *stack) pop() (*item, bool) {
 
 type nodesResponse struct {
 	Response struct {
-		URI            string  `json:"Uri"`
-		Locator        string  `json:"Locator"`
-		LocatorType    string  `json:"LocatorType"`
-		Node           []*Node `json:"Node"`
-		URIDescription string  `json:"UriDescription"`
-		EndpointType   string  `json:"EndpointType"`
-		Pages          *Pages  `json:"Pages"`
-		Timing         *timing `json:"Timing"`
+		Node  []*Node `json:"Node"`
+		Pages *Pages  `json:"Pages"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`
@@ -245,13 +239,7 @@ type nodesResponse struct {
 
 type nodeResponse struct {
 	Response struct {
-		URI            string  `json:"Uri"`
-		Locator        string  `json:"Locator"`
-		LocatorType    string  `json:"LocatorType"`
-		Node           *Node   `json:"Node"`
-		URIDescription string  `json:"UriDescription"`
-		EndpointType   string  `json:"EndpointType"`
-		Timing         *timing `json:"Timing"`
+		Node *Node `json:"Node"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`

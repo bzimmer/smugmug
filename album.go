@@ -127,14 +127,8 @@ func (s *AlbumService) SearchIter(ctx context.Context, iter AlbumIterFunc, optio
 
 type albumsResponse struct {
 	Response struct {
-		URI            string   `json:"Uri"`
-		Locator        string   `json:"Locator"`
-		LocatorType    string   `json:"LocatorType"`
-		Album          []*Album `json:"Album"`
-		URIDescription string   `json:"UriDescription"`
-		EndpointType   string   `json:"EndpointType"`
-		Pages          *Pages   `json:"Pages"`
-		Timing         *timing  `json:"Timing"`
+		Album []*Album `json:"Album"`
+		Pages *Pages   `json:"Pages"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`
@@ -143,14 +137,7 @@ type albumsResponse struct {
 
 type albumResponse struct {
 	Response struct {
-		URI            string  `json:"Uri"`
-		Locator        string  `json:"Locator"`
-		LocatorType    string  `json:"LocatorType"`
-		Album          *Album  `json:"Album"`
-		URIDescription string  `json:"UriDescription"`
-		EndpointType   string  `json:"EndpointType"`
-		DocURI         string  `json:"DocUri"`
-		Timing         *timing `json:"Timing"`
+		Album *Album `json:"Album"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`

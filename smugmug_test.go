@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/armon/go-metrics"
 	"github.com/bzimmer/smugmug"
 	"github.com/stretchr/testify/assert"
 )
@@ -60,7 +61,10 @@ func TestAPIOptions(t *testing.T) {
 func TestOption(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
+
+	m := &metrics.Metrics{}
 	client, err := smugmug.NewClient(
+		smugmug.WithMetrics(m),
 		smugmug.WithHTTPTracing(true),
 		smugmug.WithHTTPClient(http.DefaultClient),
 		smugmug.WithTransport(http.DefaultTransport),
@@ -111,7 +115,7 @@ func TestDo(t *testing.T) {
 	a.NoError(err)
 	a.NotNil(client)
 
-	ctx := context.Background()
+	ctx := context.TODO()
 	user, err := client.User.AuthUser(ctx, sleeper(time.Millisecond*100))
 	a.NotNil(user)
 	a.NoError(err)
@@ -130,4 +134,12 @@ func TestDo(t *testing.T) {
 	a.Nil(user)
 	a.Error(err)
 	a.True(errors.Is(err, context.DeadlineExceeded))
+}
+
+func TestOAuthClient(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+	c, err := smugmug.NewHTTPClient("consumerKey", "consumerSecret", "accessToken", "accessTokenSecret")
+	a.NoError(err)
+	a.NotNil(c)
 }

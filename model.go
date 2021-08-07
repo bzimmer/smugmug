@@ -35,14 +35,6 @@ func (c *Coordinate) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-type timing struct {
-	Total struct {
-		Time    float64 `json:"time"`
-		Cycles  int     `json:"cycles"`
-		Objects int     `json:"objects"`
-	} `json:"Total"`
-}
-
 type FormattedValue struct {
 	HTML string `json:"html"`
 	Text string `json:"text"`
@@ -375,10 +367,18 @@ type Uploadable struct {
 	Reader io.Reader
 }
 
+// Upload is the object details for the uploaded object
 type Upload struct {
-	Status        string `json:"status"`
-	Method        string `json:"method"`
-	ImageURI      string `json:"imageURI"`
+	// Status of the request
+	Status string `json:"status"`
+	// Method is action performed
+	Method string `json:"method"`
+	// ImageURI is the uri of the object
+	ImageURI string `json:"imageURI"`
+	// AlbumImageURI is the uri of the object in the album
 	AlbumImageURI string `json:"albumImageURI"`
-	URL           string `json:"URL"`
+	// URL is the url of the uploaded object
+	URL string `json:"URL"`
+	// Uploadable is the object being uploaded
+	Uploadable *Uploadable
 }

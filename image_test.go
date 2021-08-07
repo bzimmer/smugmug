@@ -98,7 +98,7 @@ func TestImage(t *testing.T) {
 				opts = append(opts, test.options...)
 			}
 
-			ctx := context.Background()
+			ctx := context.TODO()
 			image, err := mg.Image.Image(ctx, test.imageKey, opts...)
 			test.f(image, err)
 		})
@@ -172,7 +172,7 @@ func TestImages(t *testing.T) {
 
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
-			images, pages, err := mg.Image.Images(context.Background(), test.albumKey, test.options...)
+			images, pages, err := mg.Image.Images(context.TODO(), test.albumKey, test.options...)
 			test.f(images, pages, err)
 		})
 	}
@@ -206,7 +206,7 @@ func TestImagesIter(t *testing.T) {
 	var n int
 	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 	a.NoError(err)
-	err = mg.Image.ImagesIter(context.Background(), "HZMsPf", func(img *smugmug.Image) (bool, error) {
+	err = mg.Image.ImagesIter(context.TODO(), "HZMsPf", func(img *smugmug.Image) (bool, error) {
 		n++
 		return true, nil
 	}, smugmug.WithSearch("", "Marmot"))

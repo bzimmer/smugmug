@@ -109,14 +109,8 @@ func (s *ImageService) ImagesIter(ctx context.Context, albumKey string, iter Ima
 
 type imagesResponse struct {
 	Response struct {
-		URI            string   `json:"Uri"`
-		Locator        string   `json:"Locator"`
-		LocatorType    string   `json:"LocatorType"`
-		Images         []*Image `json:"AlbumImage"`
-		URIDescription string   `json:"UriDescription"`
-		EndpointType   string   `json:"EndpointType"`
-		Pages          *Pages   `json:"Pages"`
-		Timing         *timing  `json:"Timing"`
+		Images []*Image `json:"AlbumImage"`
+		Pages  *Pages   `json:"Pages"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:",omitempty"`
 	Code       int                         `json:"Code"`
@@ -125,14 +119,7 @@ type imagesResponse struct {
 
 type imageResponse struct {
 	Response struct {
-		URI            string  `json:"Uri"`
-		Locator        string  `json:"Locator"`
-		LocatorType    string  `json:"LocatorType"`
-		Image          *Image  `json:"Image"`
-		URIDescription string  `json:"UriDescription"`
-		EndpointType   string  `json:"EndpointType"`
-		DocURI         string  `json:"DocUri"`
-		Timing         *timing `json:"Timing"`
+		Image *Image `json:"Image"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:",omitempty"`
 	Code       int                         `json:"Code"`

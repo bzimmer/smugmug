@@ -36,14 +36,7 @@ func (s *UserService) AuthUser(ctx context.Context, options ...APIOption) (*User
 
 type userResponse struct {
 	Response struct {
-		URI            string  `json:"Uri"`
-		Locator        string  `json:"Locator"`
-		LocatorType    string  `json:"LocatorType"`
-		User           *User   `json:"User"`
-		URIDescription string  `json:"UriDescription"`
-		EndpointType   string  `json:"EndpointType"`
-		DocURI         string  `json:"DocUri"`
-		Timing         *timing `json:"Timing"`
+		User *User `json:"User"`
 	} `json:"Response"`
 	Expansions map[string]*json.RawMessage `json:"Expansions,omitempty"`
 	Code       int                         `json:"Code"`

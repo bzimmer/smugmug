@@ -55,7 +55,7 @@ func TestAlbum(t *testing.T) {
 
 		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 		a.NoError(err)
-		test.f(mg.Album.Album(context.Background(), test.albumKey))
+		test.f(mg.Album.Album(context.TODO(), test.albumKey))
 	}
 }
 
@@ -73,7 +73,7 @@ func TestAlbumExpansions(t *testing.T) {
 
 	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 	a.NoError(err)
-	album, err := mg.Album.Album(context.Background(), "2XrGxm",
+	album, err := mg.Album.Album(context.TODO(), "2XrGxm",
 		smugmug.WithExpansions("Node", "AlbumHighlightImage", "AlbumImage", "User"))
 	a.NoError(err)
 	a.NotNil(album)
@@ -99,7 +99,7 @@ func TestAlbumSearch(t *testing.T) {
 
 	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 	a.NoError(err)
-	albums, pages, err := mg.Album.Search(context.Background())
+	albums, pages, err := mg.Album.Search(context.TODO())
 	a.NoError(err)
 	a.NotNil(albums)
 	a.NotNil(pages)
@@ -115,7 +115,7 @@ func TestAlbumSearchIter(t *testing.T) {
 		// search iteration for search results
 		func(mg *smugmug.Client) error {
 			var n int
-			err := mg.Album.SearchIter(context.Background(), func(album *smugmug.Album) (bool, error) {
+			err := mg.Album.SearchIter(context.TODO(), func(album *smugmug.Album) (bool, error) {
 				n++
 				if n == 11 {
 					a.Equal("HNxNF4", album.AlbumKey)
@@ -128,7 +128,7 @@ func TestAlbumSearchIter(t *testing.T) {
 		// album iteration for a user
 		func(mg *smugmug.Client) error {
 			var n int
-			err := mg.Album.AlbumsIter(context.Background(), "foobar", func(album *smugmug.Album) (bool, error) {
+			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(album *smugmug.Album) (bool, error) {
 				n++
 				if n == 11 {
 					a.Equal("HNxNF4", album.AlbumKey)
