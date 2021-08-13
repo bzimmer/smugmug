@@ -170,8 +170,13 @@ func (s *NodeService) ParentsIter(ctx context.Context, nodeID string, iter NodeI
 
 // Walk traverses all children of the node rooted at `nodeID`
 func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, options ...APIOption) error {
+	return s.WalkN(ctx, nodeID, fn, -1, options...)
+}
+
+// Walk traverses all children of the node rooted at `nodeID` to the specified depth
+func (s *NodeService) WalkN(ctx context.Context, nodeID string, fn NodeIterFunc, depth int, options ...APIOption) error {
 	k := &stack{}
-	k.push(nodeID, nil)
+	k.push(nodeID, nil, 0)
 	for {
 		nid, ok := k.pop()
 		if !ok {
@@ -194,11 +199,13 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 		case "Album", "System Album":
 			// ignore, no children
 		case "Folder":
-			if err := s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {
-				k.push(node.NodeID, node)
-				return true, nil
-			}, options...); err != nil {
-				return err
+			if nid.depth != depth {
+				if err := s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {
+					k.push(node.NodeID, node, nid.depth+1)
+					return true, nil
+				}, options...); err != nil {
+					return err
+				}
 			}
 		default:
 			return fmt.Errorf("unhandled type {%s}", node.Type)
@@ -207,14 +214,15 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 }
 
 type item struct {
-	id   string
-	node *Node
+	id    string
+	node  *Node
+	depth int
 }
 
 type stack []*item
 
-func (s *stack) push(id string, node *Node) {
-	*s = append(*s, &item{id: id, node: node})
+func (s *stack) push(id string, node *Node, depth int) {
+	*s = append(*s, &item{id: id, node: node, depth: depth})
 }
 
 func (s *stack) pop() (*item, bool) {
