@@ -130,22 +130,21 @@ func TestNodes(t *testing.T) {
 	a := assert.New(t)
 
 	tests := []struct {
-		name   string
 		status int
-		fail   bool
+		name   string
 		res    map[int]string
-		f      func(*smugmug.Client) error
+		f      func(*smugmug.Client)
 	}{
 		{
 			name: "search iteration for search results",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var n int
 				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("HighlightImage"))
 				a.Equal(19, n)
-				return err
+				a.NoError(err)
 			},
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
@@ -154,7 +153,7 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "search iteration for search results fail",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var n int
 				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
 					n++
@@ -162,9 +161,7 @@ func TestNodes(t *testing.T) {
 				}, withError(true))
 				a.Error(err)
 				a.True(errors.Is(err, withErr))
-				return err
 			},
-			fail: true,
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
 				1: "testdata/node_children_zx4Fx_page_2.json",
@@ -172,14 +169,14 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "node iteration of children",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var n int
 				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithExpansions("HighlightImage"))
 				a.Equal(19, n)
-				return err
+				a.NoError(err)
 			},
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
@@ -188,7 +185,7 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "node iteration of children fail",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var n int
 				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
@@ -196,9 +193,7 @@ func TestNodes(t *testing.T) {
 				}, withError(true))
 				a.Error(err)
 				a.True(errors.Is(err, withErr))
-				return err
 			},
-			fail: true,
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
 				1: "testdata/node_children_zx4Fx_page_2.json",
@@ -206,7 +201,7 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "node walk iteration",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var n int
 				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
@@ -214,7 +209,25 @@ func TestNodes(t *testing.T) {
 				}, smugmug.WithExpansions("HighlightImage"))
 				// one node, eleven albums
 				a.Equal(11+1, n)
-				return err
+				a.NoError(err)
+			},
+			res: map[int]string{
+				0: "testdata/node_zx4Fx.json",
+				1: "testdata/node_children_zx4Fx_albums_page_1.json",
+				2: "testdata/node_children_zx4Fx_albums_page_2.json",
+			},
+		},
+		{
+			name: "node walk iteration to defined depth",
+			f: func(mg *smugmug.Client) {
+				var n int
+				err := mg.Node.WalkN(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+					n++
+					a.Equal("zx4Fx", node.NodeID)
+					return true, nil
+				}, 0)
+				a.Equal(1, n)
+				a.NoError(err)
 			},
 			res: map[int]string{
 				0: "testdata/node_zx4Fx.json",
@@ -224,11 +237,11 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "node walk with type `unknown`",
-			fail: true,
-			f: func(mg *smugmug.Client) error {
-				return mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+			f: func(mg *smugmug.Client) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					return true, nil
 				})
+				a.Error(err)
 			},
 			res: map[int]string{
 				0: "testdata/node_zx4Fx_type_unknown.json",
@@ -236,15 +249,15 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "parents",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var parents []string
 				err := mg.Node.ParentsIter(context.TODO(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
 					parents = append(parents, node.NodeID)
 					return true, nil
 				})
+				a.NoError(err)
 				a.Equal(3, len(parents))
 				a.Equal([]string{"g8CLb2", "T8q7k", "zx4Fx"}, parents)
-				return err
 			},
 			res: map[int]string{
 				0: "testdata/node_g8CLb2_parents.json",
@@ -253,11 +266,10 @@ func TestNodes(t *testing.T) {
 		{
 			name:   "parents fail",
 			status: http.StatusForbidden,
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				parents, _, err := mg.Node.Parents(context.TODO(), "g8CLb2")
 				a.Error(err)
 				a.Nil(parents)
-				return nil
 			},
 			res: map[int]string{
 				0: "testdata/node_g8CLb2_parents.json",
@@ -265,7 +277,7 @@ func TestNodes(t *testing.T) {
 		},
 		{
 			name: "parents fail with api option",
-			f: func(mg *smugmug.Client) error {
+			f: func(mg *smugmug.Client) {
 				var parents []string
 				err := mg.Node.ParentsIter(context.TODO(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
 					parents = append(parents, node.NodeID)
@@ -273,9 +285,7 @@ func TestNodes(t *testing.T) {
 				}, withError(true))
 				a.Error(err)
 				a.True(errors.Is(err, withErr))
-				return err
 			},
-			fail: true,
 			res: map[int]string{
 				0: "testdata/node_g8CLb2_parents.json",
 			},
@@ -304,12 +314,7 @@ func TestNodes(t *testing.T) {
 
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
-			err = test.f(mg)
-			if test.fail {
-				a.Error(err)
-			} else {
-				a.NoError(err)
-			}
+			test.f(mg)
 		})
 	}
 }
