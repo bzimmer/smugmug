@@ -3,6 +3,7 @@ package smugmug
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -162,6 +163,25 @@ func WithSearch(scope, text string) APIOption {
 	}
 }
 
+// URLName returns `name` as a suitable URL name for a folder or album
+func URLName(name string) string {
+	var b []byte
+	name = strings.Title(name)
+	for i := range name {
+		c := name[i]
+		switch {
+		case c == ' ':
+			if len(b) == 0 || b[len(b)-1] == '-' {
+				continue
+			}
+			b = append(b, '-')
+		case ('A' <= c && c <= 'z') || ('0' <= c && c <= '9'):
+			b = append(b, c)
+		}
+	}
+	return strings.Trim(string(b), "-")
+}
+
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client
 func NewHTTPClient(consumerKey, consumerSecret, accessToken, accessTokenSecret string) (*http.Client, error) {
 	consumer := oauth.NewConsumer(consumerKey, consumerSecret, Provider)
@@ -171,15 +191,26 @@ func NewHTTPClient(consumerKey, consumerSecret, accessToken, accessTokenSecret s
 
 // newRequest constructs an http.Request for the uri applying all provided `APIOption`s
 func (c *Client) newRequest(ctx context.Context, method, uri string, options []APIOption) (*http.Request, error) {
+	return c.newRequestWithBody(ctx, method, uri, nil, options)
+}
+
+// newRequest constructs an http.Request for the uri applying all provided `APIOption`s
+func (c *Client) newRequestWithBody(ctx context.Context, method, uri string, body io.Reader, options []APIOption) (*http.Request, error) {
 	uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
-	v := url.Values{"_pretty": {strconv.FormatBool(c.pretty)}}
-	for _, opt := range options {
-		if err := opt(v); err != nil {
-			return nil, err
+	switch method {
+	case http.MethodGet:
+		v := url.Values{"_pretty": {strconv.FormatBool(c.pretty)}}
+		for _, opt := range options {
+			if err := opt(v); err != nil {
+				return nil, err
+			}
 		}
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+	case http.MethodPost:
+	default:
+		return nil, fmt.Errorf("unsupported method {%s}", method)
 	}
-	uri = fmt.Sprintf("%s?%s", uri, v.Encode())
-	req, err := http.NewRequestWithContext(ctx, method, uri, nil)
+	req, err := http.NewRequestWithContext(ctx, method, uri, body)
 	if err != nil {
 		return nil, err
 	}

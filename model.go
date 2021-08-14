@@ -312,23 +312,27 @@ type NodeURIs struct {
 	User           *APIEndpoint `json:"User"`
 }
 
+type Handle struct {
+	Type    string `json:"Type"`
+	Name    string `json:"Name"`
+	URLName string `json:"UrlName"`
+	Privacy string `json:"Privacy"`
+}
+
 type Node struct {
+	Handle
 	CoverImageURI         string           `json:"CoverImageUri"`
 	Description           string           `json:"Description"`
 	HideOwner             bool             `json:"HideOwner"`
 	HighlightImageURI     string           `json:"HighlightImageUri"`
-	Name                  string           `json:"Name"`
 	Keywords              []string         `json:"Keywords"`
 	Password              string           `json:"Password"`
 	PasswordHint          string           `json:"PasswordHint"`
-	Privacy               string           `json:"Privacy"`
 	SecurityType          string           `json:"SecurityType"`
 	ShowCoverImage        bool             `json:"ShowCoverImage"`
 	SmugSearchable        string           `json:"SmugSearchable"`
 	SortDirection         string           `json:"SortDirection"`
 	SortMethod            string           `json:"SortMethod"`
-	Type                  string           `json:"Type"`
-	URLName               string           `json:"UrlName"`
 	WorldSearchable       string           `json:"WorldSearchable"`
 	DateAdded             *time.Time       `json:"DateAdded"`
 	DateModified          *time.Time       `json:"DateModified"`

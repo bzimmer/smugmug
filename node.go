@@ -1,6 +1,7 @@
 package smugmug
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -104,6 +105,20 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOption) (*Node, error) {
 	uri := fmt.Sprintf("node/%s", nodeID)
 	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	if err != nil {
+		return nil, err
+	}
+	return s.node(req)
+}
+
+// Create creates a node for the handle under the `parentID`
+func (s *NodeService) Create(ctx context.Context, parentID string, handle *Handle) (*Node, error) {
+	uri := fmt.Sprintf("node/%s!children", parentID)
+	body, err := json.Marshal(handle)
+	if err != nil {
+		return nil, err
+	}
+	req, err := s.client.newRequestWithBody(ctx, http.MethodPost, uri, bytes.NewReader(body), nil)
 	if err != nil {
 		return nil, err
 	}
