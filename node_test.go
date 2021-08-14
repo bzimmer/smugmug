@@ -290,6 +290,22 @@ func TestNodes(t *testing.T) {
 				0: "testdata/node_g8CLb2_parents.json",
 			},
 		},
+		{
+			name: "node creation",
+			f: func(mg *smugmug.Client) {
+				handle := &smugmug.Handle{
+					Name:    "foobar",
+					URLName: "Foobar",
+				}
+				node, err := mg.Node.Create(context.TODO(), "g8CLb2", handle)
+				a.NoError(err)
+				a.NotNil(node)
+				a.Equal("xmQnCV", node.NodeID)
+			},
+			res: map[int]string{
+				0: "testdata/node_create_xmQnCV_.json",
+			},
+		},
 	}
 
 	for i := range tests {

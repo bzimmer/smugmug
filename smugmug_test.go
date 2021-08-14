@@ -143,3 +143,11 @@ func TestOAuthClient(t *testing.T) {
 	a.NoError(err)
 	a.NotNil(c)
 }
+
+func TestURLName(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+	a.Equal("Foo-Bar", smugmug.URLName("foo bar"))
+	a.Equal("Foo-Bar", smugmug.URLName("foo bar "))
+	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar"))
+}
