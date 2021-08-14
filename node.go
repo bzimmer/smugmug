@@ -111,10 +111,10 @@ func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOpt
 	return s.node(req)
 }
 
-// Create creates a node for the handle under the `parentID`
-func (s *NodeService) Create(ctx context.Context, parentID string, handle *Handle) (*Node, error) {
+// Create creates a node for the nodelet under the `parentID`
+func (s *NodeService) Create(ctx context.Context, parentID string, nodelet *Nodelet) (*Node, error) {
 	uri := fmt.Sprintf("node/%s!children", parentID)
-	body, err := json.Marshal(handle)
+	body, err := json.Marshal(nodelet)
 	if err != nil {
 		return nil, err
 	}
