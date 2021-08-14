@@ -312,7 +312,7 @@ type NodeURIs struct {
 	User           *APIEndpoint `json:"User"`
 }
 
-type Handle struct {
+type Nodelet struct {
 	Type    string `json:"Type"`
 	Name    string `json:"Name"`
 	URLName string `json:"UrlName"`
@@ -320,7 +320,7 @@ type Handle struct {
 }
 
 type Node struct {
-	Handle
+	Nodelet
 	CoverImageURI         string           `json:"CoverImageUri"`
 	Description           string           `json:"Description"`
 	HideOwner             bool             `json:"HideOwner"`

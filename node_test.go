@@ -293,11 +293,11 @@ func TestNodes(t *testing.T) {
 		{
 			name: "node creation",
 			f: func(mg *smugmug.Client) {
-				handle := &smugmug.Handle{
+				nodelet := &smugmug.Nodelet{
 					Name:    "foobar",
 					URLName: "Foobar",
 				}
-				node, err := mg.Node.Create(context.TODO(), "g8CLb2", handle)
+				node, err := mg.Node.Create(context.TODO(), "g8CLb2", nodelet)
 				a.NoError(err)
 				a.NotNil(node)
 				a.Equal("xmQnCV", node.NodeID)
