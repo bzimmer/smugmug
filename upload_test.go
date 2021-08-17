@@ -117,7 +117,10 @@ func TestUploads(t *testing.T) {
 			defer svr.Close()
 
 			var err error
-			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithUploadURL(svr.URL))
+			mg, err := smugmug.NewClient(
+				smugmug.WithBaseURL(svr.URL),
+				smugmug.WithUploadURL(svr.URL),
+				smugmug.WithConcurrency(4))
 			a.NoError(err)
 
 			ctx := context.TODO()

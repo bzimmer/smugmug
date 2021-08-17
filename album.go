@@ -57,7 +57,7 @@ func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...AP
 
 func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterFunc, options ...APIOption) error {
 	n := 0
-	page := WithPagination(1, batchSize)
+	page := WithPagination(1, batch)
 	for {
 		albums, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
@@ -74,7 +74,7 @@ func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterF
 		if n == pages.Total {
 			return nil
 		}
-		page = WithPagination(pages.Start+pages.Count, batchSize)
+		page = WithPagination(pages.Start+pages.Count, batch)
 	}
 }
 
