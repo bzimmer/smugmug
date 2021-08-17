@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -165,21 +166,8 @@ func WithSearch(scope, text string) APIOption {
 
 // URLName returns `name` as a suitable URL name for a folder or album
 func URLName(name string) string {
-	var b []byte
-	name = strings.Title(name)
-	for i := range name {
-		c := name[i]
-		switch {
-		case c == ' ':
-			if len(b) == 0 || b[len(b)-1] == '-' {
-				continue
-			}
-			b = append(b, '-')
-		case ('A' <= c && c <= 'z') || ('0' <= c && c <= '9'):
-			b = append(b, c)
-		}
-	}
-	return strings.Trim(string(b), "-")
+	c := regexp.MustCompile("[A-Za-z0-9-]+")
+	return strings.Join(c.FindAllString(strings.Title(name), -1), "-")
 }
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client

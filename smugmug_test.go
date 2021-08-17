@@ -147,7 +147,10 @@ func TestOAuthClient(t *testing.T) {
 func TestURLName(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
+	a.Equal("", smugmug.URLName(""))
 	a.Equal("Foo-Bar", smugmug.URLName("foo bar"))
 	a.Equal("Foo-Bar", smugmug.URLName("foo bar "))
+	a.Equal("Foo-Bar", smugmug.URLName("Foo bar"))
 	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar"))
+	a.Equal("2021-01-01-Foo-1-Bar", smugmug.URLName("2021-01-01 foo & 1 bar"))
 }

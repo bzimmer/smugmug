@@ -8,6 +8,7 @@ import (
 )
 
 type Fault struct {
+	Code    int
 	Message string
 }
 
