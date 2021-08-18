@@ -1,0 +1,401 @@
+{
+    "Response": {
+        "Uri": "/api/v2/image/B2fHSt7-0?_pretty=true",
+        "Locator": "Image",
+        "LocatorType": "Object",
+        "Image": {
+            "Title": "",
+            "Caption": "",
+            "Keywords": "",
+            "KeywordArray": [],
+            "Watermark": "No",
+            "Latitude": "46.44270833333300",
+            "Longitude": "-121.77849444444000",
+            "Altitude": 428,
+            "Hidden": false,
+            "ThumbnailUrl": "https://photos.smugmug.com/photos/i-B2fHSt7/0/Th/i-B2fHSt7-Th.jpg",
+            "FileName": "C14A0468-A662-4998-9C1C-4414E50C780E_heic.JPG",
+            "Processing": false,
+            "UploadKey": "9751349061",
+            "Date": "2020-09-06T01:34:49+00:00",
+            "DateTimeUploaded": "2020-09-06T01:34:49+00:00",
+            "DateTimeOriginal": "2020-08-25T21:36:13+00:00",
+            "Format": "JPG",
+            "OriginalHeight": 3024,
+            "OriginalWidth": 4032,
+            "OriginalSize": 3854336,
+            "LastUpdated": "2021-08-17T14:49:49+00:00",
+            "Collectable": true,
+            "IsArchive": false,
+            "IsVideo": false,
+            "ComponentFileTypes": {
+                "Image": [
+                    "jpg"
+                ]
+            },
+            "CanEdit": true,
+            "CanBuy": true,
+            "Protected": false,
+            "Watermarked": false,
+            "ImageKey": "B2fHSt7",
+            "Serial": 0,
+            "ArchivedUri": "https://photos.smugmug.com/photos/i-B2fHSt7/0/abd96907/D/i-B2fHSt7-D.jpg",
+            "ArchivedSize": 3854336,
+            "ArchivedMD5": "3004be323291d2512c55bbc4c5536194",
+            "CanShare": true,
+            "Comments": true,
+            "ShowKeywords": true,
+            "FormattedValues": {
+                "Caption": {
+                    "html": "",
+                    "text": ""
+                },
+                "FileName": {
+                    "html": "C14A0468-A662-4998-9C1C-4414E50C780E_heic.JPG",
+                    "text": "C14A0468-A662-4998-9C1C-4414E50C780E_heic.JPG"
+                }
+            },
+            "Uri": "/api/v2/image/B2fHSt7-0",
+            "WebUri": "https://photos.gravl.cc/Activities/2020/2020-08-25-Babyshoe-Pass/n-t7jTf7/i-B2fHSt7",
+            "UriDescription": "Image by key",
+            "Uris": {
+                "LargestImage": {
+                    "Uri": "/api/v2/image/B2fHSt7-0!largestimage",
+                    "Locator": "LargestImage",
+                    "LocatorType": "Object",
+                    "UriDescription": "Largest size available for image",
+                    "EndpointType": "LargestImage"
+                },
+                "ImageSizes": {
+                    "Uri": "/api/v2/image/B2fHSt7-0!sizes",
+                    "Locator": "ImageSizes",
+                    "LocatorType": "Object",
+                    "UriDescription": "Sizes available for image",
+                    "EndpointType": "ImageSizes"
+                },
+                "ImageSizeDetails": {
+                    "Uri": "/api/v2/image/B2fHSt7-0!sizedetails",
+                    "Locator": "ImageSizeDetails",
+                    "LocatorType": "Object",
+                    "UriDescription": "Detailed size information for image",
+                    "EndpointType": "ImageSizeDetails"
+                },
+                "PointOfInterest": {
+                    "Uri": "/api/v2/image/B2fHSt7!pointofinterest",
+                    "Locator": "PointOfInterest",
+                    "LocatorType": "Object",
+                    "UriDescription": "Point of interest for image",
+                    "EndpointType": "PointOfInterest"
+                },
+                "PointOfInterestCrops": {
+                    "Uri": "/api/v2/image/B2fHSt7!poicrops",
+                    "Locator": "PointOfInterestCrops",
+                    "LocatorType": "List",
+                    "UriDescription": "PointOfInterest Crops for image",
+                    "EndpointType": "PointOfInterestCrops"
+                },
+                "Regions": {
+                    "Uri": "/api/v2/image/B2fHSt7!regions",
+                    "Locator": "Region",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Regions for image",
+                    "EndpointType": "Regions"
+                },
+                "ImageAlbum": {
+                    "Uri": "/api/v2/album/S45Qsz",
+                    "Locator": "Album",
+                    "LocatorType": "Object",
+                    "UriDescription": "Album by key",
+                    "EndpointType": "Album",
+                    "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+                },
+                "ImageDownload": {
+                    "Uri": "/api/v2/image/B2fHSt7!download",
+                    "Locator": "ImageDownload",
+                    "LocatorType": "Object",
+                    "UriDescription": "Download image",
+                    "EndpointType": "ImageDownload"
+                },
+                "ImageOwner": {
+                    "Uri": "/api/v2/user/zimmer",
+                    "Locator": "User",
+                    "LocatorType": "Object",
+                    "UriDescription": "User By Nickname",
+                    "EndpointType": "User"
+                },
+                "ImageComments": {
+                    "Uri": "/api/v2/image/B2fHSt7!comments",
+                    "Locator": "Comment",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Comments on image",
+                    "EndpointType": "ImageComments"
+                },
+                "RotateImage": {
+                    "Uri": "/api/v2/image/B2fHSt7!rotate",
+                    "UriDescription": "Rotate an image",
+                    "EndpointType": "RotateImage"
+                },
+                "ColorImage": {
+                    "Uri": "/api/v2/image/B2fHSt7!color",
+                    "Locator": "ColorImage",
+                    "LocatorType": "Object",
+                    "UriDescription": "Color an image",
+                    "EndpointType": "ColorImage"
+                },
+                "CopyImage": {
+                    "Uri": "/api/v2/image/B2fHSt7!copy",
+                    "UriDescription": "Copy an image",
+                    "EndpointType": "CopyImage"
+                },
+                "CropImage": {
+                    "Uri": "/api/v2/image/B2fHSt7!crop",
+                    "UriDescription": "Crop an image",
+                    "EndpointType": "CropImage"
+                },
+                "WatermarkImage": {
+                    "Uri": "/api/v2/image/B2fHSt7!watermark",
+                    "UriDescription": "Watermark Image",
+                    "EndpointType": "WatermarkImage"
+                },
+                "ImageMetadata": {
+                    "Uri": "/api/v2/image/B2fHSt7!metadata",
+                    "Locator": "ImageMetadata",
+                    "LocatorType": "Object",
+                    "UriDescription": "Metadata for image",
+                    "EndpointType": "ImageMetadata"
+                },
+                "ImagePrices": {
+                    "Uri": "/api/v2/image/B2fHSt7!prices",
+                    "Locator": "CatalogSkuPrice",
+                    "LocatorType": "Objects",
+                    "UriDescription": "Purchasable Skus",
+                    "EndpointType": "ImagePrices"
+                },
+                "ImagePricelistExclusions": {
+                    "Uri": "/api/v2/image/B2fHSt7!pricelistexclusions",
+                    "Locator": "ImagePricelistExclusions",
+                    "LocatorType": "Object",
+                    "UriDescription": "Pricelist information for an image",
+                    "EndpointType": "ImagePricelistExclusions"
+                }
+            }
+        },
+        "UriDescription": "Image by key",
+        "EndpointType": "Image",
+        "DocUri": "https://api.smugmug.com/api/v2/doc/reference/image.html"
+    },
+    "Code": 200,
+    "Message": "Ok",
+    "Expansions": {
+        "/api/v2/album/S45Qsz": {
+            "Uri": "/api/v2/album/S45Qsz",
+            "Locator": "Album",
+            "LocatorType": "Object",
+            "Album": {
+                "NiceName": "2020-08-25-Babyshoe-Pass",
+                "UrlName": "2020-08-25-Babyshoe-Pass",
+                "Title": "2020-08-25 Babyshoe Pass",
+                "Name": "2020-08-25 Babyshoe Pass",
+                "TemplateUri": "/api/v2/template/17",
+                "AllowDownloads": false,
+                "Backprinting": "",
+                "BoutiquePackaging": "Inherit from User",
+                "CanRank": true,
+                "Clean": false,
+                "Comments": true,
+                "Description": "",
+                "EXIF": true,
+                "External": true,
+                "FamilyEdit": false,
+                "Filenames": false,
+                "FriendEdit": false,
+                "Geography": true,
+                "Header": "Custom",
+                "HideOwner": false,
+                "InterceptShipping": "Inherit from User",
+                "Keywords": "",
+                "LargestSize": "Original",
+                "PackagingBranding": true,
+                "Password": "",
+                "PasswordHint": "",
+                "Printable": true,
+                "Privacy": "Unlisted",
+                "ProofDays": 0,
+                "ProofDigital": false,
+                "Protected": false,
+                "Share": true,
+                "Slideshow": true,
+                "SmugSearchable": "Inherit from User",
+                "SortDirection": "Ascending",
+                "SortMethod": "Date Taken",
+                "SquareThumbs": true,
+                "Watermark": false,
+                "WorldSearchable": true,
+                "SecurityType": "None",
+                "CommerceLightbox": false,
+                "AlbumKey": "S45Qsz",
+                "CanBuy": true,
+                "CanFavorite": false,
+                "Date": "2020-09-05T22:59:20+00:00",
+                "LastUpdated": "2021-07-18T15:18:18+00:00",
+                "ImagesLastUpdated": "2020-09-06T01:35:00+00:00",
+                "NodeID": "t7jTf7",
+                "OriginalSizes": 0,
+                "TotalSizes": 0,
+                "ImageCount": 55,
+                "UrlPath": "/Activities/2020/2020-08-25-Babyshoe-Pass",
+                "CanShare": true,
+                "HasDownloadPassword": false,
+                "Packages": false,
+                "Uri": "/api/v2/album/S45Qsz",
+                "WebUri": "https://photos.gravl.cc/Activities/2020/2020-08-25-Babyshoe-Pass/n-t7jTf7",
+                "UriDescription": "Album by key",
+                "Uris": {
+                    "AlbumShareUris": {
+                        "Uri": "/api/v2/album/S45Qsz!shareuris",
+                        "Locator": "AlbumShareUris",
+                        "LocatorType": "Object",
+                        "UriDescription": "URIs that are useful for sharing",
+                        "EndpointType": "AlbumShareUris"
+                    },
+                    "Node": {
+                        "Uri": "/api/v2/node/t7jTf7",
+                        "Locator": "Node",
+                        "LocatorType": "Object",
+                        "UriDescription": "Node with the given id.",
+                        "EndpointType": "Node"
+                    },
+                    "NodeCoverImage": {
+                        "Uri": "/api/v2/node/t7jTf7!cover",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Cover image for a folder, album, or page",
+                        "EndpointType": "NodeCoverImage"
+                    },
+                    "User": {
+                        "Uri": "/api/v2/user/zimmer",
+                        "Locator": "User",
+                        "LocatorType": "Object",
+                        "UriDescription": "User By Nickname",
+                        "EndpointType": "User"
+                    },
+                    "Folder": {
+                        "Uri": "/api/v2/folder/user/zimmer/Activities/2020",
+                        "Locator": "Folder",
+                        "LocatorType": "Object",
+                        "UriDescription": "A folder or legacy (sub)category by UrlPath",
+                        "EndpointType": "Folder"
+                    },
+                    "ParentFolders": {
+                        "Uri": "/api/v2/folder/user/zimmer/Activities/2020!parents",
+                        "Locator": "Folder",
+                        "LocatorType": "Objects",
+                        "UriDescription": "The sequence of parent folders, from the given folder to the root",
+                        "EndpointType": "ParentFolders"
+                    },
+                    "HighlightImage": {
+                        "Uri": "/api/v2/highlight/node/t7jTf7",
+                        "Locator": "Image",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for a folder, album, or page",
+                        "EndpointType": "HighlightImage"
+                    },
+                    "AlbumHighlightImage": {
+                        "Uri": "/api/v2/album/S45Qsz!highlightimage",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Object",
+                        "UriDescription": "Highlight image for album",
+                        "EndpointType": "AlbumHighlightImage"
+                    },
+                    "AlbumImages": {
+                        "Uri": "/api/v2/album/S45Qsz!images",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Images from album",
+                        "EndpointType": "AlbumImages"
+                    },
+                    "AlbumPopularMedia": {
+                        "Uri": "/api/v2/album/S45Qsz!popularmedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Popular images from album",
+                        "EndpointType": "AlbumPopularMedia"
+                    },
+                    "AlbumGeoMedia": {
+                        "Uri": "/api/v2/album/S45Qsz!geomedia",
+                        "Locator": "AlbumImage",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Geotagged images from album",
+                        "EndpointType": "AlbumGeoMedia"
+                    },
+                    "AlbumComments": {
+                        "Uri": "/api/v2/album/S45Qsz!comments",
+                        "Locator": "Comment",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Comments on album",
+                        "EndpointType": "AlbumComments"
+                    },
+                    "MoveAlbumImages": {
+                        "Uri": "/api/v2/album/S45Qsz!moveimages",
+                        "UriDescription": "Move images into album",
+                        "EndpointType": "MoveAlbumImages"
+                    },
+                    "CollectImages": {
+                        "Uri": "/api/v2/album/S45Qsz!collectimages",
+                        "UriDescription": "Collect images into album",
+                        "EndpointType": "CollectImages"
+                    },
+                    "ApplyAlbumTemplate": {
+                        "Uri": "/api/v2/album/S45Qsz!applyalbumtemplate",
+                        "Locator": "ApplyAlbumTemplate",
+                        "LocatorType": "Object",
+                        "UriDescription": "Apply an album template",
+                        "EndpointType": "ApplyAlbumTemplate"
+                    },
+                    "DeleteAlbumImages": {
+                        "Uri": "/api/v2/album/S45Qsz!deleteimages",
+                        "UriDescription": "Delete album images",
+                        "EndpointType": "DeleteAlbumImages"
+                    },
+                    "UploadFromUri": {
+                        "Uri": "/api/v2/album/S45Qsz!uploadfromuri",
+                        "UriDescription": "Upload a photo or video from elsewhere on the web",
+                        "EndpointType": "UploadFromUri"
+                    },
+                    "AlbumGrants": {
+                        "Uri": "/api/v2/album/S45Qsz!grants",
+                        "Locator": "Grant",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Grants for the Album",
+                        "EndpointType": "AlbumGrants"
+                    },
+                    "AlbumDownload": {
+                        "Uri": "/api/v2/album/S45Qsz!download",
+                        "Locator": "Download",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Download album",
+                        "EndpointType": "AlbumDownload"
+                    },
+                    "AlbumPrices": {
+                        "Uri": "/api/v2/album/S45Qsz!prices",
+                        "Locator": "CatalogSkuPrice",
+                        "LocatorType": "Objects",
+                        "UriDescription": "Purchasable Skus",
+                        "EndpointType": "AlbumPrices"
+                    },
+                    "AlbumPricelistExclusions": {
+                        "Uri": "/api/v2/album/S45Qsz!pricelistexclusions",
+                        "Locator": "AlbumPricelistExclusions",
+                        "LocatorType": "Object",
+                        "UriDescription": "Pricelist information for an Album",
+                        "EndpointType": "AlbumPricelistExclusions"
+                    }
+                },
+                "ResponseLevel": "Full"
+            },
+            "UriDescription": "Album by key",
+            "EndpointType": "Album",
+            "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+        }
+    }
+}

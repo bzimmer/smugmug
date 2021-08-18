@@ -18,7 +18,7 @@ type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *P
 
 func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error {
 	n := 0
-	page := WithPagination(1, batchSize)
+	page := WithPagination(1, batch)
 	for {
 		nodes, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
@@ -35,7 +35,7 @@ func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc
 		if n == pages.Total {
 			return nil
 		}
-		page = WithPagination(pages.Start+pages.Count, batchSize)
+		page = WithPagination(pages.Start+pages.Count, batch)
 	}
 }
 
@@ -188,7 +188,7 @@ func (s *NodeService) Walk(ctx context.Context, nodeID string, fn NodeIterFunc, 
 	return s.WalkN(ctx, nodeID, fn, -1, options...)
 }
 
-// Walk traverses all children of the node rooted at `nodeID` to the specified depth
+// WalkN traverses all children of the node rooted at `nodeID` to the specified depth
 func (s *NodeService) WalkN(ctx context.Context, nodeID string, fn NodeIterFunc, depth int, options ...APIOption) error {
 	k := &stack{}
 	k.push(nodeID, nil, 0)

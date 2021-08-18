@@ -21,8 +21,6 @@ type Uploadables interface {
 	Uploadables(context.Context) (<-chan *Uploadable, <-chan error)
 }
 
-const concurrency = 5
-
 // Upload an image to an album
 func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (res *Upload, err error) {
 	if up.AlbumKey == "" {
@@ -109,7 +107,7 @@ func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (<
 			return err
 		}
 	})
-	for i := 0; i < concurrency; i++ {
+	for i := 0; i < s.client.concurrency; i++ {
 		grp.Go(s.uploads(ctx, uploadablesc, updc))
 	}
 

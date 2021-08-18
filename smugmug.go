@@ -17,7 +17,9 @@ import (
 //go:generate genwith --client --do --package smugmug
 
 const (
-	batchSize = 100
+	batch       = 100
+	concurrency = 2
+
 	userAgent = "github.com/bzimmer/smugmug"
 
 	_baseURL   = "https://api.smugmug.com/api/v2"
@@ -33,11 +35,12 @@ var Provider = oauth.ServiceProvider{
 
 // Client provides SmugMug connectivity
 type Client struct {
-	client    *http.Client
-	pretty    bool
-	baseURL   string
-	uploadURL string
-	metrics   *metrics.Metrics
+	client      *http.Client
+	pretty      bool
+	baseURL     string
+	uploadURL   string
+	metrics     *metrics.Metrics
+	concurrency int
 
 	User   *UserService
 	Node   *NodeService
@@ -68,6 +71,9 @@ func withServices() Option {
 			}
 			c.metrics = met
 		}
+		if c.concurrency == 0 {
+			c.concurrency = concurrency
+		}
 		return nil
 	}
 }
@@ -79,6 +85,14 @@ type APIOption func(url.Values) error
 func WithMetrics(metrics *metrics.Metrics) Option {
 	return func(c *Client) error {
 		c.metrics = metrics
+		return nil
+	}
+}
+
+// WithConcurrency configures the number of concurrent upload goroutines
+func WithConcurrency(concurrency int) Option {
+	return func(c *Client) error {
+		c.concurrency = concurrency
 		return nil
 	}
 }
@@ -186,7 +200,7 @@ func (c *Client) newRequest(ctx context.Context, method, uri string, options []A
 func (c *Client) newRequestWithBody(ctx context.Context, method, uri string, body io.Reader, options []APIOption) (*http.Request, error) {
 	uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	switch method {
-	case http.MethodGet:
+	case http.MethodGet, http.MethodPost, http.MethodPatch:
 		v := url.Values{"_pretty": {strconv.FormatBool(c.pretty)}}
 		for _, opt := range options {
 			if err := opt(v); err != nil {
@@ -194,7 +208,6 @@ func (c *Client) newRequestWithBody(ctx context.Context, method, uri string, bod
 			}
 		}
 		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
-	case http.MethodPost:
 	default:
 		return nil, fmt.Errorf("unsupported method {%s}", method)
 	}

@@ -1,6 +1,7 @@
 package smugmug
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -19,7 +20,7 @@ type imagesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Image, 
 
 func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterFunc, options ...APIOption) error {
 	n := 0
-	page := WithPagination(1, batchSize)
+	page := WithPagination(1, batch)
 	for {
 		images, pages, err := q(ctx, append(options, page)...)
 		if err != nil {
@@ -36,8 +37,17 @@ func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterF
 		if n == pages.Total {
 			return nil
 		}
-		page = WithPagination(pages.Start+pages.Count, batchSize)
+		page = WithPagination(pages.Start+pages.Count, batch)
 	}
+}
+
+func (s *ImageService) image(req *http.Request) (*Image, error) {
+	res := &imageResponse{}
+	err := s.client.do(req, res)
+	if err != nil {
+		return nil, err
+	}
+	return s.expand(res.Response.Image, res.Expansions)
 }
 
 func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
@@ -62,8 +72,20 @@ func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessa
 		}
 		image.ImageSizeDetails = res.ImageSizeDetails
 	}
+	// Album exists when expanding an image by the album key (eg HighlightImage)
 	if image.URIs.Album != nil {
 		if val, ok := expansions[image.URIs.Album.URI]; ok {
+			res := struct{ Album *Album }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.Album = res.Album
+		}
+		return image, nil
+	}
+	// ImageAlbum exists when querying an image directly
+	if image.URIs.ImageAlbum != nil {
+		if val, ok := expansions[image.URIs.ImageAlbum.URI]; ok {
 			res := struct{ Album *Album }{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
@@ -82,12 +104,22 @@ func (s *ImageService) Image(ctx context.Context, imageKey string, options ...AP
 	if err != nil {
 		return nil, err
 	}
-	res := &imageResponse{}
-	err = s.client.do(req, res)
+	return s.image(req)
+}
+
+// Patch updates the metadata for `imageKey`
+// The image is not updated; to update the image use the `Upload` service
+func (s *ImageService) Patch(ctx context.Context, imageKey string, data map[string]interface{}, options ...APIOption) (*Image, error) {
+	uri := fmt.Sprintf("image/%s", imageKey)
+	body, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
-	return s.expand(res.Response.Image, res.Expansions)
+	req, err := s.client.newRequestWithBody(ctx, http.MethodPatch, uri, bytes.NewReader(body), nil)
+	if err != nil {
+		return nil, err
+	}
+	return s.image(req)
 }
 
 // Images returns a single page of image results for the album

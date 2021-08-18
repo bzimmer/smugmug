@@ -24,6 +24,7 @@ func TestImage(t *testing.T) {
 		expansions []string
 		filename   string
 		options    []smugmug.APIOption
+		patch      map[string]interface{}
 		f          func(*smugmug.Image, error)
 	}{
 		{
@@ -44,6 +45,18 @@ func TestImage(t *testing.T) {
 				a.NotNil(image)
 				a.NoError(err)
 				a.Nil(image.Album)
+			},
+		},
+		{
+			name:       "patch image",
+			imageKey:   "VPB9RVH-0",
+			filename:   "testdata/image_B2fHSt7-0.json",
+			expansions: []string{},
+			patch:      map[string]interface{}{"Keywords": []string{}},
+			f: func(image *smugmug.Image, err error) {
+				a.NotNil(image)
+				a.NoError(err)
+				a.NotNil(image.Album)
 			},
 		},
 		{
@@ -99,8 +112,13 @@ func TestImage(t *testing.T) {
 			}
 
 			ctx := context.TODO()
-			image, err := mg.Image.Image(ctx, test.imageKey, opts...)
-			test.f(image, err)
+			if test.patch != nil {
+				image, err := mg.Image.Patch(ctx, test.imageKey, test.patch, opts...)
+				test.f(image, err)
+			} else {
+				image, err := mg.Image.Image(ctx, test.imageKey, opts...)
+				test.f(image, err)
+			}
 		})
 	}
 }

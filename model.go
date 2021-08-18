@@ -18,6 +18,7 @@ func (f *Fault) Error() string {
 
 type Coordinate float64
 
+// UnmarshalJSON converts the json value to a coordinate
 func (c *Coordinate) UnmarshalJSON(b []byte) error {
 	var s interface{}
 	if err := json.Unmarshal(b, &s); err != nil {
