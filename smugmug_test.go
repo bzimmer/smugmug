@@ -11,7 +11,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/armon/go-metrics"
 	"github.com/bzimmer/smugmug"
 	"github.com/stretchr/testify/assert"
 )
@@ -62,9 +61,7 @@ func TestOption(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	m := &metrics.Metrics{}
 	client, err := smugmug.NewClient(
-		smugmug.WithMetrics(m),
 		smugmug.WithHTTPTracing(true),
 		smugmug.WithHTTPClient(http.DefaultClient),
 		smugmug.WithTransport(http.DefaultTransport),

@@ -9,111 +9,122 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/armon/go-metrics"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/afero"
 
 	"github.com/bzimmer/smugmug"
 )
 
+// PreFunc is called before the file is opened
+type PreFunc func(fs afero.Fs, filename string) (bool, error)
+
+// UseFunc is called after the file is opened but before it sent to be uploaded
+type UseFunc func(up *smugmug.Uploadable) (*smugmug.Uploadable, error)
+
 // FsUploadable creates Uploadable instances
 type FsUploadable interface {
 	// Uploadable creates an Uploadable from a filesystem
 	Uploadable(afero.Fs, string) (*smugmug.Uploadable, error)
+	// Pre registers a PreFunc
+	Pre(...PreFunc)
+	// Use registers a UseFunc
+	Use(...UseFunc)
+}
+
+// Extensions represents the valid list of extensions to upload
+func Extensions(extension ...string) PreFunc {
+	return func(_ afero.Fs, filename string) (bool, error) {
+		f := strings.ToLower(filename)
+		for i := range extension {
+			if strings.HasSuffix(f, extension[i]) {
+				return true, nil
+			}
+		}
+		return false, nil
+	}
+}
+
+// Skip checks if the Uploadable is already uploaded by comparing MD5s
+// If `force` is true the Uploadable will be always be uploaded
+func Skip(force bool, images map[string]*smugmug.Image) UseFunc {
+	return func(up *smugmug.Uploadable) (*smugmug.Uploadable, error) {
+		if force {
+			return up, nil
+		}
+		img, ok := images[up.Name]
+		if !ok {
+			return up, nil
+		}
+		if up.MD5 == img.ArchivedMD5 {
+			return nil, nil
+		}
+		return up, nil
+	}
+}
+
+// Replace will update the Uploadable's URI if the image was already uploaded
+// If `update` is false the URI will not be updated
+func Replace(update bool, images map[string]*smugmug.Image) UseFunc {
+	return func(up *smugmug.Uploadable) (*smugmug.Uploadable, error) {
+		if !update {
+			return up, nil
+		}
+		img, ok := images[up.Name]
+		if ok {
+			up.Replaces = img.URIs.Image.URI
+		}
+		return up, nil
+	}
 }
 
 type fsUploadable struct {
-	skip       bool
-	replace    bool
-	albumKey   string
-	extensions []string
-	metrics    *metrics.Metrics
-	images     map[string]*smugmug.Image
-}
-
-// FsUploadableOption enables configuration of uploadable creation
-type FsUploadableOption func(c *fsUploadable)
-
-// WithMetrics configures the metrics instance
-func WithMetrics(metrics *metrics.Metrics) FsUploadableOption {
-	return func(c *fsUploadable) {
-		c.metrics = metrics
-	}
-}
-
-// WithExtensions configures which extensions (inclusive of '.') are supported
-func WithExtensions(exts ...string) FsUploadableOption {
-	return func(c *fsUploadable) {
-		c.extensions = make([]string, len(exts))
-		for i := range exts {
-			c.extensions[i] = strings.ToLower(exts[i])
-		}
-	}
-}
-
-// WithReplace configures if an image replaces an image with the same filename or creates a duplicate
-func WithReplace(replace bool) FsUploadableOption {
-	return func(c *fsUploadable) {
-		c.replace = replace
-	}
-}
-
-// WithSkip configures if an image is uploaded if the md5 sum matches
-func WithSkip(skip bool) FsUploadableOption {
-	return func(c *fsUploadable) {
-		c.skip = skip
-	}
-}
-
-// WithImages maps basenames from the album to existing images
-func WithImages(albumKey string, images map[string]*smugmug.Image) FsUploadableOption {
-	return func(c *fsUploadable) {
-		c.images = images
-		c.albumKey = albumKey
-	}
+	albumKey string
+	pre      []PreFunc
+	use      []UseFunc
 }
 
 // NewFsUploadable returns a newly instantiated FsUploadable instance
-func NewFsUploadable(options ...FsUploadableOption) (FsUploadable, error) {
-	p := &fsUploadable{skip: true, replace: true}
-	for i := range options {
-		options[i](p)
-	}
-	if p.images == nil {
-		p.images = make(map[string]*smugmug.Image)
-	}
-	if p.albumKey == "" {
+func NewFsUploadable(albumKey string) (FsUploadable, error) {
+	if albumKey == "" {
 		return nil, errors.New("missing albumKey")
 	}
-	if p.metrics == nil {
-		p.metrics = metrics.Default()
-	}
-	return p, nil
+	return &fsUploadable{albumKey: albumKey}, nil
+}
+
+func (p *fsUploadable) Pre(f ...PreFunc) {
+	p.pre = append(p.pre, f...)
+}
+
+func (p *fsUploadable) Use(f ...UseFunc) {
+	p.use = append(p.use, f...)
 }
 
 func (p *fsUploadable) Uploadable(fs afero.Fs, filename string) (*smugmug.Uploadable, error) {
-	if !p.supported(filename) {
-		p.metrics.IncrCounter([]string{"fsUploadable", "skip", "unsupported"}, 1)
-		log.Info().Str("reason", "unsupported").Str("path", filename).Msg("skipping")
-		return nil, nil
+	for i := range p.pre {
+		ok, err := p.pre[i](fs, filename)
+		if err != nil {
+			return nil, err
+		}
+		if !ok {
+			return nil, nil
+		}
 	}
+
 	up, err := p.open(fs, filename)
 	if err != nil {
 		return nil, err
 	}
 	up.AlbumKey = p.albumKey
-	img, ok := p.images[up.Name]
-	if ok {
-		if p.skip && up.MD5 == img.ArchivedMD5 {
-			p.metrics.IncrCounter([]string{"fsUploadable", "skip", "md5"}, 1)
-			log.Info().Str("reason", "md5").Str("path", filename).Msg("skipping")
+
+	for i := range p.use {
+		up, err = p.use[i](up)
+		if err != nil {
+			return nil, err
+		}
+		if up == nil {
 			return nil, nil
 		}
-		if p.replace && img.URIs.Image != nil {
-			p.metrics.IncrCounter([]string{"fsUploadable", "replace"}, 1)
-			up.Replaces = img.URIs.Image.URI
-		}
 	}
+
 	return up, nil
 }
 
@@ -123,8 +134,6 @@ func (p *fsUploadable) open(fs afero.Fs, path string) (*smugmug.Uploadable, erro
 		return nil, err
 	}
 	defer fp.Close()
-
-	p.metrics.IncrCounter([]string{"fsUploadable", "open"}, 1)
 
 	buf := bytes.NewBuffer(nil)
 	size, err := io.Copy(buf, fp)
@@ -138,14 +147,4 @@ func (p *fsUploadable) open(fs afero.Fs, path string) (*smugmug.Uploadable, erro
 		MD5:    fmt.Sprintf("%x", md5.Sum(buf.Bytes())),
 		Reader: bytes.NewBuffer(buf.Bytes()),
 	}, nil
-}
-
-func (p *fsUploadable) supported(filename string) bool {
-	f := strings.ToLower(filename)
-	for i := range p.extensions {
-		if strings.HasSuffix(f, p.extensions[i]) {
-			return true
-		}
-	}
-	return false
 }

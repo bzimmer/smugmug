@@ -381,6 +381,8 @@ type Upload struct {
 	Method string `json:"method"`
 	// ImageURI is the uri of the object
 	ImageURI string `json:"imageURI"`
+	// Elapsed time of the upload
+	Elapsed time.Duration `json:"elapsed"`
 	// AlbumImageURI is the uri of the object in the album
 	AlbumImageURI string `json:"albumImageURI"`
 	// URL is the url of the uploaded object
