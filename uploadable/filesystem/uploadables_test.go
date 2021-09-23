@@ -27,6 +27,9 @@ func (t *testFsUploadable) Uploadable(fsys afero.Fs, filename string) (*smugmug.
 	}
 }
 
+func (t *testFsUploadable) Pre(_ ...filesystem.PreFunc) {}
+func (t *testFsUploadable) Use(_ ...filesystem.UseFunc) {}
+
 func TestUploadables(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)

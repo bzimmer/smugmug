@@ -4,7 +4,6 @@ import (
 	"context"
 	"io/fs"
 
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/afero"
 	"golang.org/x/sync/errgroup"
 
@@ -58,7 +57,6 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Upload
 				case <-ctx.Done():
 					return ctx.Err()
 				case uploadablesc <- up:
-					log.Info().Str("path", filename).Msg("uploadable")
 				}
 			}
 		}
@@ -93,7 +91,6 @@ func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) 
 				case <-ctx.Done():
 					return ctx.Err()
 				case filenamesc <- path:
-					log.Debug().Str("path", path).Msg("walk")
 				}
 				return nil
 			}); err != nil {

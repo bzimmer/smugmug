@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -51,44 +50,13 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (res *Upload
 		req.Header.Set(key, val)
 	}
 
-	defer func(t time.Time) {
-		elapsed := time.Since(t)
-		if err != nil {
-			s.client.metrics.IncrCounter([]string{"upload", "fail"}, 1)
-			log.Error().
-				Err(err).
-				Str("name", up.Name).
-				Str("album", up.AlbumKey).
-				Dur("elapsed", elapsed).
-				Str("status", "fail").
-				Msg("upload")
-		} else {
-			s.client.metrics.IncrCounter([]string{"upload", "success"}, 1)
-			log.Info().
-				Str("name", up.Name).
-				Str("album", up.AlbumKey).
-				Dur("elapsed", elapsed).
-				Str("uri", res.ImageURI).
-				Str("status", "success").
-				Msg("upload")
-		}
-		s.client.metrics.AddSample([]string{"upload", "upload"}, float32(elapsed.Seconds()))
-	}(time.Now())
-
-	log.Info().
-		Str("name", up.Name).
-		Str("album", up.AlbumKey).
-		Str("replaces", up.Replaces).
-		Str("status", "uploading").
-		Msg("upload")
-	s.client.metrics.IncrCounter([]string{"upload", "attempt"}, 1)
-
+	t := time.Now()
 	ur := &uploadResponse{}
 	err = s.client.do(req, ur)
 	if err != nil {
 		return nil, err
 	}
-	res = ur.Upload(up)
+	res = ur.Upload(up, time.Since(t))
 	return
 }
 
@@ -122,8 +90,7 @@ func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (<
 	return updc, errc
 }
 
-func (s *UploadService) uploads(ctx context.Context,
-	uploadablesc <-chan *Uploadable, updc chan<- *Upload) func() error {
+func (s *UploadService) uploads(ctx context.Context, uploadablesc <-chan *Uploadable, updc chan<- *Upload) func() error {
 	return func() error {
 		for {
 			select {
@@ -131,7 +98,6 @@ func (s *UploadService) uploads(ctx context.Context,
 				return ctx.Err()
 			case up, ok := <-uploadablesc:
 				if !ok {
-					log.Debug().Msg("exiting; exhausted uploadables")
 					return nil
 				}
 				upload, err := s.Upload(ctx, up)
@@ -159,11 +125,12 @@ type uploadResponse struct {
 	} `json:"Image"`
 }
 
-func (u *uploadResponse) Upload(up *Uploadable) *Upload {
+func (u *uploadResponse) Upload(up *Uploadable, elapsed time.Duration) *Upload {
 	return &Upload{
 		Uploadable:    up,
 		Status:        u.Stat,
 		Method:        u.Method,
+		Elapsed:       elapsed,
 		ImageURI:      u.UploadedImage.ImageURI,
 		AlbumImageURI: u.UploadedImage.AlbumImageURI,
 	}

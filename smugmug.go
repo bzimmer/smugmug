@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/armon/go-metrics"
 	"github.com/mrjones/oauth"
 )
 
@@ -26,12 +25,16 @@ const (
 	_uploadURL = "https://upload.smugmug.com"
 )
 
-// Provider specifies OAuth 1.0 URLs for SmugMug
-var Provider = oauth.ServiceProvider{
-	RequestTokenUrl:   "https://api.smugmug.com/services/oauth/1.0a/getRequestToken",
-	AuthorizeTokenUrl: "https://api.smugmug.com/services/oauth/1.0a/authorize",
-	AccessTokenUrl:    "https://api.smugmug.com/services/oauth/1.0a/getAccessToken",
-}
+var (
+	// Provider specifies OAuth 1.0 URLs for SmugMug
+	Provider = oauth.ServiceProvider{
+		RequestTokenUrl:   "https://api.smugmug.com/services/oauth/1.0a/getRequestToken",
+		AuthorizeTokenUrl: "https://api.smugmug.com/services/oauth/1.0a/authorize",
+		AccessTokenUrl:    "https://api.smugmug.com/services/oauth/1.0a/getAccessToken",
+	}
+	// albumNameRE allowable characters
+	albumNameRE = regexp.MustCompile("[A-Za-z0-9-]+")
+)
 
 // Client provides SmugMug connectivity
 type Client struct {
@@ -39,7 +42,6 @@ type Client struct {
 	pretty      bool
 	baseURL     string
 	uploadURL   string
-	metrics     *metrics.Metrics
 	concurrency int
 
 	User   *UserService
@@ -63,14 +65,6 @@ func withServices() Option {
 		if c.uploadURL == "" {
 			c.uploadURL = _uploadURL
 		}
-		if c.metrics == nil {
-			cfg := metrics.DefaultConfig("smugmug")
-			met, err := metrics.New(cfg, &metrics.BlackholeSink{})
-			if err != nil {
-				return err
-			}
-			c.metrics = met
-		}
 		if c.concurrency == 0 {
 			c.concurrency = concurrency
 		}
@@ -80,14 +74,6 @@ func withServices() Option {
 
 // APIOption for configuring API requests
 type APIOption func(url.Values) error
-
-// WithMetrics configures the metrics instance
-func WithMetrics(metrics *metrics.Metrics) Option {
-	return func(c *Client) error {
-		c.metrics = metrics
-		return nil
-	}
-}
 
 // WithConcurrency configures the number of concurrent upload goroutines
 func WithConcurrency(concurrency int) Option {
@@ -180,8 +166,7 @@ func WithSearch(scope, text string) APIOption {
 
 // URLName returns `name` as a suitable URL name for a folder or album
 func URLName(name string) string {
-	c := regexp.MustCompile("[A-Za-z0-9-]+")
-	return strings.Join(c.FindAllString(strings.Title(name), -1), "-")
+	return strings.Join(albumNameRE.FindAllString(strings.Title(name), -1), "-")
 }
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client
