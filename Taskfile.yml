@@ -6,7 +6,7 @@ vars:
   CWD:
     sh: git rev-parse --show-toplevel
   DIST:
-    "{{.CWD}}/.dist"
+    "{{.CWD}}/dist"
 
 tasks:
   default:
@@ -24,3 +24,13 @@ tasks:
     deps: [test]
     cmds:
       - go tool cover -html={{.DIST}}/coverage.txt
+
+  clean:
+    desc: Remove artifacts
+    cmds:
+      - rm -rf {{.DIST}}
+
+  snapshot:
+    desc: Build a snapshot
+    cmds:
+      - goreleaser release --snapshot --rm-dist
