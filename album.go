@@ -43,7 +43,7 @@ func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessa
 // Album returns the album with key `albumKey`
 func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...APIOption) (*Album, error) {
 	uri := fmt.Sprintf("album/%s", albumKey)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...AP
 	return s.expand(res.Response.Album, res.Expansions)
 }
 
-func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterFunc, options ...APIOption) error {
+func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterFunc, options ...APIOption) error { //nolint
 	n := 0
 	page := WithPagination(1, batch)
 	for {
@@ -89,13 +89,13 @@ func (s *AlbumService) albums(req *http.Request) ([]*Album, *Pages, error) {
 			return nil, nil, err
 		}
 	}
-	return res.Response.Album, res.Response.Pages, err
+	return res.Response.Album, res.Response.Pages, nil
 }
 
 // Albums returns a single page of albums for the user
 func (s *AlbumService) Albums(ctx context.Context, userID string, options ...APIOption) ([]*Album, *Pages, error) {
 	uri := fmt.Sprintf("user/%s!albums", userID)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -112,7 +112,7 @@ func (s *AlbumService) AlbumsIter(ctx context.Context, userID string, iter Album
 // Search returns a single page of search results
 func (s *AlbumService) Search(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error) {
 	uri := "album!search"
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, nil, err
 	}

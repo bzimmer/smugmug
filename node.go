@@ -16,7 +16,7 @@ type NodeIterFunc func(*Node) (bool, error)
 
 type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
 
-func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error {
+func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error { //nolint
 	n := 0
 	page := WithPagination(1, batch)
 	for {
@@ -59,7 +59,7 @@ func (s *NodeService) nodes(req *http.Request) ([]*Node, *Pages, error) {
 			return nil, nil, err
 		}
 	}
-	return res.Response.Node, res.Response.Pages, err
+	return res.Response.Node, res.Response.Pages, nil
 }
 
 func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) {
@@ -87,9 +87,9 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 		}
 	}
 	switch node.Type {
-	case "Folder":
+	case TypeFolder:
 		// deprecated
-	case "Album":
+	case TypeAlbum:
 		if val, ok := expansions[node.URIs.Album.URI]; ok {
 			res := struct{ Album *Album }{}
 			if err := json.Unmarshal(*val, &res); err != nil {
@@ -104,7 +104,7 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 // Node returns the node with id `nodeID`
 func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOption) (*Node, error) {
 	uri := fmt.Sprintf("node/%s", nodeID)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (s *NodeService) Create(ctx context.Context, parentID string, nodelet *Node
 // Children returns a single page of direct children of the node (does not traverse)
 func (s *NodeService) Children(ctx context.Context, nodeID string, options ...APIOption) ([]*Node, *Pages, error) {
 	uri := fmt.Sprintf("node/%s!children", nodeID)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -144,7 +144,7 @@ func (s *NodeService) ChildrenIter(ctx context.Context, nodeID string, iter Node
 
 // Search returns a single page of search results (does not traverse)
 func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
-	req, err := s.client.newRequest(ctx, http.MethodGet, "node!search", options)
+	req, err := s.client.newRequest(ctx, "node!search", options)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -159,7 +159,7 @@ func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options
 // Parent returns the parent node
 func (s *NodeService) Parent(ctx context.Context, nodeID string, options ...APIOption) (*Node, error) {
 	uri := fmt.Sprintf("node/%s!parent", nodeID)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func (s *NodeService) Parent(ctx context.Context, nodeID string, options ...APIO
 // Parents returns a single page of parent nodes (does not traverse)
 func (s *NodeService) Parents(ctx context.Context, nodeID string, options ...APIOption) ([]*Node, *Pages, error) {
 	uri := fmt.Sprintf("node/%s!parents", nodeID)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, nil, err
 	}

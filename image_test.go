@@ -14,7 +14,7 @@ import (
 	"github.com/bzimmer/smugmug"
 )
 
-func TestImage(t *testing.T) {
+func TestImage(t *testing.T) { //nolint
 	t.Parallel()
 	a := assert.New(t)
 
@@ -72,11 +72,11 @@ func TestImage(t *testing.T) {
 		},
 		{
 			name:    "api option failure",
-			options: []smugmug.APIOption{withError(true)},
+			options: []smugmug.APIOption{withError()},
 			f: func(image *smugmug.Image, err error) {
 				a.Nil(image)
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 			},
 		},
 		{
@@ -154,10 +154,10 @@ func TestImages(t *testing.T) {
 			name:     "fail with api option error",
 			albumKey: "WpK3n2",
 			filename: "testdata/images_WpK3n2_expansions.json",
-			options:  []smugmug.APIOption{withError(true)},
+			options:  []smugmug.APIOption{withError()},
 			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 				a.Nil(images)
 				a.Nil(pages)
 			},
@@ -166,10 +166,10 @@ func TestImages(t *testing.T) {
 			name:     "fail with bad json",
 			albumKey: "WpK3n2",
 			filename: "image_test.go",
-			options:  []smugmug.APIOption{withError(true)},
+			options:  []smugmug.APIOption{withError()},
 			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 				a.Nil(images)
 				a.Nil(pages)
 			},

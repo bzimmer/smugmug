@@ -43,10 +43,10 @@ func TestAuthUser(t *testing.T) {
 		{
 			name:     "failed options",
 			filename: "testdata/user_cmac.json",
-			options:  []smugmug.APIOption{withError(true)},
+			options:  []smugmug.APIOption{withError()},
 			f: func(user *smugmug.User, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 				a.Nil(user)
 			},
 		},
