@@ -18,7 +18,7 @@ type ImageIterFunc func(*Image) (bool, error)
 
 type imagesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Image, *Pages, error)
 
-func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterFunc, options ...APIOption) error {
+func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterFunc, options ...APIOption) error { //nolint
 	n := 0
 	page := WithPagination(1, batch)
 	for {
@@ -61,7 +61,7 @@ func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
 			return nil, nil, err
 		}
 	}
-	return res.Response.Images, res.Response.Pages, err
+	return res.Response.Images, res.Response.Pages, nil
 }
 
 func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
@@ -100,7 +100,7 @@ func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessa
 // Image returns the image for `imageKey`
 func (s *ImageService) Image(ctx context.Context, imageKey string, options ...APIOption) (*Image, error) {
 	uri := fmt.Sprintf("image/%s", imageKey)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *ImageService) Patch(ctx context.Context, imageKey string, data map[stri
 // Images returns a single page of image results for the album
 func (s *ImageService) Images(ctx context.Context, albumKey string, options ...APIOption) ([]*Image, *Pages, error) {
 	uri := fmt.Sprintf("album/%s!images", albumKey)
-	req, err := s.client.newRequest(ctx, http.MethodGet, uri, options)
+	req, err := s.client.newRequest(ctx, uri, options)
 	if err != nil {
 		return nil, nil, err
 	}

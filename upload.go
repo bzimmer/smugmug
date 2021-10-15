@@ -21,7 +21,7 @@ type Uploadables interface {
 }
 
 // Upload an image to an album
-func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (res *Upload, err error) {
+func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, error) {
 	if up.AlbumKey == "" {
 		return nil, errors.New("missing albumKey")
 	}
@@ -56,8 +56,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (res *Upload
 	if err != nil {
 		return nil, err
 	}
-	res = ur.Upload(up, time.Since(t))
-	return
+	return ur.Upload(up, time.Since(t)), nil
 }
 
 // Uploads consumes Uploadables from uploadables, uploads them to SmugMug returning status in Upload instances

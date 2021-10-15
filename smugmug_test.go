@@ -15,14 +15,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var withErr = errors.New("fail")
+var errFail = errors.New("fail")
 
-func withError(fail bool) smugmug.APIOption {
+func withError() smugmug.APIOption {
 	return func(v url.Values) error {
-		if fail {
-			return withErr
-		}
-		return nil
+		return errFail
 	}
 }
 

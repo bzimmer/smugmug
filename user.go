@@ -3,7 +3,6 @@ package smugmug
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 )
 
 // UserService is the API for user endpoints
@@ -22,7 +21,7 @@ func (s *UserService) expand(user *User, expansions map[string]*json.RawMessage)
 
 // AuthUser returns the authorized user
 func (s *UserService) AuthUser(ctx context.Context, options ...APIOption) (*User, error) {
-	req, err := s.client.newRequest(ctx, http.MethodGet, "!authuser", options)
+	req, err := s.client.newRequest(ctx, "!authuser", options)
 	if err != nil {
 		return nil, err
 	}

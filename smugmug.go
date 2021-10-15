@@ -23,18 +23,22 @@ const (
 
 	_baseURL   = "https://api.smugmug.com/api/v2"
 	_uploadURL = "https://upload.smugmug.com"
+
+	TypeAlbum  = "Album"
+	TypeFolder = "Folder"
 )
 
-var (
-	// Provider specifies OAuth 1.0 URLs for SmugMug
-	Provider = oauth.ServiceProvider{
+// albumNameRE allowable characters
+var albumNameRE = regexp.MustCompile("[A-Za-z0-9-]+")
+
+// provider specifies OAuth 1.0 URLs for SmugMug
+func provider() oauth.ServiceProvider {
+	return oauth.ServiceProvider{
 		RequestTokenUrl:   "https://api.smugmug.com/services/oauth/1.0a/getRequestToken",
 		AuthorizeTokenUrl: "https://api.smugmug.com/services/oauth/1.0a/authorize",
 		AccessTokenUrl:    "https://api.smugmug.com/services/oauth/1.0a/getAccessToken",
 	}
-	// albumNameRE allowable characters
-	albumNameRE = regexp.MustCompile("[A-Za-z0-9-]+")
-)
+}
 
 // Client provides SmugMug connectivity
 type Client struct {
@@ -171,14 +175,14 @@ func URLName(name string) string {
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client
 func NewHTTPClient(consumerKey, consumerSecret, accessToken, accessTokenSecret string) (*http.Client, error) {
-	consumer := oauth.NewConsumer(consumerKey, consumerSecret, Provider)
+	consumer := oauth.NewConsumer(consumerKey, consumerSecret, provider())
 	token := &oauth.AccessToken{Token: accessToken, Secret: accessTokenSecret}
 	return consumer.MakeHttpClient(token)
 }
 
 // newRequest constructs an http.Request for the uri applying all provided `APIOption`s
-func (c *Client) newRequest(ctx context.Context, method, uri string, options []APIOption) (*http.Request, error) {
-	return c.newRequestWithBody(ctx, method, uri, nil, options)
+func (c *Client) newRequest(ctx context.Context, uri string, options []APIOption) (*http.Request, error) {
+	return c.newRequestWithBody(ctx, http.MethodGet, uri, nil, options)
 }
 
 // newRequest constructs an http.Request for the uri applying all provided `APIOption`s

@@ -14,7 +14,7 @@ import (
 	"github.com/bzimmer/smugmug"
 )
 
-func TestNode(t *testing.T) {
+func TestNode(t *testing.T) { //nolint
 	t.Parallel()
 	a := assert.New(t)
 
@@ -38,10 +38,10 @@ func TestNode(t *testing.T) {
 			name:    "api option failure",
 			nodeID:  "zx4Fx",
 			fn:      "testdata/node_zx4Fx.json",
-			options: []smugmug.APIOption{withError(true)},
+			options: []smugmug.APIOption{withError()},
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 				a.Nil(node)
 			},
 		},
@@ -87,10 +87,10 @@ func TestNode(t *testing.T) {
 			nodeID:  "ZFJQ9",
 			fn:      "testdata/node_ZFJQ9_parent.json",
 			parent:  true,
-			options: []smugmug.APIOption{withError(true)},
+			options: []smugmug.APIOption{withError()},
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 				a.Nil(node)
 			},
 		},
@@ -125,7 +125,7 @@ func TestNode(t *testing.T) {
 	}
 }
 
-func TestNodes(t *testing.T) {
+func TestNodes(t *testing.T) { //nolint
 	t.Parallel()
 	a := assert.New(t)
 
@@ -158,9 +158,9 @@ func TestNodes(t *testing.T) {
 				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
-				}, withError(true))
+				}, withError())
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 			},
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
@@ -190,9 +190,9 @@ func TestNodes(t *testing.T) {
 				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
-				}, withError(true))
+				}, withError())
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 			},
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
@@ -282,9 +282,9 @@ func TestNodes(t *testing.T) {
 				err := mg.Node.ParentsIter(context.TODO(), "g8CLb2", func(node *smugmug.Node) (bool, error) {
 					parents = append(parents, node.NodeID)
 					return true, nil
-				}, withError(true))
+				}, withError())
 				a.Error(err)
-				a.True(errors.Is(err, withErr))
+				a.True(errors.Is(err, errFail))
 			},
 			res: map[int]string{
 				0: "testdata/node_g8CLb2_parents.json",
