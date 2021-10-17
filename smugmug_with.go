@@ -96,7 +96,20 @@ func (c *Client) do(req *http.Request, v interface{}) error {
 			err = nil // ignore EOF errors caused by empty response body
 		}
 		if httpError {
-			return obj.(error)
+			switch q := obj.(type) {
+			case *Fault:
+				if q.Code == 0 {
+					q.Code = res.StatusCode
+				}
+				if q.Message == "" {
+					q.Message = http.StatusText(res.StatusCode)
+				}
+				return q
+			case error:
+				return q
+			default:
+				return q.(error)
+			}
 		}
 		return err
 	}
