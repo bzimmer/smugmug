@@ -34,6 +34,11 @@ func TestImage(t *testing.T) { //nolint
 			f: func(image *smugmug.Image, err error) {
 				a.Error(err)
 				a.Nil(image)
+				switch q := err.(type) {
+				case *smugmug.Fault:
+					a.Equal(http.StatusNotFound, q.Code)
+					a.Equal(http.StatusText(http.StatusNotFound), q.Message)
+				}
 			},
 		},
 		{
@@ -93,7 +98,7 @@ func TestImage(t *testing.T) { //nolint
 		t.Run(test.name, func(t *testing.T) {
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if test.filename == "" {
-					w.WriteHeader(http.StatusForbidden)
+					w.WriteHeader(http.StatusNotFound)
 					return
 				}
 				fp, err := os.Open(test.filename)
