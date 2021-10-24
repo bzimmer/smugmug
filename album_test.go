@@ -34,6 +34,16 @@ func TestAlbum(t *testing.T) {
 			},
 		},
 		{
+			// @see(https://github.com/bzimmer/smugmug/issues/34)
+			name:     "album with no user uri",
+			albumKey: "WJvpCp",
+			filename: "testdata/album_WJvpCp_no_user_uri.json",
+			f: func(album *smugmug.Album, err error) {
+				a.NoError(err)
+				a.NotNil(album)
+			},
+		},
+		{
 			name:     "valid query",
 			albumKey: "RM4BL2",
 			filename: "testdata/album_RM4BL2.json",
@@ -60,6 +70,12 @@ func TestAlbum(t *testing.T) {
 		tt := tests[i]
 
 		mux := http.NewServeMux()
+		mux.HandleFunc("/album/WJvpCp", func(w http.ResponseWriter, r *http.Request) {
+			fp, err := os.Open(tt.filename)
+			a.NoError(err)
+			_, err = io.Copy(w, fp)
+			a.NoError(err)
+		})
 		mux.HandleFunc("/album/RM4BL2", func(w http.ResponseWriter, r *http.Request) {
 			if tt.filename == "" {
 				w.WriteHeader(http.StatusForbidden)

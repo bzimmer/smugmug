@@ -62,40 +62,48 @@ func (s *NodeService) nodes(req *http.Request) ([]*Node, *Pages, error) {
 	return res.Response.Node, res.Response.Pages, nil
 }
 
-func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) {
-	if val, ok := expansions[node.URIs.User.URI]; ok {
-		res := struct{ User *User }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
-		}
-		node.User = res.User
-	}
-	if val, ok := expansions[node.URIs.HighlightImage.URI]; ok {
-		res := struct{ Image *Image }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
-		}
-		node.HighlightImage = res.Image
-	}
-	if node.URIs.Parent != nil {
-		if val, ok := expansions[node.URIs.Parent.URI]; ok {
-			res := struct{ Node *Node }{}
+func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) { //nolint
+	if node.URIs.User != nil {
+		if val, ok := expansions[node.URIs.User.URI]; ok {
+			res := struct{ User *User }{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
 			}
-			node.Parent = res.Node
+			node.User = res.User
+		}
+	}
+	if node.URIs.HighlightImage != nil {
+		if val, ok := expansions[node.URIs.HighlightImage.URI]; ok {
+			res := struct{ Image *Image }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			node.HighlightImage = res.Image
+		}
+	}
+	if node.URIs.Parent != nil {
+		if node.URIs.Parent != nil {
+			if val, ok := expansions[node.URIs.Parent.URI]; ok {
+				res := struct{ Node *Node }{}
+				if err := json.Unmarshal(*val, &res); err != nil {
+					return nil, err
+				}
+				node.Parent = res.Node
+			}
 		}
 	}
 	switch node.Type {
 	case TypeFolder:
 		// deprecated
 	case TypeAlbum:
-		if val, ok := expansions[node.URIs.Album.URI]; ok {
-			res := struct{ Album *Album }{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
+		if node.URIs.Album != nil {
+			if val, ok := expansions[node.URIs.Album.URI]; ok {
+				res := struct{ Album *Album }{}
+				if err := json.Unmarshal(*val, &res); err != nil {
+					return nil, err
+				}
+				node.Album = res.Album
 			}
-			node.Album = res.Album
 		}
 	}
 	return node, nil
