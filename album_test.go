@@ -3,6 +3,7 @@ package smugmug_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -186,6 +187,25 @@ func TestAlbumSearchIter(t *testing.T) {
 			}, smugmug.WithSearch("", "Marmot"))
 			a.Equal(20, n)
 			return err
+		},
+		// album iteration with error
+		func(mg *smugmug.Client) error {
+			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(album *smugmug.Album) (bool, error) {
+				return false, errors.New("dummy error")
+			}, smugmug.WithSearch("", "Marmot"))
+			a.Error(err)
+			return nil
+		},
+		// album iteration with no error but no continue
+		func(mg *smugmug.Client) error {
+			var n int
+			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(album *smugmug.Album) (bool, error) {
+				n++
+				return false, nil
+			}, smugmug.WithSearch("", "Marmot"))
+			a.NoError(err)
+			a.Equal(1, n)
+			return nil
 		},
 	}
 
