@@ -2,6 +2,7 @@ package smugmug_test
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -18,11 +19,14 @@ func TestAlbum(t *testing.T) {
 	a := assert.New(t)
 
 	tests := []struct {
+		name     string
 		albumKey string
 		filename string
+		patch    map[string]interface{}
 		f        func(*smugmug.Album, error)
 	}{
 		{
+			name:     "no response",
 			albumKey: "RM4BL2",
 			f: func(album *smugmug.Album, err error) {
 				a.Error(err)
@@ -30,8 +34,21 @@ func TestAlbum(t *testing.T) {
 			},
 		},
 		{
+			name:     "valid query",
 			albumKey: "RM4BL2",
 			filename: "testdata/album_RM4BL2.json",
+			f: func(album *smugmug.Album, err error) {
+				a.NoError(err)
+				a.NotNil(album)
+			},
+		},
+		{
+			name:     "valid patch",
+			albumKey: "RM4BL2",
+			filename: "testdata/album_RM4BL2.json",
+			patch: map[string]interface{}{
+				"Name": "Foo",
+			},
 			f: func(album *smugmug.Album, err error) {
 				a.NoError(err)
 				a.NotNil(album)
@@ -40,22 +57,38 @@ func TestAlbum(t *testing.T) {
 	}
 
 	for i := range tests {
-		test := tests[i]
-		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if test.filename == "" {
+		tt := tests[i]
+
+		mux := http.NewServeMux()
+		mux.HandleFunc("/album/RM4BL2", func(w http.ResponseWriter, r *http.Request) {
+			if tt.filename == "" {
 				w.WriteHeader(http.StatusForbidden)
 				return
 			}
-			fp, err := os.Open(test.filename)
+			if tt.patch != nil {
+				data := make(map[string]interface{})
+				dec := json.NewDecoder(r.Body)
+				a.NoError(dec.Decode(&data))
+				a.Contains(data, "Name")
+				a.Equal(data["Name"], "Foo")
+			}
+			fp, err := os.Open(tt.filename)
 			a.NoError(err)
 			_, err = io.Copy(w, fp)
 			a.NoError(err)
-		}))
+		})
+		svr := httptest.NewServer(mux)
 		defer svr.Close()
 
 		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 		a.NoError(err)
-		test.f(mg.Album.Album(context.TODO(), test.albumKey))
+
+		switch {
+		case tt.patch != nil:
+			tt.f(mg.Album.Patch(context.Background(), tt.albumKey, tt.patch))
+		default:
+			tt.f(mg.Album.Album(context.Background(), tt.albumKey))
+		}
 	}
 }
 

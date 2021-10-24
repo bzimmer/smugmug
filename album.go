@@ -1,6 +1,7 @@
 package smugmug
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -14,6 +15,15 @@ type AlbumService service
 type AlbumIterFunc func(*Album) (bool, error)
 
 type albumsQueryFunc func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error)
+
+func (s *AlbumService) album(req *http.Request) (*Album, error) {
+	res := &albumResponse{}
+	err := s.client.do(req, res)
+	if err != nil {
+		return nil, err
+	}
+	return s.expand(res.Response.Album, res.Expansions)
+}
 
 func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessage) (*Album, error) {
 	if val, ok := expansions[album.URIs.User.URI]; ok {
@@ -47,12 +57,7 @@ func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...AP
 	if err != nil {
 		return nil, err
 	}
-	res := &albumResponse{}
-	err = s.client.do(req, res)
-	if err != nil {
-		return nil, err
-	}
-	return s.expand(res.Response.Album, res.Expansions)
+	return s.album(req)
 }
 
 func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterFunc, options ...APIOption) error { //nolint
@@ -123,6 +128,20 @@ func (s *AlbumService) Search(ctx context.Context, options ...APIOption) ([]*Alb
 // The results of this query might be very large depending on the scope and query
 func (s *AlbumService) SearchIter(ctx context.Context, iter AlbumIterFunc, options ...APIOption) error {
 	return s.iter(ctx, s.Search, iter, options...)
+}
+
+// Patch updates the metadata for `albumKey`
+func (s *AlbumService) Patch(ctx context.Context, albumKey string, data map[string]interface{}, options ...APIOption) (*Album, error) {
+	uri := fmt.Sprintf("album/%s", albumKey)
+	body, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	req, err := s.client.newRequestWithBody(ctx, http.MethodPatch, uri, bytes.NewReader(body), options)
+	if err != nil {
+		return nil, err
+	}
+	return s.album(req)
 }
 
 type albumsResponse struct {
