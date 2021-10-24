@@ -26,26 +26,32 @@ func (s *AlbumService) album(req *http.Request) (*Album, error) {
 }
 
 func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessage) (*Album, error) {
-	if val, ok := expansions[album.URIs.User.URI]; ok {
-		res := struct{ User *User }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
+	if album.URIs.User != nil {
+		if val, ok := expansions[album.URIs.User.URI]; ok {
+			res := struct{ User *User }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			album.User = res.User
 		}
-		album.User = res.User
 	}
-	if val, ok := expansions[album.URIs.HighlightImage.URI]; ok {
-		res := struct{ Image *Image }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
+	if album.URIs.HighlightImage != nil {
+		if val, ok := expansions[album.URIs.HighlightImage.URI]; ok {
+			res := struct{ Image *Image }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			album.HighlightImage = res.Image
 		}
-		album.HighlightImage = res.Image
 	}
-	if val, ok := expansions[album.URIs.Node.URI]; ok {
-		res := struct{ Node *Node }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
+	if album.URIs.Node != nil {
+		if val, ok := expansions[album.URIs.Node.URI]; ok {
+			res := struct{ Node *Node }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			album.Node = res.Node
 		}
-		album.Node = res.Node
 	}
 	return album, nil
 }

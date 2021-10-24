@@ -65,12 +65,14 @@ func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
 }
 
 func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
-	if val, ok := expansions[image.URIs.ImageSizeDetails.URI]; ok {
-		res := struct{ ImageSizeDetails *ImageSizeDetails }{}
-		if err := json.Unmarshal(*val, &res); err != nil {
-			return nil, err
+	if image.URIs.ImageSizeDetails != nil {
+		if val, ok := expansions[image.URIs.ImageSizeDetails.URI]; ok {
+			res := struct{ ImageSizeDetails *ImageSizeDetails }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.ImageSizeDetails = res.ImageSizeDetails
 		}
-		image.ImageSizeDetails = res.ImageSizeDetails
 	}
 	// Album exists when expanding an image by the album key (eg HighlightImage)
 	if image.URIs.Album != nil {
