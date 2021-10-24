@@ -115,7 +115,7 @@ func (s *ImageService) Patch(ctx context.Context, imageKey string, data map[stri
 	if err != nil {
 		return nil, err
 	}
-	req, err := s.client.newRequestWithBody(ctx, http.MethodPatch, uri, bytes.NewReader(body), nil)
+	req, err := s.client.newRequestWithBody(ctx, http.MethodPatch, uri, bytes.NewReader(body), options)
 	if err != nil {
 		return nil, err
 	}

@@ -34,3 +34,8 @@ tasks:
     desc: Build a snapshot
     cmds:
       - goreleaser release --snapshot --rm-dist
+
+  lint:
+    desc: Runs lint
+    cmds:
+      - golangci-lint -v run
