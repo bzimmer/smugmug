@@ -17,7 +17,7 @@ tasks:
     desc: Run tests
     cmds:
       - mkdir -p {{.DIST}}
-      - go test -count=1 -race -covermode atomic -coverprofile {{.DIST}}/coverage.txt ./...
+      - go test {{.CLI_ARGS}} -count=1 -race -covermode atomic -coverprofile {{.DIST}}/coverage.txt ./...
 
   cover:
     desc: Visualize test coverage

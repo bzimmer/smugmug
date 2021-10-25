@@ -3,10 +3,8 @@ package smugmug_test
 import (
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 	"time"
 
@@ -20,11 +18,7 @@ func TestUpload(t *testing.T) {
 	a := assert.New(t)
 
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/upload_CVvj69L.json")
-		a.NoError(err)
-		defer fp.Close()
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
+		http.ServeFile(w, r, "testdata/upload_CVvj69L.json")
 	}))
 	defer svr.Close()
 
@@ -47,20 +41,20 @@ type testUploadables struct {
 	sleep    time.Duration
 }
 
-func (t *testUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
-	errs := make(chan error)
-	uploadables := make(chan *smugmug.Uploadable, 1)
+func (t *testUploadables) Uploadables(ctx context.Context) (uploadables <-chan *smugmug.Uploadable, errs <-chan error) {
+	errc := make(chan error)
+	uploadablesc := make(chan *smugmug.Uploadable, 1)
 
 	go func() {
-		defer close(errs)
-		defer close(uploadables)
+		defer close(errc)
+		defer close(uploadablesc)
 		if t.sleep > 0 {
 			time.Sleep(t.sleep)
 		}
-		uploadables <- &smugmug.Uploadable{Name: "DSC33556.jpg", AlbumKey: t.albumKey}
+		uploadablesc <- &smugmug.Uploadable{Name: "DSC33556.jpg", AlbumKey: t.albumKey}
 	}()
 
-	return uploadables, errs
+	return uploadablesc, errc
 }
 
 func TestUploads(t *testing.T) {
@@ -105,14 +99,10 @@ func TestUploads(t *testing.T) {
 	}
 
 	for i := range tests {
-		test := tests[i]
-		t.Run(test.name, func(t *testing.T) {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				fp, err := os.Open(test.filename)
-				a.NoError(err)
-				defer fp.Close()
-				_, err = io.Copy(w, fp)
-				a.NoError(err)
+				http.ServeFile(w, r, tt.filename)
 			}))
 			defer svr.Close()
 
@@ -124,13 +114,13 @@ func TestUploads(t *testing.T) {
 			a.NoError(err)
 
 			ctx := context.TODO()
-			if test.sleep > 0 {
+			if tt.sleep > 0 {
 				var cancel func()
 				ctx, cancel = context.WithTimeout(context.TODO(), time.Millisecond*10)
 				defer cancel()
 			}
 
-			uploadables := &testUploadables{albumKey: test.albumKey, sleep: test.sleep}
+			uploadables := &testUploadables{albumKey: tt.albumKey, sleep: tt.sleep}
 			uploadc, errc := mg.Upload.Uploads(ctx, uploadables)
 			a.NotNil(uploadc)
 			a.NotNil(errc)
@@ -144,7 +134,7 @@ func TestUploads(t *testing.T) {
 			case up = <-uploadc:
 			}
 
-			test.f(up, err)
+			tt.f(up, err)
 		})
 	}
 }

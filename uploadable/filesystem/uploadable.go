@@ -17,7 +17,7 @@ import (
 // PreFunc is called before the file is opened
 type PreFunc func(fs afero.Fs, filename string) (bool, error)
 
-// UseFunc is called after the file is opened but before it sent to be uploaded
+// UseFunc is called after the file is opened but before being uploaded
 type UseFunc func(up *smugmug.Uploadable) (*smugmug.Uploadable, error)
 
 // FsUploadable creates Uploadable instances

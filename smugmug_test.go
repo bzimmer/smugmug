@@ -3,11 +3,9 @@ package smugmug_test
 import (
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"os"
 	"testing"
 	"time"
 
@@ -90,11 +88,7 @@ func TestDo(t *testing.T) {
 	a := assert.New(t)
 
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/user_cmac.json")
-		a.NoError(err)
-		defer fp.Close()
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
+		http.ServeFile(w, r, "testdata/user_cmac.json")
 	}))
 	defer svr.Close()
 
