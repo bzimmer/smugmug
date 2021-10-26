@@ -18,11 +18,11 @@ type fsUploadables struct {
 
 // NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
 //  from files on the filesystem
-func NewFsUploadables(fs afero.Fs, filenames []string, uploadable FsUploadable) smugmug.Uploadables {
-	return &fsUploadables{fs: fs, filenames: filenames, uploadable: uploadable}
+func NewFsUploadables(afs afero.Fs, filenames []string, uploadable FsUploadable) smugmug.Uploadables {
+	return &fsUploadables{fs: afs, filenames: filenames, uploadable: uploadable}
 }
 
-func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
+func (p *fsUploadables) Uploadables(ctx context.Context) (uploadables <-chan *smugmug.Uploadable, errs <-chan error) {
 	grp, ctx := errgroup.WithContext(ctx)
 
 	errc := make(chan error, 1)
@@ -73,7 +73,7 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Upload
 	return uploadablesc, errc
 }
 
-func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) {
+func (p *fsUploadables) walk(ctx context.Context) (names <-chan string, errs <-chan error) {
 	errc := make(chan error, 1)
 	filenamesc := make(chan string)
 	go func() {

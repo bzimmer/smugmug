@@ -3,10 +3,8 @@ package smugmug_test
 import (
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -52,22 +50,18 @@ func TestAuthUser(t *testing.T) {
 		},
 	}
 	for i := range tests {
-		test := tests[i]
-		t.Run(test.name, func(t *testing.T) {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				a.Equal("/!authuser", r.URL.Path)
-				fp, err := os.Open(test.filename)
-				a.NoError(err)
-				defer fp.Close()
-				_, err = io.Copy(w, fp)
-				a.NoError(err)
+				http.ServeFile(w, r, tt.filename)
 			}))
 			defer svr.Close()
 
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithPretty(false))
 			a.NoError(err)
-			user, err := mg.User.AuthUser(context.TODO(), test.options...)
-			test.f(user, err)
+			user, err := mg.User.AuthUser(context.TODO(), tt.options...)
+			tt.f(user, err)
 		})
 	}
 }

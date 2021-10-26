@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -72,10 +70,7 @@ func TestAlbum(t *testing.T) {
 
 		mux := http.NewServeMux()
 		mux.HandleFunc("/album/WJvpCp", func(w http.ResponseWriter, r *http.Request) {
-			fp, err := os.Open(tt.filename)
-			a.NoError(err)
-			_, err = io.Copy(w, fp)
-			a.NoError(err)
+			http.ServeFile(w, r, tt.filename)
 		})
 		mux.HandleFunc("/album/RM4BL2", func(w http.ResponseWriter, r *http.Request) {
 			if tt.filename == "" {
@@ -89,10 +84,7 @@ func TestAlbum(t *testing.T) {
 				a.Contains(data, "Name")
 				a.Equal(data["Name"], "Foo")
 			}
-			fp, err := os.Open(tt.filename)
-			a.NoError(err)
-			_, err = io.Copy(w, fp)
-			a.NoError(err)
+			http.ServeFile(w, r, tt.filename)
 		})
 		svr := httptest.NewServer(mux)
 		defer svr.Close()
@@ -114,10 +106,7 @@ func TestAlbumExpansions(t *testing.T) {
 	a := assert.New(t)
 
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/album_2XrGxm_expansions.json")
-		a.NoError(err)
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
+		http.ServeFile(w, r, "testdata/album_2XrGxm_expansions.json")
 	}))
 	defer svr.Close()
 
@@ -139,11 +128,7 @@ func TestAlbumSearch(t *testing.T) {
 	a := assert.New(t)
 
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fp, err := os.Open("testdata/album_search_marmot_page_1.json")
-		a.NoError(err)
-		defer fp.Close()
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
+		http.ServeFile(w, r, "testdata/album_search_marmot_page_1.json")
 	}))
 	defer svr.Close()
 
@@ -224,11 +209,7 @@ func TestAlbumSearchIter(t *testing.T) {
 				a.Fail("expected i <= 1, not {%d}", j)
 				return
 			}
-			fp, err := os.Open(fn)
-			a.NoError(err)
-			defer fp.Close()
-			_, err = io.Copy(w, fp)
-			a.NoError(err)
+			http.ServeFile(w, r, fn)
 			j++
 		}))
 		defer svr.Close()

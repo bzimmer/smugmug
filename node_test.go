@@ -3,10 +3,8 @@ package smugmug_test
 import (
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,12 +17,12 @@ func TestNode(t *testing.T) { //nolint
 	a := assert.New(t)
 
 	tests := []struct {
-		f       func(*smugmug.Node, error)
-		fn      string
-		name    string
-		nodeID  string
-		options []smugmug.APIOption
-		parent  bool
+		name     string
+		f        func(*smugmug.Node, error)
+		filename string
+		nodeID   string
+		options  []smugmug.APIOption
+		parent   bool
 	}{
 		{
 			name:   "no response",
@@ -35,10 +33,10 @@ func TestNode(t *testing.T) { //nolint
 			},
 		},
 		{
-			name:    "api option failure",
-			nodeID:  "zx4Fx",
-			fn:      "testdata/node_zx4Fx.json",
-			options: []smugmug.APIOption{withError()},
+			name:     "api option failure",
+			nodeID:   "zx4Fx",
+			filename: "testdata/node_zx4Fx.json",
+			options:  []smugmug.APIOption{withError()},
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
 				a.True(errors.Is(err, errFail))
@@ -46,16 +44,16 @@ func TestNode(t *testing.T) { //nolint
 			},
 		},
 		{
-			nodeID: "zx4Fx",
-			fn:     "testdata/node_zx4Fx.json",
+			nodeID:   "zx4Fx",
+			filename: "testdata/node_zx4Fx.json",
 			f: func(node *smugmug.Node, err error) {
 				a.NoError(err)
 				a.NotNil(node)
 			},
 		},
 		{
-			nodeID: "kTR76",
-			fn:     "testdata/node_kTR76.json",
+			nodeID:   "kTR76",
+			filename: "testdata/node_kTR76.json",
 			f: func(node *smugmug.Node, err error) {
 				a.NoError(err)
 				a.NotNil(node)
@@ -64,8 +62,8 @@ func TestNode(t *testing.T) { //nolint
 			},
 		},
 		{
-			nodeID: "JDVkPQ",
-			fn:     "testdata/node_JDVkPQ.json",
+			nodeID:   "JDVkPQ",
+			filename: "testdata/node_JDVkPQ.json",
 			f: func(node *smugmug.Node, err error) {
 				a.NoError(err)
 				a.NotNil(node)
@@ -73,9 +71,9 @@ func TestNode(t *testing.T) { //nolint
 			},
 		},
 		{
-			nodeID: "ZFJQ9",
-			fn:     "testdata/node_ZFJQ9_parent.json",
-			parent: true,
+			nodeID:   "ZFJQ9",
+			filename: "testdata/node_ZFJQ9_parent.json",
+			parent:   true,
 			f: func(node *smugmug.Node, err error) {
 				a.NoError(err)
 				a.NotNil(node)
@@ -84,10 +82,10 @@ func TestNode(t *testing.T) { //nolint
 			},
 		},
 		{
-			nodeID:  "ZFJQ9",
-			fn:      "testdata/node_ZFJQ9_parent.json",
-			parent:  true,
-			options: []smugmug.APIOption{withError()},
+			nodeID:   "ZFJQ9",
+			filename: "testdata/node_ZFJQ9_parent.json",
+			parent:   true,
+			options:  []smugmug.APIOption{withError()},
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
 				a.True(errors.Is(err, errFail))
@@ -97,30 +95,27 @@ func TestNode(t *testing.T) { //nolint
 	}
 
 	for i := range tests {
-		test := tests[i]
-		if test.name == "" {
-			test.name = test.fn
+		tt := tests[i]
+		if tt.name == "" {
+			tt.name = tt.filename
 		}
-		t.Run(test.name, func(t *testing.T) {
+		t.Run(tt.name, func(t *testing.T) {
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if test.fn == "" {
+				if tt.filename == "" {
 					w.WriteHeader(http.StatusForbidden)
 					return
 				}
-				fp, err := os.Open(test.fn)
-				a.NoError(err)
-				_, err = io.Copy(w, fp)
-				a.NoError(err)
+				http.ServeFile(w, r, tt.filename)
 			}))
 			defer svr.Close()
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
 
 			q := mg.Node.Node
-			if test.parent {
+			if tt.parent {
 				q = mg.Node.Parent
 			}
-			test.f(q(context.TODO(), test.nodeID, test.options...))
+			tt.f(q(context.TODO(), tt.nodeID, tt.options...))
 		})
 	}
 }
@@ -319,11 +314,7 @@ func TestNodes(t *testing.T) { //nolint
 				}
 				fn, ok := test.res[j]
 				a.True(ok, "missing file for iteration {%d}", j)
-				fp, err := os.Open(fn)
-				a.NoError(err)
-				defer fp.Close()
-				_, err = io.Copy(w, fp)
-				a.NoError(err)
+				http.ServeFile(w, r, fn)
 				j++
 			}))
 			defer svr.Close()

@@ -60,7 +60,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 }
 
 // Uploads consumes Uploadables from uploadables, uploads them to SmugMug returning status in Upload instances
-func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (<-chan *Upload, <-chan error) {
+func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (uploads <-chan *Upload, errs <-chan error) {
 	updc := make(chan *Upload)
 	errc := make(chan error, 1)
 	grp, ctx := errgroup.WithContext(ctx)

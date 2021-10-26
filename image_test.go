@@ -3,10 +3,9 @@ package smugmug_test
 import (
 	"context"
 	"errors"
-	"io"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -34,11 +33,10 @@ func TestImage(t *testing.T) { //nolint
 			f: func(image *smugmug.Image, err error) {
 				a.Error(err)
 				a.Nil(image)
-				switch q := err.(type) {
-				case *smugmug.Fault:
-					a.Equal(http.StatusNotFound, q.Code)
-					a.Equal(http.StatusText(http.StatusNotFound), q.Message)
-				}
+				q, ok := err.(*smugmug.Fault)
+				a.True(ok)
+				a.Equal(http.StatusNotFound, q.Code)
+				a.Equal(http.StatusText(http.StatusNotFound), q.Message)
 			},
 		},
 		{
@@ -94,35 +92,31 @@ func TestImage(t *testing.T) { //nolint
 		},
 	}
 	for i := range tests {
-		test := tests[i]
-		t.Run(test.name, func(t *testing.T) {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if test.filename == "" {
+				if tt.filename == "" {
 					w.WriteHeader(http.StatusNotFound)
 					return
 				}
-				fp, err := os.Open(test.filename)
-				a.NoError(err)
-				defer fp.Close()
-				_, err = io.Copy(w, fp)
-				a.NoError(err)
+				http.ServeFile(w, r, tt.filename)
 			}))
 			defer svr.Close()
 
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
-			opts := []smugmug.APIOption{smugmug.WithExpansions(test.expansions...)}
-			if len(test.options) > 0 {
-				opts = append(opts, test.options...)
+			opts := []smugmug.APIOption{smugmug.WithExpansions(tt.expansions...)}
+			if len(tt.options) > 0 {
+				opts = append(opts, tt.options...)
 			}
 
 			ctx := context.TODO()
-			if test.patch != nil {
-				image, err := mg.Image.Patch(ctx, test.imageKey, test.patch, opts...)
-				test.f(image, err)
+			if tt.patch != nil {
+				image, err := mg.Image.Patch(ctx, tt.imageKey, tt.patch, opts...)
+				tt.f(image, err)
 			} else {
-				image, err := mg.Image.Image(ctx, test.imageKey, opts...)
-				test.f(image, err)
+				image, err := mg.Image.Image(ctx, tt.imageKey, opts...)
+				tt.f(image, err)
 			}
 		})
 	}
@@ -182,21 +176,17 @@ func TestImages(t *testing.T) {
 	}
 
 	for i := range tests {
-		test := tests[i]
-		t.Run(test.name, func(t *testing.T) {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				fp, err := os.Open(test.filename)
-				a.NoError(err)
-				defer fp.Close()
-				_, err = io.Copy(w, fp)
-				a.NoError(err)
+				http.ServeFile(w, r, tt.filename)
 			}))
 			defer svr.Close()
 
 			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 			a.NoError(err)
-			images, pages, err := mg.Image.Images(context.TODO(), test.albumKey, test.options...)
-			test.f(images, pages, err)
+			images, pages, err := mg.Image.Images(context.TODO(), tt.albumKey, tt.options...)
+			tt.f(images, pages, err)
 		})
 	}
 }
@@ -205,29 +195,28 @@ func TestImagesIter(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	var i int
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var fn string
-		switch i {
-		case 0:
-			fn = "testdata/album_images_HZMsPf_page_1.json"
-		case 1:
-			fn = "testdata/album_images_HZMsPf_page_2.json"
+	mux := http.NewServeMux()
+	mux.HandleFunc("/album/HZMsPf!images", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var i int
+		ts, ok := r.URL.Query()["start"]
+		a.True(ok, "did not find `start` parameter")
+		a.Len(ts, 1, "expected to find a single value for `start`")
+		switch ts[0] {
+		case "1":
+			i = 1
+		case "31":
+			i = 2
 		default:
-			a.Fail("expected i <= 1, not {%d}", i)
-			return
+			a.Failf("unexpected starting value {%s}", ts[0])
 		}
-		fp, err := os.Open(fn)
-		a.NoError(err)
-		defer fp.Close()
-		_, err = io.Copy(w, fp)
-		a.NoError(err)
-		i++
+		http.ServeFile(w, r, fmt.Sprintf("testdata/album_images_HZMsPf_page_%d.json", i))
 	}))
+
+	svr := httptest.NewServer(mux)
 	defer svr.Close()
 
 	var n int
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithHTTPTracing(true))
 	a.NoError(err)
 	err = mg.Image.ImagesIter(context.TODO(), "HZMsPf", func(img *smugmug.Image) (bool, error) {
 		n++
