@@ -11,6 +11,8 @@ import (
 	"strings"
 
 	"github.com/mrjones/oauth"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 //go:generate genwith --client --do --package smugmug
@@ -169,8 +171,13 @@ func WithSearch(scope, text string) APIOption {
 }
 
 // URLName returns `name` as a suitable URL name for a folder or album
-func URLName(name string) string {
-	return strings.Join(albumNameRE.FindAllString(strings.Title(name), -1), "-")
+func URLName(name string, tags ...language.Tag) string {
+	tag := language.Und
+	if len(tags) > 0 {
+		tag = tags[0]
+	}
+	title := cases.Title(tag).String(name)
+	return strings.Join(albumNameRE.FindAllString(title, -1), "-")
 }
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client
@@ -208,4 +215,29 @@ func (c *Client) newRequestWithBody(ctx context.Context, method, uri string, bod
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", userAgent)
 	return req, nil
+}
+
+func iterate[T any](ctx context.Context,
+	q func(ctx context.Context, options ...APIOption) ([]T, *Pages, error),
+	f func(T) (bool, error), options ...APIOption) error {
+	var n int
+	page := WithPagination(1, batch)
+	for {
+		nodes, pages, err := q(ctx, append(options, page)...)
+		if err != nil {
+			return err
+		}
+		n += pages.Count
+		for _, node := range nodes {
+			if ok, err := f(node); err != nil {
+				return err
+			} else if !ok {
+				return nil
+			}
+		}
+		if n == pages.Total {
+			return nil
+		}
+		page = WithPagination(pages.Start+pages.Count, batch)
+	}
 }

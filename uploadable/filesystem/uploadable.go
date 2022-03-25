@@ -135,8 +135,8 @@ func (p *fsUploadable) open(fs afero.Fs, path string) (*smugmug.Uploadable, erro
 	}
 	defer fp.Close()
 
-	buf := bytes.NewBuffer(nil)
-	size, err := io.Copy(buf, fp)
+	var buf bytes.Buffer
+	size, err := io.Copy(&buf, fp)
 	if err != nil {
 		return nil, err
 	}
@@ -145,6 +145,6 @@ func (p *fsUploadable) open(fs afero.Fs, path string) (*smugmug.Uploadable, erro
 		Name:   filepath.Base(path),
 		Size:   size,
 		MD5:    fmt.Sprintf("%x", md5.Sum(buf.Bytes())), //nolint:gosec
-		Reader: bytes.NewBuffer(buf.Bytes()),
+		Reader: &buf,
 	}, nil
 }

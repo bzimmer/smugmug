@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -67,37 +68,38 @@ func TestAlbum(t *testing.T) {
 
 	for i := range tests {
 		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
+			mux := http.NewServeMux()
+			mux.HandleFunc("/album/WJvpCp", func(w http.ResponseWriter, r *http.Request) {
+				http.ServeFile(w, r, tt.filename)
+			})
+			mux.HandleFunc("/album/RM4BL2", func(w http.ResponseWriter, r *http.Request) {
+				if tt.filename == "" {
+					w.WriteHeader(http.StatusForbidden)
+					return
+				}
+				if tt.patch != nil {
+					data := make(map[string]interface{})
+					dec := json.NewDecoder(r.Body)
+					a.NoError(dec.Decode(&data))
+					a.Contains(data, "Name")
+					a.Equal(data["Name"], "Foo")
+				}
+				http.ServeFile(w, r, tt.filename)
+			})
+			svr := httptest.NewServer(mux)
+			defer svr.Close()
 
-		mux := http.NewServeMux()
-		mux.HandleFunc("/album/WJvpCp", func(w http.ResponseWriter, r *http.Request) {
-			http.ServeFile(w, r, tt.filename)
-		})
-		mux.HandleFunc("/album/RM4BL2", func(w http.ResponseWriter, r *http.Request) {
-			if tt.filename == "" {
-				w.WriteHeader(http.StatusForbidden)
-				return
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+
+			switch {
+			case tt.patch != nil:
+				tt.f(mg.Album.Patch(context.Background(), tt.albumKey, tt.patch))
+			default:
+				tt.f(mg.Album.Album(context.Background(), tt.albumKey))
 			}
-			if tt.patch != nil {
-				data := make(map[string]interface{})
-				dec := json.NewDecoder(r.Body)
-				a.NoError(dec.Decode(&data))
-				a.Contains(data, "Name")
-				a.Equal(data["Name"], "Foo")
-			}
-			http.ServeFile(w, r, tt.filename)
 		})
-		svr := httptest.NewServer(mux)
-		defer svr.Close()
-
-		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-		a.NoError(err)
-
-		switch {
-		case tt.patch != nil:
-			tt.f(mg.Album.Patch(context.Background(), tt.albumKey, tt.patch))
-		default:
-			tt.f(mg.Album.Album(context.Background(), tt.albumKey))
-		}
 	}
 }
 
@@ -196,26 +198,27 @@ func TestAlbumSearchIter(t *testing.T) {
 
 	for i := range tests {
 		f := tests[i]
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			var j int
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				var fn string
+				switch j {
+				case 0:
+					fn = "testdata/album_search_marmot_page_1.json"
+				case 1:
+					fn = "testdata/album_search_marmot_page_2.json"
+				default:
+					a.Fail("expected i <= 1, not {%d}", j)
+					return
+				}
+				http.ServeFile(w, r, fn)
+				j++
+			}))
+			defer svr.Close()
 
-		var j int
-		svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			var fn string
-			switch j {
-			case 0:
-				fn = "testdata/album_search_marmot_page_1.json"
-			case 1:
-				fn = "testdata/album_search_marmot_page_2.json"
-			default:
-				a.Fail("expected i <= 1, not {%d}", j)
-				return
-			}
-			http.ServeFile(w, r, fn)
-			j++
-		}))
-		defer svr.Close()
-
-		mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-		a.NoError(err)
-		a.NoError(f(mg))
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+			a.NoError(f(mg))
+		})
 	}
 }
