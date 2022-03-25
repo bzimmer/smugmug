@@ -14,8 +14,6 @@ type AlbumService service
 // AlbumIterFunc is called for each album in the results
 type AlbumIterFunc func(*Album) (bool, error)
 
-type albumsQueryFunc func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error)
-
 func (s *AlbumService) album(req *http.Request) (*Album, error) {
 	res := &albumResponse{}
 	err := s.client.do(req, res)
@@ -66,29 +64,6 @@ func (s *AlbumService) Album(ctx context.Context, albumKey string, options ...AP
 	return s.album(req)
 }
 
-func (s *AlbumService) iter(ctx context.Context, q albumsQueryFunc, f AlbumIterFunc, options ...APIOption) error { //nolint
-	n := 0
-	page := WithPagination(1, batch)
-	for {
-		albums, pages, err := q(ctx, append(options, page)...)
-		if err != nil {
-			return err
-		}
-		n += pages.Count
-		for _, album := range albums {
-			if ok, err := f(album); err != nil {
-				return err
-			} else if !ok {
-				return nil
-			}
-		}
-		if n == pages.Total {
-			return nil
-		}
-		page = WithPagination(pages.Start+pages.Count, batch)
-	}
-}
-
 func (s *AlbumService) albums(req *http.Request) ([]*Album, *Pages, error) {
 	res := &albumsResponse{}
 	err := s.client.do(req, res)
@@ -115,7 +90,7 @@ func (s *AlbumService) Albums(ctx context.Context, userID string, options ...API
 
 // AlbumsIter iterates all albums for the user
 func (s *AlbumService) AlbumsIter(ctx context.Context, userID string, iter AlbumIterFunc, options ...APIOption) error {
-	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error) {
+	return iterate(ctx, func(ctx context.Context, options ...APIOption) ([]*Album, *Pages, error) {
 		return s.Albums(ctx, userID, options...)
 	}, iter, options...)
 }
@@ -133,7 +108,7 @@ func (s *AlbumService) Search(ctx context.Context, options ...APIOption) ([]*Alb
 // SearchIter iterates all search results
 // The results of this query might be very large depending on the scope and query
 func (s *AlbumService) SearchIter(ctx context.Context, iter AlbumIterFunc, options ...APIOption) error {
-	return s.iter(ctx, s.Search, iter, options...)
+	return iterate(ctx, s.Search, iter, options...)
 }
 
 // Patch updates the metadata for `albumKey`

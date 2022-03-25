@@ -11,6 +11,7 @@ import (
 
 	"github.com/bzimmer/smugmug"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/text/language"
 )
 
 var errFail = errors.New("fail")
@@ -141,4 +142,5 @@ func TestURLName(t *testing.T) {
 	a.Equal("Foo-Bar", smugmug.URLName("Foo bar"))
 	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar"))
 	a.Equal("2021-01-01-Foo-1-Bar", smugmug.URLName("2021-01-01 foo & 1 bar"))
+	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar", language.English))
 }

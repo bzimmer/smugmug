@@ -14,31 +14,6 @@ type NodeService service
 // NodeIterFunc is called for each node in the results
 type NodeIterFunc func(*Node) (bool, error)
 
-type nodesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error)
-
-func (s *NodeService) iter(ctx context.Context, q nodesQueryFunc, f NodeIterFunc, options ...APIOption) error { //nolint
-	n := 0
-	page := WithPagination(1, batch)
-	for {
-		nodes, pages, err := q(ctx, append(options, page)...)
-		if err != nil {
-			return err
-		}
-		n += pages.Count
-		for _, node := range nodes {
-			if ok, err := f(node); err != nil {
-				return err
-			} else if !ok {
-				return nil
-			}
-		}
-		if n == pages.Total {
-			return nil
-		}
-		page = WithPagination(pages.Start+pages.Count, batch)
-	}
-}
-
 func (s *NodeService) node(req *http.Request) (*Node, error) {
 	res := &nodeResponse{}
 	err := s.client.do(req, res)
@@ -62,7 +37,7 @@ func (s *NodeService) nodes(req *http.Request) ([]*Node, *Pages, error) {
 	return res.Response.Node, res.Response.Pages, nil
 }
 
-func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) { //nolint
+func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) { //nolint:gocyclo
 	if node.URIs.User != nil {
 		if val, ok := expansions[node.URIs.User.URI]; ok {
 			res := struct{ User *User }{}
@@ -145,7 +120,7 @@ func (s *NodeService) Children(ctx context.Context, nodeID string, options ...AP
 
 // ChildrenIter iterates all direct children of the node
 func (s *NodeService) ChildrenIter(ctx context.Context, nodeID string, iter NodeIterFunc, options ...APIOption) error {
-	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
+	return iterate(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
 		return s.Children(ctx, nodeID, options...)
 	}, iter, options...)
 }
@@ -161,7 +136,7 @@ func (s *NodeService) Search(ctx context.Context, options ...APIOption) ([]*Node
 
 // SearchIter iterates all search results
 func (s *NodeService) SearchIter(ctx context.Context, iter NodeIterFunc, options ...APIOption) error {
-	return s.iter(ctx, s.Search, iter, options...)
+	return iterate(ctx, s.Search, iter, options...)
 }
 
 // Parent returns the parent node
@@ -186,7 +161,7 @@ func (s *NodeService) Parents(ctx context.Context, nodeID string, options ...API
 
 // ParentsIter iterates all parental ancestors
 func (s *NodeService) ParentsIter(ctx context.Context, nodeID string, iter NodeIterFunc, options ...APIOption) error {
-	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
+	return iterate(ctx, func(ctx context.Context, options ...APIOption) ([]*Node, *Pages, error) {
 		return s.Parents(ctx, nodeID, options...)
 	}, iter, options...)
 }

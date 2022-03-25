@@ -16,31 +16,6 @@ type ImageService service
 // ImageIterFunc is called for iteration of images results
 type ImageIterFunc func(*Image) (bool, error)
 
-type imagesQueryFunc func(ctx context.Context, options ...APIOption) ([]*Image, *Pages, error)
-
-func (s *ImageService) iter(ctx context.Context, q imagesQueryFunc, f ImageIterFunc, options ...APIOption) error { //nolint
-	n := 0
-	page := WithPagination(1, batch)
-	for {
-		images, pages, err := q(ctx, append(options, page)...)
-		if err != nil {
-			return err
-		}
-		n += pages.Count
-		for _, image := range images {
-			if ok, err := f(image); err != nil {
-				return err
-			} else if !ok {
-				return nil
-			}
-		}
-		if n == pages.Total {
-			return nil
-		}
-		page = WithPagination(pages.Start+pages.Count, batch)
-	}
-}
-
 func (s *ImageService) image(req *http.Request) (*Image, error) {
 	res := &imageResponse{}
 	err := s.client.do(req, res)
@@ -136,7 +111,7 @@ func (s *ImageService) Images(ctx context.Context, albumKey string, options ...A
 
 // ImagesIter iterates all images in the album
 func (s *ImageService) ImagesIter(ctx context.Context, albumKey string, iter ImageIterFunc, options ...APIOption) error {
-	return s.iter(ctx, func(ctx context.Context, options ...APIOption) ([]*Image, *Pages, error) {
+	return iterate(ctx, func(ctx context.Context, options ...APIOption) ([]*Image, *Pages, error) {
 		return s.Images(ctx, albumKey, options...)
 	}, iter, options...)
 }
