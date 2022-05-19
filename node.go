@@ -57,14 +57,12 @@ func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage)
 		}
 	}
 	if node.URIs.Parent != nil {
-		if node.URIs.Parent != nil {
-			if val, ok := expansions[node.URIs.Parent.URI]; ok {
-				res := struct{ Node *Node }{}
-				if err := json.Unmarshal(*val, &res); err != nil {
-					return nil, err
-				}
-				node.Parent = res.Node
+		if val, ok := expansions[node.URIs.Parent.URI]; ok {
+			res := struct{ Node *Node }{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
 			}
+			node.Parent = res.Node
 		}
 	}
 	switch node.Type {
