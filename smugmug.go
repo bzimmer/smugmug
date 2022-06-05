@@ -30,8 +30,12 @@ const (
 	TypeFolder = "Folder"
 )
 
-// albumNameRE allowable characters
-var albumNameRE = regexp.MustCompile("[A-Za-z0-9-]+")
+var (
+	// albumNameRE allowable characters
+	albumNameRE = regexp.MustCompile("[\\p{L}\\d]+")
+	// quotesRE quotes
+	quotesRE = regexp.MustCompile(`['"]`)
+)
 
 // provider specifies OAuth 1.0 URLs for SmugMug
 func provider() oauth.ServiceProvider {
@@ -176,8 +180,14 @@ func URLName(name string, tags ...language.Tag) string {
 	if len(tags) > 0 {
 		tag = tags[0]
 	}
-	title := cases.Title(tag).String(name)
-	return strings.Join(albumNameRE.FindAllString(title, -1), "-")
+	return strings.Join(
+		albumNameRE.FindAllString(
+			cases.Title(tag).String(
+				quotesRE.ReplaceAllString(
+					strings.ReplaceAll(name, "-", " "),
+					"")),
+			-1),
+		"-")
 }
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client
