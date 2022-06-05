@@ -32,7 +32,7 @@ const (
 
 var (
 	// albumNameRE allowable characters
-	albumNameRE = regexp.MustCompile("[\\p{L}\\d]+")
+	albumNameRE = regexp.MustCompile(`[\p{L}\d]+`)
 	// quotesRE quotes
 	quotesRE = regexp.MustCompile(`['"]`)
 )
