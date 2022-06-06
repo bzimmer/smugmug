@@ -1,0 +1,19 @@
+{
+    "Options": {
+        "Methods": [
+            "DELETE"
+        ],
+        "Parameters": {
+            "DELETE": []
+        }
+    },
+    "Response": {
+        "Uri": "/api/v2/album/FB5fdQ/image/743XwH7-0?_pretty=true",
+        "Locator": "AlbumImage",
+        "LocatorType": "Object",
+        "UriDescription": "Image from album",
+        "EndpointType": "AlbumImage"
+    },
+    "Code": 200,
+    "Message": "Ok"
+}

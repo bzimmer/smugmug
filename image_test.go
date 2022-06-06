@@ -225,3 +225,57 @@ func TestImagesIter(t *testing.T) {
 	a.NoError(err)
 	a.Equal(34, n)
 }
+
+func TestDeleteImage(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
+	tests := []struct {
+		name     string
+		albumKey string
+		imageKey string
+		filename string
+		options  []smugmug.APIOption
+		f        func(bool, error)
+	}{
+		{
+			name:     "success",
+			imageKey: "VPB9RVH-0",
+			filename: "testdata/image_743XwH7_delete.json",
+			f: func(ok bool, err error) {
+				a.NoError(err)
+				a.True(ok)
+			},
+		},
+		{
+			name:     "success",
+			imageKey: "VPB9RVH-0",
+			filename: "testdata/image_743XwH7_delete.json",
+			options:  []smugmug.APIOption{withError()},
+			f: func(ok bool, err error) {
+				a.Error(err)
+				a.False(ok)
+			},
+		},
+	}
+	for i := range tests {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if tt.filename == "" {
+					w.WriteHeader(http.StatusNotFound)
+					return
+				}
+				http.ServeFile(w, r, tt.filename)
+			}))
+			defer svr.Close()
+
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+
+			ctx := context.TODO()
+			ok, err := mg.Image.Delete(ctx, tt.albumKey, tt.imageKey, tt.options...)
+			tt.f(ok, err)
+		})
+	}
+}
