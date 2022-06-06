@@ -40,6 +40,10 @@ func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
 }
 
 func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
+	// a delete request will result in no image in the response
+	if image == nil {
+		return nil, nil
+	}
 	if image.URIs.ImageSizeDetails != nil {
 		if val, ok := expansions[image.URIs.ImageSizeDetails.URI]; ok {
 			res := struct{ ImageSizeDetails *ImageSizeDetails }{}
@@ -97,6 +101,17 @@ func (s *ImageService) Patch(ctx context.Context, imageKey string, data map[stri
 		return nil, err
 	}
 	return s.image(req)
+}
+
+// Delete deletes the image for `imageKey` from `albumKey`
+func (s *ImageService) Delete(ctx context.Context, albumKey, imageKey string, options ...APIOption) (bool, error) {
+	uri := fmt.Sprintf("album/%s/image/%s", albumKey, imageKey)
+	req, err := s.client.newRequestWithBody(ctx, http.MethodDelete, uri, http.NoBody, options)
+	if err != nil {
+		return false, err
+	}
+	_, err = s.image(req)
+	return err == nil, err
 }
 
 // Images returns a single page of image results for the album

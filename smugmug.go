@@ -206,7 +206,7 @@ func (c *Client) newRequest(ctx context.Context, uri string, options []APIOption
 func (c *Client) newRequestWithBody(ctx context.Context, method, uri string, body io.Reader, options []APIOption) (*http.Request, error) {
 	uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	switch method {
-	case http.MethodGet, http.MethodPost, http.MethodPatch:
+	case http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete:
 		v := url.Values{"_pretty": {strconv.FormatBool(c.pretty)}}
 		for _, opt := range options {
 			if err := opt(v); err != nil {
