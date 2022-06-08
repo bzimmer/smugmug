@@ -360,33 +360,33 @@ type Node struct {
 // Uploadable holds the details about an image suitable for upload
 type Uploadable struct {
 	// Name is the basename of the image (not the full path)
-	Name string
+	Name string `json:"Name"`
 	// Size is the size in bytes
-	Size int64
+	Size int64 `json:"Size"`
 	// MD5 is the hash of the file contents
-	MD5 string
+	MD5 string `json:"MD5"`
 	// Replaces is the URI of an image to replace
-	Replaces string
+	Replaces string `json:"Replaces"`
 	// AlbumKey is the album into which the file will be uploaded
-	AlbumKey string
+	AlbumKey string `json:"AlbumKey"`
 	// Reader holds the image data for uploading
-	Reader io.Reader
+	Reader io.Reader `json:"-"`
 }
 
 // Upload is the object details for the uploaded object
 type Upload struct {
 	// Status of the request
-	Status string `json:"status"`
+	Status string `json:"Status"`
 	// Method is action performed
-	Method string `json:"method"`
+	Method string `json:"Method"`
 	// ImageURI is the uri of the object
-	ImageURI string `json:"imageURI"`
+	ImageURI string `json:"ImageUri"`
 	// Elapsed time of the upload
-	Elapsed time.Duration `json:"elapsed"`
+	Elapsed time.Duration `json:"Elapsed"`
 	// AlbumImageURI is the uri of the object in the album
-	AlbumImageURI string `json:"albumImageURI"`
+	AlbumImageURI string `json:"AlbumImageUri"`
 	// URL is the url of the uploaded object
 	URL string `json:"URL"`
 	// Uploadable is the object being uploaded
-	Uploadable *Uploadable
+	Uploadable *Uploadable `json:"Uploadable"`
 }
