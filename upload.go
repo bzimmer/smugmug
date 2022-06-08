@@ -130,6 +130,7 @@ func (u *uploadResponse) Upload(up *Uploadable, elapsed time.Duration) *Upload {
 		Status:        u.Stat,
 		Method:        u.Method,
 		Elapsed:       elapsed,
+		URL:           u.UploadedImage.URL,
 		ImageURI:      u.UploadedImage.ImageURI,
 		AlbumImageURI: u.UploadedImage.AlbumImageURI,
 	}
