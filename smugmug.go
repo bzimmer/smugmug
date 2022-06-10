@@ -33,8 +33,18 @@ const (
 var (
 	// albumNameRE allowable characters
 	albumNameRE = regexp.MustCompile(`[\p{L}\d]+`)
-	// quotesRE quotes
-	quotesRE = regexp.MustCompile(`['"]`)
+	// searchReplaceRE special characters to replace
+	searchReplaceRE = func() map[*regexp.Regexp]string { //nolint
+		re := make(map[*regexp.Regexp]string, 0)
+		for search, replace := range map[string]string{
+			`-`:                    " ",
+			"[" + "`" + `'"` + "]": "",
+		} {
+			c := regexp.MustCompile(search)
+			re[c] = replace
+		}
+		return re
+	}()
 )
 
 // provider specifies OAuth 1.0 URLs for SmugMug
@@ -176,18 +186,24 @@ func WithSearch(scope, text string) APIOption {
 
 // URLName returns `name` as a suitable URL name for a folder or album
 func URLName(name string, tags ...language.Tag) string {
+	s := name
 	tag := language.Und
 	if len(tags) > 0 {
 		tag = tags[0]
 	}
-	return strings.Join(
-		albumNameRE.FindAllString(
-			cases.Title(tag).String(
-				quotesRE.ReplaceAllString(
-					strings.ReplaceAll(name, "-", " "),
-					"")),
-			-1),
-		"-")
+	upper := cases.Upper(tag)
+	for search, replace := range searchReplaceRE {
+		s = search.ReplaceAllString(s, replace)
+	}
+	t := albumNameRE.FindAllString(s, -1)
+	for i := 0; i < len(t); i++ {
+		u := t[i]
+		// if the part is entirely capitals, probably an acronym
+		if upper.String(u) != u {
+			t[i] = cases.Title(tag).String(u)
+		}
+	}
+	return strings.Join(t, "-")
 }
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client

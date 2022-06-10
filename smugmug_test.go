@@ -146,4 +146,6 @@ func TestURLName(t *testing.T) {
 	a.Equal("2022-03-04-Zürich", smugmug.URLName("2022-03-04 Zürich"))
 	a.Equal("2021-01-01-Foo-1-Bar", smugmug.URLName("2021-01-01 foo & 1 bar"))
 	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar", language.English))
+	a.Equal("2009-10-11-BIFD-Pancake-Breakfast", smugmug.URLName("2009-10-11 BIFD Pancake Breakfast", language.English))
+	a.Equal("2009-10-11-BIFD-Pancake-Breakfast", smugmug.URLName("2009-10-11 BIFD `Pancake Breakfast`", language.English))
 }
