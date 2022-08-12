@@ -17,7 +17,7 @@ type fsUploadables struct {
 }
 
 // NewFsUploadables returns a new instance of an Uploadables which creates Uploadable instances
-//  from files on the filesystem
+// from files on the filesystem
 func NewFsUploadables(afs afero.Fs, filenames []string, uploadable FsUploadable) smugmug.Uploadables {
 	return &fsUploadables{fs: afs, filenames: filenames, uploadable: uploadable}
 }

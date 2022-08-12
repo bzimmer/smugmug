@@ -135,17 +135,40 @@ func TestOAuthClient(t *testing.T) {
 
 func TestURLName(t *testing.T) {
 	t.Parallel()
-	a := assert.New(t)
-	a.Equal("", smugmug.URLName(""))
-	a.Equal("Foo-Bar", smugmug.URLName("foo bar"))
-	a.Equal("Foo-Bar", smugmug.URLName("foo bar "))
-	a.Equal("Foo-Bar", smugmug.URLName("Foo bar"))
-	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar"))
-	a.Equal("Someones-Something", smugmug.URLName("Someone's something"))
-	a.Equal("Someones-Something", smugmug.URLName(`Someone"s something`))
-	a.Equal("2022-03-04-Zürich", smugmug.URLName("2022-03-04 Zürich"))
-	a.Equal("2021-01-01-Foo-1-Bar", smugmug.URLName("2021-01-01 foo & 1 bar"))
-	a.Equal("Foo-1-Bar", smugmug.URLName("foo & 1 bar", language.English))
-	a.Equal("2009-10-11-BIFD-Pancake-Breakfast", smugmug.URLName("2009-10-11 BIFD Pancake Breakfast", language.English))
-	a.Equal("2009-10-11-BIFD-Pancake-Breakfast", smugmug.URLName("2009-10-11 BIFD `Pancake Breakfast`", language.English))
+
+	tests := []struct {
+		url   string
+		album string
+		lang  language.Tag
+	}{
+		{url: "", album: ""},
+		{url: "Foo-Bar", album: "foo bar"},
+		{url: "Foo-Bar", album: "foo bar "},
+		{url: "Foo-Bar", album: "Foo bar"},
+		{url: "Foo-1-Bar", album: "foo & 1 bar"},
+		{url: "Someones-Something", album: "Someone's something"},
+		{url: "Someones-Something", album: `Someone"s something`},
+		{url: "2022-03-04-Zürich", album: "2022-03-04 Zürich"},
+		{url: "2022-03-04-Zürich", album: "2022-03-04 Zürich", lang: language.German},
+		{url: "2022-03-04-Zürich", album: "2022-03-04-Zürich-", lang: language.German},
+		{url: "2022-03-04-Zürich", album: "2022-03-04 Zürich & ___", lang: language.German},
+		{url: "2022-03-04-Zürich", album: "2022-03-04 Zürich & ___"},
+		{url: "2021-01-01-Foo-1-Bar", album: "2021-01-01 foo & 1 bar"},
+		{url: "Foo-1-Bar", album: "foo & 1 bar", lang: language.English},
+		{url: "2009-10-11-BIFD-Pancake-Breakfast", album: "2009-10-11 BIFD Pancake Breakfast", lang: language.English},
+		{url: "2009-10-11-BIFD-Pancake-Breakfast", album: "2009-10-11 BIFD `Pancake Breakfast`", lang: language.English},
+	}
+
+	for i := range tests {
+		test := tests[i]
+		t.Run(test.url+test.album, func(t *testing.T) {
+			a := assert.New(t)
+			switch test.lang.IsRoot() {
+			case true:
+				a.Equal(test.url, smugmug.URLName(test.album))
+			case false:
+				a.Equal(test.url, smugmug.URLName(test.album, test.lang))
+			}
+		})
+	}
 }
