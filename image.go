@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
 
 // @todo(bzimmer) add image search
+
+var errNoImage = errors.New("no image")
 
 // ImageService is the API for image endpoints
 type ImageService service
@@ -32,8 +35,10 @@ func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
 		return nil, nil, err
 	}
 	for i := range res.Response.Images {
-		if _, err := s.expand(res.Response.Images[i], res.Expansions); err != nil {
-			return nil, nil, err
+		if _, err = s.expand(res.Response.Images[i], res.Expansions); err != nil {
+			if !errors.Is(err, errNoImage) {
+				return nil, nil, err
+			}
 		}
 	}
 	return res.Response.Images, res.Response.Pages, nil
@@ -42,7 +47,7 @@ func (s *ImageService) images(req *http.Request) ([]*Image, *Pages, error) {
 func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
 	// a delete request will result in no image in the response
 	if image == nil {
-		return nil, nil
+		return nil, errNoImage
 	}
 	if image.URIs.ImageSizeDetails != nil {
 		if val, ok := expansions[image.URIs.ImageSizeDetails.URI]; ok {
@@ -111,7 +116,10 @@ func (s *ImageService) Delete(ctx context.Context, albumKey, imageKey string, op
 		return false, err
 	}
 	_, err = s.image(req)
-	return err == nil, err
+	if err == nil || errors.Is(err, errNoImage) {
+		return true, nil
+	}
+	return false, err
 }
 
 // Images returns a single page of image results for the album

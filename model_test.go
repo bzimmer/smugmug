@@ -66,6 +66,7 @@ func TestCoordinate(t *testing.T) {
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {
 			var qq q
+			t.Parallel()
 			err := json.Unmarshal([]byte(test.value), &qq)
 			test.f(qq.C, err)
 		})

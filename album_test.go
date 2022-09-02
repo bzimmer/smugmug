@@ -69,6 +69,7 @@ func TestAlbum(t *testing.T) {
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			mux := http.NewServeMux()
 			mux.HandleFunc("/album/WJvpCp", func(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, tt.filename)
@@ -200,6 +201,7 @@ func TestAlbumSearchIter(t *testing.T) {
 		f := tests[i]
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 			var j int
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				var fn string
 				switch j {

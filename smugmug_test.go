@@ -115,7 +115,10 @@ func TestDo(t *testing.T) {
 	user, err = client.User.AuthUser(ctx)
 	a.Nil(user)
 	a.Error(err)
-	a.Equal("boom", err.(*url.Error).Unwrap().Error())
+	var q *url.Error
+	ok := errors.As(err, &q)
+	a.True(ok)
+	a.Equal("boom", q.Unwrap().Error())
 
 	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*5)
 	defer cancel()
@@ -162,6 +165,7 @@ func TestURLName(t *testing.T) {
 	for i := range tests {
 		test := tests[i]
 		t.Run(test.url+test.album, func(t *testing.T) {
+			t.Parallel()
 			a := assert.New(t)
 			switch test.lang.IsRoot() {
 			case true:

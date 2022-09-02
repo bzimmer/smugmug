@@ -30,14 +30,14 @@ func (s *NodeService) nodes(req *http.Request) ([]*Node, *Pages, error) {
 		return nil, nil, err
 	}
 	for i := range res.Response.Node {
-		if _, err := s.expand(res.Response.Node[i], res.Expansions); err != nil {
+		if _, err = s.expand(res.Response.Node[i], res.Expansions); err != nil {
 			return nil, nil, err
 		}
 	}
 	return res.Response.Node, res.Response.Pages, nil
 }
 
-func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) {
+func (s *NodeService) expand(node *Node, expansions map[string]*json.RawMessage) (*Node, error) { //nolint:gocognit
 	if node.URIs.User != nil {
 		if val, ok := expansions[node.URIs.User.URI]; ok {
 			res := struct{ User *User }{}
@@ -174,19 +174,19 @@ func (s *NodeService) WalkN(ctx context.Context, nodeID string, fn NodeIterFunc,
 	k := &stack{}
 	k.push(nodeID, nil, 0)
 	for {
+		var err error
 		nid, ok := k.pop()
 		if !ok {
 			return nil
 		}
 		node := nid.node
 		if node == nil {
-			var err error
 			node, err = s.Node(ctx, nid.id, options...)
 			if err != nil {
 				return err
 			}
 		}
-		if ok, err := fn(node); err != nil {
+		if ok, err = fn(node); err != nil {
 			return err
 		} else if !ok {
 			return nil
@@ -196,7 +196,7 @@ func (s *NodeService) WalkN(ctx context.Context, nodeID string, fn NodeIterFunc,
 			// ignore, no children
 		case "Folder":
 			if nid.depth != depth {
-				if err := s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {
+				if err = s.ChildrenIter(ctx, nid.id, func(node *Node) (bool, error) {
 					k.push(node.NodeID, node, nid.depth+1)
 					return true, nil
 				}, options...); err != nil {

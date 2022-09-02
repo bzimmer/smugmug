@@ -1,6 +1,7 @@
 package filesystem_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -26,16 +27,23 @@ func TestUploadable(t *testing.T) {
 	tests := []struct {
 		filename string
 		replace  string
-		empty    bool
+		skip     bool
 		pre      filesystem.PreFunc
 		use      filesystem.UseFunc
 		uri      string
 	}{
-		{filename: ".DS_Info", empty: true, pre: filesystem.Extensions(".jpg")},
-		{filename: "DSC1234.jpg", empty: false},
+		{
+			filename: ".DS_Info",
+			skip:     true,
+			pre:      filesystem.Extensions(".jpg"),
+		},
+		{
+			filename: "DSC1234.jpg",
+			skip:     false,
+		},
 		{
 			filename: "DSC12345.jpg",
-			empty:    true,
+			skip:     true,
 			use: filesystem.Skip(false, map[string]*smugmug.Image{
 				"DSC12345.jpg": {
 					ArchivedMD5: "54b0c58c7ce9f2a8b551351102ee0938",
@@ -44,7 +52,7 @@ func TestUploadable(t *testing.T) {
 		},
 		{
 			filename: "DSC12345.jpg",
-			empty:    false,
+			skip:     false,
 			uri:      "foo",
 			use: filesystem.Replace(true, map[string]*smugmug.Image{
 				"DSC12345.jpg": {
@@ -58,7 +66,7 @@ func TestUploadable(t *testing.T) {
 		},
 		{
 			filename: "DSC12345.jpg",
-			empty:    false,
+			skip:     false,
 			uri:      "",
 			use: filesystem.Replace(false, map[string]*smugmug.Image{
 				"DSC12345.jpg": {
@@ -76,6 +84,7 @@ func TestUploadable(t *testing.T) {
 	for i := range tests {
 		test := tests[i]
 		t.Run(test.filename, func(t *testing.T) {
+			t.Parallel()
 			fs := new(afero.MemMapFs)
 			a.NoError(afero.WriteFile(fs, test.filename, []byte("this is a test"), 0644))
 			fsup, err := filesystem.NewFsUploadable(albumKey)
@@ -88,9 +97,10 @@ func TestUploadable(t *testing.T) {
 			}
 
 			up, err := fsup.Uploadable(fs, test.filename)
-			a.NoError(err)
-			switch test.empty {
+			switch test.skip {
 			case true:
+				a.Error(err)
+				a.True(errors.Is(err, filesystem.ErrSkip))
 				a.Nil(up)
 			case false:
 				a.NotNil(up)

@@ -33,18 +33,6 @@ const (
 var (
 	// albumNameRE allowable characters
 	albumNameRE = regexp.MustCompile(`[\p{L}\d]+`)
-	// searchReplaceRE special characters to replace
-	searchReplaceRE = func() map[*regexp.Regexp]string { //nolint
-		re := make(map[*regexp.Regexp]string, 0)
-		for search, replace := range map[string]string{
-			`-`:                    " ",
-			"[" + "`" + `'"` + "]": "",
-		} {
-			c := regexp.MustCompile(search)
-			re[c] = replace
-		}
-		return re
-	}()
 )
 
 // provider specifies OAuth 1.0 URLs for SmugMug
@@ -184,6 +172,19 @@ func WithSearch(scope, text string) APIOption {
 	}
 }
 
+// searchReplaceREs special characters to replace
+func searchReplaceREs() map[*regexp.Regexp]string {
+	re := make(map[*regexp.Regexp]string, 0)
+	for search, replace := range map[string]string{
+		`-`:                    " ",
+		"[" + "`" + `'"` + "]": "",
+	} {
+		c := regexp.MustCompile(search)
+		re[c] = replace
+	}
+	return re
+}
+
 // URLName returns `name` as a suitable URL name for a folder or album
 func URLName(name string, tags ...language.Tag) string {
 	s := name
@@ -192,7 +193,7 @@ func URLName(name string, tags ...language.Tag) string {
 		tag = tags[0]
 	}
 	upper := cases.Upper(tag)
-	for search, replace := range searchReplaceRE {
+	for search, replace := range searchReplaceREs() {
 		s = search.ReplaceAllString(s, replace)
 	}
 	t := albumNameRE.FindAllString(s, -1)
@@ -255,7 +256,8 @@ func iterate[T any](ctx context.Context,
 		}
 		n += pages.Count
 		for _, node := range nodes {
-			if ok, err := f(node); err != nil {
+			var ok bool
+			if ok, err = f(node); err != nil {
 				return err
 			} else if !ok {
 				return nil
