@@ -41,7 +41,7 @@ type testUploadables struct {
 	sleep    time.Duration
 }
 
-func (t *testUploadables) Uploadables(ctx context.Context) (uploadables <-chan *smugmug.Uploadable, errs <-chan error) {
+func (t *testUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
 	errc := make(chan error)
 	uploadablesc := make(chan *smugmug.Uploadable, 1)
 
@@ -101,6 +101,7 @@ func TestUploads(t *testing.T) {
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, tt.filename)
 			}))

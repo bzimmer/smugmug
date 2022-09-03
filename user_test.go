@@ -52,6 +52,7 @@ func TestAuthUser(t *testing.T) {
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				a.Equal("/!authuser", r.URL.Path)
 				http.ServeFile(w, r, tt.filename)

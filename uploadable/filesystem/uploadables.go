@@ -2,6 +2,7 @@ package filesystem
 
 import (
 	"context"
+	"errors"
 	"io/fs"
 
 	"github.com/spf13/afero"
@@ -22,7 +23,7 @@ func NewFsUploadables(afs afero.Fs, filenames []string, uploadable FsUploadable)
 	return &fsUploadables{fs: afs, filenames: filenames, uploadable: uploadable}
 }
 
-func (p *fsUploadables) Uploadables(ctx context.Context) (uploadables <-chan *smugmug.Uploadable, errs <-chan error) {
+func (p *fsUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) { //nolint:gocognit
 	grp, ctx := errgroup.WithContext(ctx)
 
 	errc := make(chan error, 1)
@@ -48,10 +49,10 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (uploadables <-chan *sm
 				}
 				up, err := p.uploadable.Uploadable(p.fs, filename)
 				if err != nil {
+					if errors.Is(err, ErrSkip) {
+						continue
+					}
 					return err
-				}
-				if up == nil {
-					continue
 				}
 				select {
 				case <-ctx.Done():
@@ -73,7 +74,7 @@ func (p *fsUploadables) Uploadables(ctx context.Context) (uploadables <-chan *sm
 	return uploadablesc, errc
 }
 
-func (p *fsUploadables) walk(ctx context.Context) (names <-chan string, errs <-chan error) {
+func (p *fsUploadables) walk(ctx context.Context) (<-chan string, <-chan error) {
 	errc := make(chan error, 1)
 	filenamesc := make(chan string)
 	go func() {

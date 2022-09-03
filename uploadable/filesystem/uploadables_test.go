@@ -21,7 +21,7 @@ func (t *testFsUploadable) Uploadable(fsys afero.Fs, filename string) (*smugmug.
 			Name: "DSC4321.jpg",
 		}, nil
 	case "Readme.md":
-		return nil, nil
+		return nil, filesystem.ErrSkip
 	default:
 		return nil, errors.New("missing")
 	}

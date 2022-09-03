@@ -12,7 +12,7 @@ import (
 	"github.com/bzimmer/smugmug"
 )
 
-func TestNode(t *testing.T) { //nolint
+func TestNode(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
@@ -100,6 +100,7 @@ func TestNode(t *testing.T) { //nolint
 			tt.name = tt.filename
 		}
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if tt.filename == "" {
 					w.WriteHeader(http.StatusForbidden)
@@ -120,7 +121,7 @@ func TestNode(t *testing.T) { //nolint
 	}
 }
 
-func TestNodes(t *testing.T) { //nolint
+func TestNodes(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
@@ -307,6 +308,7 @@ func TestNodes(t *testing.T) { //nolint
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {
 			var j int
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if test.status != 0 {
 					w.WriteHeader(test.status)

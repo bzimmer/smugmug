@@ -13,7 +13,7 @@ import (
 	"github.com/bzimmer/smugmug"
 )
 
-func TestImage(t *testing.T) { //nolint
+func TestImage(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
@@ -33,10 +33,11 @@ func TestImage(t *testing.T) { //nolint
 			f: func(image *smugmug.Image, err error) {
 				a.Error(err)
 				a.Nil(image)
-				q, ok := err.(*smugmug.Fault)
+				var fault *smugmug.Fault
+				ok := errors.As(err, &fault)
 				a.True(ok)
-				a.Equal(http.StatusNotFound, q.Code)
-				a.Equal(http.StatusText(http.StatusNotFound), q.Message)
+				a.Equal(http.StatusNotFound, fault.Code)
+				a.Equal(http.StatusText(http.StatusNotFound), fault.Message)
 			},
 		},
 		{
@@ -94,6 +95,7 @@ func TestImage(t *testing.T) { //nolint
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if tt.filename == "" {
 					w.WriteHeader(http.StatusNotFound)
@@ -110,12 +112,12 @@ func TestImage(t *testing.T) { //nolint
 				opts = append(opts, tt.options...)
 			}
 
-			ctx := context.TODO()
+			var image *smugmug.Image
 			if tt.patch != nil {
-				image, err := mg.Image.Patch(ctx, tt.imageKey, tt.patch, opts...)
+				image, err = mg.Image.Patch(context.TODO(), tt.imageKey, tt.patch, opts...)
 				tt.f(image, err)
 			} else {
-				image, err := mg.Image.Image(ctx, tt.imageKey, opts...)
+				image, err = mg.Image.Image(context.TODO(), tt.imageKey, opts...)
 				tt.f(image, err)
 			}
 		})
@@ -178,6 +180,7 @@ func TestImages(t *testing.T) {
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, tt.filename)
 			}))
@@ -261,6 +264,7 @@ func TestDeleteImage(t *testing.T) {
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if tt.filename == "" {
 					w.WriteHeader(http.StatusNotFound)

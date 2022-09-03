@@ -71,7 +71,7 @@ func (s *AlbumService) albums(req *http.Request) ([]*Album, *Pages, error) {
 		return nil, nil, err
 	}
 	for i := range res.Response.Album {
-		if _, err := s.expand(res.Response.Album[i], res.Expansions); err != nil {
+		if _, err = s.expand(res.Response.Album[i], res.Expansions); err != nil {
 			return nil, nil, err
 		}
 	}

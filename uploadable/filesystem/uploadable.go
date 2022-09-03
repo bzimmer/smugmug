@@ -18,7 +18,7 @@ import (
 type PreFunc func(fs afero.Fs, filename string) (bool, error)
 
 // UseFunc is called after the file is opened but before being uploaded
-type UseFunc func(up *smugmug.Uploadable) (*smugmug.Uploadable, error)
+type UseFunc func(up *smugmug.Uploadable) error
 
 // FsUploadable creates Uploadable instances
 type FsUploadable interface {
@@ -29,6 +29,9 @@ type FsUploadable interface {
 	// Use registers a UseFunc
 	Use(...UseFunc)
 }
+
+// ErrSkip is used to skip an Uploadable
+var ErrSkip = errors.New("skip")
 
 // Extensions represents the valid list of extensions to upload
 func Extensions(extension ...string) PreFunc {
@@ -46,33 +49,33 @@ func Extensions(extension ...string) PreFunc {
 // Skip checks if the Uploadable is already uploaded by comparing MD5s
 // If `force` is true the Uploadable will be always be uploaded
 func Skip(force bool, images map[string]*smugmug.Image) UseFunc {
-	return func(up *smugmug.Uploadable) (*smugmug.Uploadable, error) {
+	return func(up *smugmug.Uploadable) error {
 		if force {
-			return up, nil
+			return nil
 		}
 		img, ok := images[up.Name]
 		if !ok {
-			return up, nil
+			return nil
 		}
 		if up.MD5 == img.ArchivedMD5 {
-			return nil, nil
+			return ErrSkip
 		}
-		return up, nil
+		return nil
 	}
 }
 
 // Replace will update the Uploadable's URI if the image was already uploaded
 // If `update` is false the URI will not be updated
 func Replace(update bool, images map[string]*smugmug.Image) UseFunc {
-	return func(up *smugmug.Uploadable) (*smugmug.Uploadable, error) {
+	return func(up *smugmug.Uploadable) error {
 		if !update {
-			return up, nil
+			return nil
 		}
 		img, ok := images[up.Name]
 		if ok {
 			up.Replaces = img.URIs.Image.URI
 		}
-		return up, nil
+		return nil
 	}
 }
 
@@ -105,7 +108,7 @@ func (p *fsUploadable) Uploadable(fs afero.Fs, filename string) (*smugmug.Upload
 			return nil, err
 		}
 		if !ok {
-			return nil, nil
+			return nil, ErrSkip
 		}
 	}
 
@@ -116,12 +119,9 @@ func (p *fsUploadable) Uploadable(fs afero.Fs, filename string) (*smugmug.Upload
 	up.AlbumKey = p.albumKey
 
 	for i := range p.use {
-		up, err = p.use[i](up)
+		err = p.use[i](up)
 		if err != nil {
 			return nil, err
-		}
-		if up == nil {
-			return nil, nil
 		}
 	}
 
