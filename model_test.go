@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/bzimmer/smugmug"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/bzimmer/smugmug"
 )
 
 func TestFault(t *testing.T) {
