@@ -9,9 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bzimmer/smugmug"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/text/language"
+
+	"github.com/bzimmer/smugmug"
 )
 
 var errFail = errors.New("fail")
