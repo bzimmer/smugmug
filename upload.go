@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 
@@ -26,7 +27,9 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 		return nil, errors.New("missing albumKey")
 	}
 
-	uri := fmt.Sprintf("%s/%s", s.client.uploadURL, up.Name)
+	// https://api.smugmug.com/services/api/?method=upload
+
+	uri := fmt.Sprintf("%s/photo.jpg", s.client.uploadURL)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPut, uri, up.Reader)
 	if err != nil {
 		return nil, err
@@ -40,6 +43,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 		"X-Smug-Version":      "v2",
 		"X-Smug-AlbumUri":     "/api/v2/album/" + up.AlbumKey,
 		"X-Smug-ResponseType": "JSON",
+		"X-Smug-FileName":     url.PathEscape(up.Name),
 	}
 
 	if up.Replaces != "" {
@@ -54,7 +58,7 @@ func (s *UploadService) Upload(ctx context.Context, up *Uploadable) (*Upload, er
 	ur := &uploadResponse{}
 	err = s.client.do(req, ur)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to upload file `%s` with error %w", up.Name, err)
 	}
 	return ur.Upload(up, time.Since(t)), nil
 }

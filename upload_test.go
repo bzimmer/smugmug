@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
@@ -17,23 +18,57 @@ func TestUpload(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "testdata/upload_CVvj69L.json")
-	}))
-	defer svr.Close()
+	tests := []struct {
+		name     string
+		album    string
+		filename string
+		err      string
+	}{
+		{
+			name:     "no album",
+			filename: "DSC33556.jpg",
+			err:      "missing albumKey",
+		},
+		{
+			name:     "with album",
+			album:    "7dFHSm",
+			filename: "DSC33556.jpg",
+		},
+		{
+			name:     "filename with spaces",
+			album:    "7dFHSm",
+			filename: "This is a name with spaces.jpg",
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			mux := http.NewServeMux()
+			mux.HandleFunc("/photo.jpg", func(w http.ResponseWriter, r *http.Request) {
+				a.Equal(http.MethodPut, r.Method)
+				a.Equal(url.PathEscape(tt.filename), r.Header.Get("X-Smug-FileName"))
+				http.ServeFile(w, r, "testdata/upload_CVvj69L.json")
+			})
+			svr := httptest.NewServer(mux)
+			defer svr.Close()
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithUploadURL(svr.URL))
+			a.NoError(err)
 
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithUploadURL(svr.URL))
-	a.NoError(err)
+			up := &smugmug.Uploadable{
+				Name:     tt.filename,
+				AlbumKey: tt.album,
+			}
+			upload, err := mg.Upload.Upload(context.TODO(), up)
+			if tt.err != "" {
+				a.Error(err)
+				a.Contains(err.Error(), tt.err)
+			} else {
+				a.NoError(err)
+				a.NotNil(upload)
+			}
+		})
 
-	up := &smugmug.Uploadable{Name: "DSC33556.jpg"}
-	upload, err := mg.Upload.Upload(context.TODO(), up)
-	a.Error(err)
-	a.Nil(upload)
-
-	up.AlbumKey = "7dFHSm"
-	upload, err = mg.Upload.Upload(context.TODO(), up)
-	a.NoError(err)
-	a.NotNil(upload)
+	}
 }
 
 type testUploadables struct {
