@@ -219,8 +219,9 @@ func TestImagesIter(t *testing.T) {
 	defer svr.Close()
 
 	var n int
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL), smugmug.WithHTTPTracing(true))
+	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
 	a.NoError(err)
+	a.NotNil(mg)
 	err = mg.Image.ImagesIter(context.TODO(), "HZMsPf", func(img *smugmug.Image) (bool, error) {
 		n++
 		return true, nil
