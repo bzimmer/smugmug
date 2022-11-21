@@ -43,6 +43,7 @@ func TestUpload(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			mux := http.NewServeMux()
 			mux.HandleFunc("/photo.jpg", func(w http.ResponseWriter, r *http.Request) {
 				a.Equal(http.MethodPut, r.Method)
@@ -67,7 +68,6 @@ func TestUpload(t *testing.T) {
 				a.NotNil(upload)
 			}
 		})
-
 	}
 }
 
