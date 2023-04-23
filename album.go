@@ -26,7 +26,9 @@ func (s *AlbumService) album(req *http.Request) (*Album, error) {
 func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessage) (*Album, error) {
 	if album.URIs.User != nil {
 		if val, ok := expansions[album.URIs.User.URI]; ok {
-			res := struct{ User *User }{}
+			res := struct {
+				User *User `json:"User"`
+			}{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
 			}
@@ -35,7 +37,9 @@ func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessa
 	}
 	if album.URIs.HighlightImage != nil {
 		if val, ok := expansions[album.URIs.HighlightImage.URI]; ok {
-			res := struct{ Image *Image }{}
+			res := struct {
+				Image *Image `json:"Image"`
+			}{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
 			}
@@ -44,7 +48,9 @@ func (s *AlbumService) expand(album *Album, expansions map[string]*json.RawMessa
 	}
 	if album.URIs.Node != nil {
 		if val, ok := expansions[album.URIs.Node.URI]; ok {
-			res := struct{ Node *Node }{}
+			res := struct {
+				Node *Node `json:"Node"`
+			}{}
 			if err := json.Unmarshal(*val, &res); err != nil {
 				return nil, err
 			}
@@ -112,7 +118,8 @@ func (s *AlbumService) SearchIter(ctx context.Context, iter AlbumIterFunc, optio
 }
 
 // Patch updates the metadata for `albumKey`
-func (s *AlbumService) Patch(ctx context.Context, albumKey string, data map[string]interface{}, options ...APIOption) (*Album, error) {
+func (s *AlbumService) Patch(
+	ctx context.Context, albumKey string, data map[string]interface{}, options ...APIOption) (*Album, error) {
 	uri := fmt.Sprintf("album/%s", albumKey)
 	body, err := json.Marshal(data)
 	if err != nil {

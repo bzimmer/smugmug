@@ -76,7 +76,7 @@ type testUploadables struct {
 	sleep    time.Duration
 }
 
-func (t *testUploadables) Uploadables(ctx context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
+func (t *testUploadables) Uploadables(_ context.Context) (<-chan *smugmug.Uploadable, <-chan error) {
 	errc := make(chan error)
 	uploadablesc := make(chan *smugmug.Uploadable, 1)
 

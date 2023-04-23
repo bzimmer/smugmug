@@ -1,0 +1,124 @@
+version: '3'
+
+vars:
+
+  DIST:
+    "{{.ROOT_DIR}}/dist"
+
+tasks:
+
+  dist:
+    desc: Create dist directory
+    internal: true
+    cmds:
+      - mkdir -p {{.DIST}}
+
+  test:
+    desc: Run unit tests
+    deps: [dist]
+    cmds:
+      - go test {{.CLI_ARGS}} -timeout 20s -race -count=1 -covermode atomic -coverprofile {{.DIST}}/coverage.txt ./...
+
+  test:fuzz:
+    desc: Run fuzz tests
+    cmds:
+      - go test -fuzz=Fuzz{{.CLI_ARGS}} -fuzztime 10s
+
+  test:bench:
+    desc: Run benchmark tests
+    cmds:
+      - go test -v -shuffle=on -run=- -bench=. -benchtime=1x ./...
+
+  test:integration:
+    desc: Run integration tests
+    deps: [build]
+    cmds:
+      - go test {{.CLI_ARGS}} --tags=integration -race -count=1 -covermode atomic ./...
+
+  cover:
+    desc: Visualize test coverage
+    deps: [test]
+    cmds:
+      - go tool cover -html={{.DIST}}/coverage.txt
+
+  clean:
+    desc: Remove build artifacts
+    cmds:
+      - rm -rf {{.DIST}}
+
+  build:all:
+    desc: Build all artifacts
+    cmds:
+      - task: generate
+      - task: build
+
+  build:
+    desc: Build all binaries
+    deps: [dist]
+    vars:
+      cmds:
+        "{{ .ROOT_DIR }}/cmd"
+      binaries:
+        sh: if [[ -d {{ .cmds }} ]]; then fd -t d --max-depth 1 . {{ .cmds }} -x echo {/}; fi
+    cmds:
+      - |
+
+        {{- if .binaries -}}
+          {{ range ( .binaries | trim | splitLines ) }}
+        go build -o {{ $.DIST }}/{{ . }} {{ $.cmds }}/{{ . }}/*.go
+          {{- end -}}
+        {{- end -}}
+
+  generate:
+    desc: Run go generate
+    cmds:
+      - go generate ./...
+
+  lint:
+    desc: Runs golint
+    cmds:
+      - golangci-lint -v run
+      - typos
+
+  snapshot:
+    desc: Build a snapshot
+    deps: [test, lint]
+    cmds:
+      - goreleaser --debug release --snapshot --clean
+
+  scc:
+    desc: Run scc (https://github.com/boyter/scc)
+    cmds:
+      - scc -i go {{.ROOT_DIR}}
+
+  goimports:
+    desc: Run goimports
+    vars:
+      module:
+        sh: go mod edit -json | jq -r .Module.Path
+    cmds:
+      - goimports -w -local "{{.module}}/" .
+
+  docs:build:
+    desc: Statically generate the documentation
+    deps: [dist]
+    cmds:
+      - "{{.ROOT_DIR}}/env/bin/mkdocs build"
+
+  docs:serve:
+    desc: Serve the documentation
+    deps: [docs:generate]
+    cmds:
+      - "{{.ROOT_DIR}}/env/bin/mkdocs serve"
+
+  gitleaks:
+    desc: Run gitleaks
+    deps: [dist]
+    cmds:
+      - gitleaks detect --no-banner --baseline-path {{.ROOT_DIR}}/.gitleaks-baseline.json --report-path {{.DIST}}/gitleaks-report.json
+
+  gitleaks:baseline:
+    desc: Run gitleaks
+    deps: [dist]
+    cmds:
+      - gitleaks detect --no-banner --report-path {{.ROOT_DIR}}/.gitleaks-baseline.json

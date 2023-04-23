@@ -1,0 +1,16 @@
+name: mkdocs
+
+on:
+  push:
+    branches:
+      - main
+      - mkdocs
+
+permissions:
+  contents: write
+
+jobs:
+
+  mkdocs:
+    uses: bzimmer/actions/.github/workflows/mkdocs.yaml@main
+    secrets: inherit

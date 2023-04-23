@@ -2,7 +2,7 @@ package filesystem
 
 import (
 	"bytes"
-	"crypto/md5" //nolint:gosec
+	"crypto/md5" //nolint:gosec // used to match md5 at smugmug
 	"errors"
 	"fmt"
 	"io"
@@ -144,7 +144,7 @@ func (p *fsUploadable) open(fs afero.Fs, path string) (*smugmug.Uploadable, erro
 	return &smugmug.Uploadable{
 		Name:   filepath.Base(path),
 		Size:   size,
-		MD5:    fmt.Sprintf("%x", md5.Sum(buf.Bytes())), //nolint:gosec
+		MD5:    fmt.Sprintf("%x", md5.Sum(buf.Bytes())), //nolint:gosec // required for smugmug
 		Reader: &buf,
 	}, nil
 }

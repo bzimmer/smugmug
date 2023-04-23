@@ -220,7 +220,8 @@ func (c *Client) newRequest(ctx context.Context, uri string, options []APIOption
 }
 
 // newRequest constructs an http.Request for the uri applying all provided `APIOption`s
-func (c *Client) newRequestWithBody(ctx context.Context, method, uri string, body io.Reader, options []APIOption) (*http.Request, error) {
+func (c *Client) newRequestWithBody(
+	ctx context.Context, method, uri string, body io.Reader, options []APIOption) (*http.Request, error) {
 	uri = fmt.Sprintf("%s/%s", c.baseURL, uri)
 	switch method {
 	case http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete:
