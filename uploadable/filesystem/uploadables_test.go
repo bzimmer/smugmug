@@ -14,7 +14,7 @@ import (
 
 type testFsUploadable struct{}
 
-func (t *testFsUploadable) Uploadable(fsys afero.Fs, filename string) (*smugmug.Uploadable, error) {
+func (t *testFsUploadable) Uploadable(_ afero.Fs, filename string) (*smugmug.Uploadable, error) {
 	switch filename {
 	case "DSC4321.jpg":
 		return &smugmug.Uploadable{

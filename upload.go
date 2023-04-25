@@ -93,7 +93,8 @@ func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (<
 	return updc, errc
 }
 
-func (s *UploadService) uploads(ctx context.Context, uploadablesc <-chan *Uploadable, updc chan<- *Upload) func() error {
+func (s *UploadService) uploads(
+	ctx context.Context, uploadablesc <-chan *Uploadable, updc chan<- *Upload) func() error {
 	return func() error {
 		for {
 			select {

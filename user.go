@@ -10,7 +10,9 @@ type UserService service
 
 func (s *UserService) expand(user *User, expansions map[string]*json.RawMessage) (*User, error) {
 	if val, ok := expansions[user.URIs.Node.URI]; ok {
-		res := struct{ Node *Node }{}
+		res := struct {
+			Node *Node `json:"Node"`
+		}{}
 		if err := json.Unmarshal(*val, &res); err != nil {
 			return nil, err
 		}

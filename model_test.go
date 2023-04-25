@@ -23,7 +23,7 @@ func TestCoordinate(t *testing.T) {
 	a := assert.New(t)
 
 	type q struct {
-		C smugmug.Coordinate
+		C smugmug.Coordinate `json:"C"`
 	}
 
 	tests := []struct {

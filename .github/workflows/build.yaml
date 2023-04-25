@@ -1,28 +1,19 @@
-name: Build
-on: [push, pull_request]
+name: build
+
+on:
+  push
+
+permissions:
+  contents: read
+
 jobs:
+
   build:
-    strategy:
-      matrix:
-        go-version: [1.18.x]
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-    - name: Install Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: ${{ matrix.go-version }}
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Install Task
-      uses: arduino/setup-task@v1
-    - name: Test Coverage
-      run: task test
-      if: matrix.os == 'ubuntu-latest'
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./dist/coverage.txt
-        verbose: true
-      if: matrix.os == 'ubuntu-latest'
+    uses: bzimmer/actions/.github/workflows/build.yaml@main
+    with:
+      skipBuild: true
+      skipCoverage: false
+    secrets: inherit
+
+  vuln:
+    uses: bzimmer/actions/.github/workflows/vuln.yaml@main

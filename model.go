@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type Fault struct { //nolint:errname
+type Fault struct { //nolint:errname // smugmug naming convention
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
