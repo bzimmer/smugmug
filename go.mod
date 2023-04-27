@@ -3,7 +3,7 @@ module github.com/bzimmer/smugmug
 go 1.20
 
 require (
-	github.com/bzimmer/httpwares v0.1.1
+	github.com/bzimmer/httpwares v0.1.3
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
 	github.com/spf13/afero v1.9.5
 	github.com/stretchr/testify v1.7.0
