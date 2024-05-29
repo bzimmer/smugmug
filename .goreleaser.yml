@@ -1,15 +1,8 @@
 before:
   hooks:
-    - task test
+    - go test ./...
 builds:
   - skip: true
-archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -22,4 +15,4 @@ changelog:
       - '^test:'
       - '^Merge pull request'
 announce:
-  skip: "true"
+  skip: true
