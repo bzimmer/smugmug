@@ -50,14 +50,14 @@ func TestCoordinate(t *testing.T) {
 		{
 			name:  "invalid",
 			value: `{"C": }`,
-			f: func(c smugmug.Coordinate, err error) {
+			f: func(_ smugmug.Coordinate, err error) {
 				a.Error(err)
 			},
 		},
 		{
 			name:  "not a float",
 			value: `{"C": "abc"}`,
-			f: func(c smugmug.Coordinate, err error) {
+			f: func(_ smugmug.Coordinate, err error) {
 				a.Error(err)
 			},
 		},

@@ -178,7 +178,7 @@ func TestAlbumSearchIter(t *testing.T) {
 		},
 		// album iteration with error
 		func(mg *smugmug.Client) error {
-			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(album *smugmug.Album) (bool, error) {
+			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(_ *smugmug.Album) (bool, error) {
 				return false, errors.New("dummy error")
 			}, smugmug.WithSearch("", "Marmot"))
 			a.Error(err)
@@ -187,7 +187,7 @@ func TestAlbumSearchIter(t *testing.T) {
 		// album iteration with no error but no continue
 		func(mg *smugmug.Client) error {
 			var n int
-			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(album *smugmug.Album) (bool, error) {
+			err := mg.Album.AlbumsIter(context.TODO(), "foobar", func(_ *smugmug.Album) (bool, error) {
 				n++
 				return false, nil
 			}, smugmug.WithSearch("", "Marmot"))

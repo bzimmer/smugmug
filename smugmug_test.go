@@ -18,7 +18,7 @@ import (
 var errFail = errors.New("fail")
 
 func withError() smugmug.APIOption {
-	return func(v url.Values) error {
+	return func(_ url.Values) error {
 		return errFail
 	}
 }
@@ -95,7 +95,7 @@ func TestDo(t *testing.T) {
 	defer svr.Close()
 
 	sleeper := func(dur time.Duration) smugmug.APIOption {
-		return func(v url.Values) error {
+		return func(_ url.Values) error {
 			time.Sleep(dur)
 			return nil
 		}

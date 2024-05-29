@@ -135,7 +135,7 @@ func TestNodes(t *testing.T) {
 			name: "search iteration for search results",
 			f: func(mg *smugmug.Client) {
 				var n int
-				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.SearchIter(context.TODO(), func(_ *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithSearch("", "Marmot"), smugmug.WithExpansions("HighlightImage"))
@@ -151,7 +151,7 @@ func TestNodes(t *testing.T) {
 			name: "search iteration for search results fail",
 			f: func(mg *smugmug.Client) {
 				var n int
-				err := mg.Node.SearchIter(context.TODO(), func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.SearchIter(context.TODO(), func(_ *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, withError())
@@ -167,7 +167,7 @@ func TestNodes(t *testing.T) {
 			name: "node iteration of children",
 			f: func(mg *smugmug.Client) {
 				var n int
-				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithExpansions("HighlightImage"))
@@ -183,7 +183,7 @@ func TestNodes(t *testing.T) {
 			name: "node iteration of children fail",
 			f: func(mg *smugmug.Client) {
 				var n int
-				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, withError())
@@ -199,7 +199,7 @@ func TestNodes(t *testing.T) {
 			name: "node walk iteration",
 			f: func(mg *smugmug.Client) {
 				var n int
-				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
 					n++
 					return true, nil
 				}, smugmug.WithExpansions("HighlightImage"))
@@ -234,7 +234,7 @@ func TestNodes(t *testing.T) {
 		{
 			name: "node walk with type `unknown`",
 			f: func(mg *smugmug.Client) {
-				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(node *smugmug.Node) (bool, error) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
 					return true, nil
 				})
 				a.Error(err)
