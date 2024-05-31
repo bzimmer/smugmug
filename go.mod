@@ -1,6 +1,6 @@
 module github.com/bzimmer/smugmug
 
-go 1.22
+go 1.22.3
 
 require (
 	github.com/bzimmer/httpwares v0.1.3
