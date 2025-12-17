@@ -78,7 +78,7 @@ func (s *UploadService) Uploads(ctx context.Context, uploadables Uploadables) (<
 			return err
 		}
 	})
-	for i := 0; i < s.client.concurrency; i++ {
+	for range s.client.concurrency {
 		grp.Go(s.uploads(ctx, uploadablesc, updc))
 	}
 

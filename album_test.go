@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +22,7 @@ func TestAlbum(t *testing.T) {
 		name     string
 		albumKey string
 		filename string
-		patch    map[string]interface{}
+		patch    map[string]any
 		f        func(*smugmug.Album, error)
 	}{
 		{
@@ -56,7 +56,7 @@ func TestAlbum(t *testing.T) {
 			name:     "valid patch",
 			albumKey: "RM4BL2",
 			filename: "testdata/album_RM4BL2.json",
-			patch: map[string]interface{}{
+			patch: map[string]any{
 				"Name": "Foo",
 			},
 			f: func(album *smugmug.Album, err error) {
@@ -80,7 +80,7 @@ func TestAlbum(t *testing.T) {
 					return
 				}
 				if tt.patch != nil {
-					data := make(map[string]interface{})
+					data := make(map[string]any)
 					dec := json.NewDecoder(r.Body)
 					a.NoError(dec.Decode(&data))
 					a.Contains(data, "Name")
@@ -199,7 +199,7 @@ func TestAlbumSearchIter(t *testing.T) {
 
 	for i := range tests {
 		f := tests[i]
-		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			var j int
 			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

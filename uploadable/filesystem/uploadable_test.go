@@ -1,7 +1,6 @@
 package filesystem_test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -100,7 +99,7 @@ func TestUploadable(t *testing.T) {
 			switch test.skip {
 			case true:
 				a.Error(err)
-				a.True(errors.Is(err, filesystem.ErrSkip))
+				a.ErrorIs(err, filesystem.ErrSkip)
 				a.Nil(up)
 			case false:
 				a.NotNil(up)

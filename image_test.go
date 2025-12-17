@@ -23,7 +23,7 @@ func TestImage(t *testing.T) {
 		expansions []string
 		filename   string
 		options    []smugmug.APIOption
-		patch      map[string]interface{}
+		patch      map[string]any
 		f          func(*smugmug.Image, error)
 	}{
 		{
@@ -56,7 +56,7 @@ func TestImage(t *testing.T) {
 			imageKey:   "VPB9RVH-0",
 			filename:   "testdata/image_B2fHSt7-0.json",
 			expansions: []string{},
-			patch:      map[string]interface{}{"Keywords": []string{}},
+			patch:      map[string]any{"Keywords": []string{}},
 			f: func(image *smugmug.Image, err error) {
 				a.NotNil(image)
 				a.NoError(err)
@@ -75,12 +75,24 @@ func TestImage(t *testing.T) {
 			},
 		},
 		{
+			name:       "image size details & metadata expansion",
+			imageKey:   "UQpV019-0",
+			filename:   "testdata/image_UQpV019_metadata.json",
+			expansions: []string{"ImageMetadata"},
+			f: func(image *smugmug.Image, err error) {
+				a.NotNil(image)
+				a.NoError(err)
+				a.NotNil(image.ImageMetadata)
+				a.Equal("iPhone X back dual camera 4mm f/1.8", image.ImageMetadata.Lens)
+			},
+		},
+		{
 			name:    "api option failure",
 			options: []smugmug.APIOption{withError()},
 			f: func(image *smugmug.Image, err error) {
 				a.Nil(image)
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 			},
 		},
 		{
@@ -158,7 +170,7 @@ func TestImages(t *testing.T) {
 			options:  []smugmug.APIOption{withError()},
 			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 				a.Nil(images)
 				a.Nil(pages)
 			},
@@ -170,7 +182,7 @@ func TestImages(t *testing.T) {
 			options:  []smugmug.APIOption{withError()},
 			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 				a.Nil(images)
 				a.Nil(pages)
 			},

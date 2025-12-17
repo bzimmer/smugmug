@@ -73,3 +73,53 @@ func TestCoordinate(t *testing.T) {
 		})
 	}
 }
+
+func TestAltitude(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
+	type q struct {
+		A smugmug.Altitude `json:"A"`
+	}
+
+	tests := []struct {
+		name  string
+		value string
+		f     func(c smugmug.Altitude, err error)
+	}{
+		{
+			name:  "float",
+			value: `{"A": 4.0}`,
+			f: func(c smugmug.Altitude, err error) {
+				a.NoError(err)
+				a.Equal("4.000000", string(c))
+			},
+		},
+		{
+			name:  "string m",
+			value: `{"A": "168.1 m"}`,
+			f: func(c smugmug.Altitude, err error) {
+				a.NoError(err)
+				a.Equal("168.1 m", string(c))
+			},
+		},
+		{
+			name:  "string m above sea level",
+			value: `{"A": "1700.2 m Above Sea Level"}`,
+			f: func(c smugmug.Altitude, err error) {
+				a.NoError(err)
+				a.Equal("1700.2 m Above Sea Level", string(c))
+			},
+		},
+	}
+
+	for i := range tests {
+		test := tests[i]
+		t.Run(test.name, func(t *testing.T) {
+			var qq q
+			t.Parallel()
+			err := json.Unmarshal([]byte(test.value), &qq)
+			test.f(qq.A, err)
+		})
+	}
+}

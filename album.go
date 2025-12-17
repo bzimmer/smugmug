@@ -119,7 +119,7 @@ func (s *AlbumService) SearchIter(ctx context.Context, iter AlbumIterFunc, optio
 
 // Patch updates the metadata for `albumKey`
 func (s *AlbumService) Patch(
-	ctx context.Context, albumKey string, data map[string]interface{}, options ...APIOption) (*Album, error) {
+	ctx context.Context, albumKey string, data map[string]any, options ...APIOption) (*Album, error) {
 	uri := fmt.Sprintf("album/%s", albumKey)
 	body, err := json.Marshal(data)
 	if err != nil {

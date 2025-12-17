@@ -2,7 +2,6 @@ package smugmug_test
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -39,7 +38,7 @@ func TestNode(t *testing.T) {
 			options:  []smugmug.APIOption{withError()},
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 				a.Nil(node)
 			},
 		},
@@ -88,7 +87,7 @@ func TestNode(t *testing.T) {
 			options:  []smugmug.APIOption{withError()},
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 				a.Nil(node)
 			},
 		},
@@ -156,7 +155,7 @@ func TestNodes(t *testing.T) {
 					return true, nil
 				}, withError())
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 			},
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
@@ -188,7 +187,7 @@ func TestNodes(t *testing.T) {
 					return true, nil
 				}, withError())
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 			},
 			res: map[int]string{
 				0: "testdata/node_children_zx4Fx_page_1.json",
@@ -280,7 +279,7 @@ func TestNodes(t *testing.T) {
 					return true, nil
 				}, withError())
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 			},
 			res: map[int]string{
 				0: "testdata/node_g8CLb2_parents.json",

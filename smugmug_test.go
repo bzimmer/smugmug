@@ -126,7 +126,7 @@ func TestDo(t *testing.T) {
 	user, err = client.User.AuthUser(ctx, sleeper(time.Millisecond*150))
 	a.Nil(user)
 	a.Error(err)
-	a.True(errors.Is(err, context.DeadlineExceeded))
+	a.ErrorIs(err, context.DeadlineExceeded)
 }
 
 func TestOAuthClient(t *testing.T) {
@@ -159,8 +159,10 @@ func TestURLName(t *testing.T) {
 		{url: "2022-03-04-Zürich", album: "2022-03-04 Zürich & ___"},
 		{url: "2021-01-01-Foo-1-Bar", album: "2021-01-01 foo & 1 bar"},
 		{url: "Foo-1-Bar", album: "foo & 1 bar", lang: language.English},
-		{url: "2009-10-11-BIFD-Pancake-Breakfast", album: "2009-10-11 BIFD Pancake Breakfast", lang: language.English},
-		{url: "2009-10-11-BIFD-Pancake-Breakfast", album: "2009-10-11 BIFD `Pancake Breakfast`", lang: language.English},
+		{url: "2009-10-11-BIFD-Pancake-Breakfast",
+			album: "2009-10-11 BIFD Pancake Breakfast", lang: language.English},
+		{url: "2009-10-11-BIFD-Pancake-Breakfast",
+			album: "2009-10-11 BIFD `Pancake Breakfast`", lang: language.English},
 	}
 
 	for i := range tests {

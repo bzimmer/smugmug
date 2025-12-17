@@ -19,6 +19,8 @@ type ImageService service
 // ImageIterFunc is called for iteration of images results
 type ImageIterFunc func(*Image) (bool, error)
 
+type ImageExpandFunc func(image *Image, expansions map[string]*json.RawMessage) (*Image, error)
+
 func (s *ImageService) image(req *http.Request) (*Image, error) {
 	res := &imageResponse{}
 	err := s.client.do(req, res)
@@ -49,42 +51,12 @@ func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessa
 	if image == nil {
 		return nil, errNoImage
 	}
-	if image.URIs.ImageSizeDetails != nil {
-		if val, ok := expansions[image.URIs.ImageSizeDetails.URI]; ok {
-			res := struct {
-				ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
-			}{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			image.ImageSizeDetails = res.ImageSizeDetails
+	var err error
+	for _, f := range []ImageExpandFunc{expandAlbum, expandMetadata, expandSizeDetails} {
+		image, err = f(image, expansions)
+		if err != nil {
+			return nil, err
 		}
-	}
-	// Album exists when expanding an image by the album key (eg HighlightImage)
-	if image.URIs.Album != nil {
-		if val, ok := expansions[image.URIs.Album.URI]; ok {
-			res := struct {
-				Album *Album `json:"Album"`
-			}{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			image.Album = res.Album
-		}
-		return image, nil
-	}
-	// ImageAlbum exists when querying an image directly
-	if image.URIs.ImageAlbum != nil {
-		if val, ok := expansions[image.URIs.ImageAlbum.URI]; ok {
-			res := struct {
-				Album *Album `json:"Album"`
-			}{}
-			if err := json.Unmarshal(*val, &res); err != nil {
-				return nil, err
-			}
-			image.Album = res.Album
-		}
-		return image, nil
 	}
 	return image, nil
 }
@@ -102,7 +74,7 @@ func (s *ImageService) Image(ctx context.Context, imageKey string, options ...AP
 // Patch updates the metadata for `imageKey`
 // The image is not updated; to update the image use the `Upload` service
 func (s *ImageService) Patch(
-	ctx context.Context, imageKey string, data map[string]interface{}, options ...APIOption) (*Image, error) {
+	ctx context.Context, imageKey string, data map[string]any, options ...APIOption) (*Image, error) {
 	uri := fmt.Sprintf("image/%s", imageKey)
 	body, err := json.Marshal(data)
 	if err != nil {
@@ -165,4 +137,62 @@ type imageResponse struct {
 	Expansions map[string]*json.RawMessage `json:",omitempty"`
 	Code       int                         `json:"Code"`
 	Message    string                      `json:"Message"`
+}
+
+func expandMetadata(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
+	if image.URIs.ImageMetadata != nil {
+		if val, ok := expansions[image.URIs.ImageMetadata.URI]; ok {
+			res := struct {
+				ImageMetadata *ImageMetadata `json:"ImageMetadata"`
+			}{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.ImageMetadata = res.ImageMetadata
+		}
+	}
+	return image, nil
+}
+
+func expandSizeDetails(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
+	if image.URIs.ImageSizeDetails != nil {
+		if val, ok := expansions[image.URIs.ImageSizeDetails.URI]; ok {
+			res := struct {
+				ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
+			}{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.ImageSizeDetails = res.ImageSizeDetails
+		}
+	}
+	return image, nil
+}
+
+func expandAlbum(image *Image, expansions map[string]*json.RawMessage) (*Image, error) {
+	// Album exists when expanding an image by the album key (eg HighlightImage)
+	if image.URIs.Album != nil {
+		if val, ok := expansions[image.URIs.Album.URI]; ok {
+			res := struct {
+				Album *Album `json:"Album"`
+			}{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.Album = res.Album
+		}
+	}
+	// ImageAlbum exists when querying an image directly
+	if image.URIs.ImageAlbum != nil {
+		if val, ok := expansions[image.URIs.ImageAlbum.URI]; ok {
+			res := struct {
+				Album *Album `json:"Album"`
+			}{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.Album = res.Album
+		}
+	}
+	return image, nil
 }
