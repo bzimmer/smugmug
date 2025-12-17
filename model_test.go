@@ -104,7 +104,7 @@ func TestAltitude(t *testing.T) {
 			},
 		},
 		{
-			name:  "string m",
+			name:  "string m above sea level",
 			value: `{"A": "1700.2 m Above Sea Level"}`,
 			f: func(c smugmug.Altitude, err error) {
 				a.NoError(err)

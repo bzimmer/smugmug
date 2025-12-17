@@ -76,7 +76,7 @@ func TestImage(t *testing.T) {
 		},
 		{
 			name:       "image size details & metadata expansion",
-			imageKey:   "mQRcX2V-0",
+			imageKey:   "UQpV019-0",
 			filename:   "testdata/image_UQpV019_metadata.json",
 			expansions: []string{"ImageMetadata"},
 			f: func(image *smugmug.Image, err error) {
