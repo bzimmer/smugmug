@@ -347,6 +347,7 @@ type Nodelet struct {
 
 type Node struct {
 	Nodelet
+
 	CoverImageURI         string           `json:"CoverImageUri"`
 	Description           string           `json:"Description"`
 	HideOwner             bool             `json:"HideOwner"`

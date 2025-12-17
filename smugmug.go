@@ -126,8 +126,8 @@ func WithExpansions(expansions ...string) APIOption {
 // WithPagination enables paging results for albums, nodes, and images
 func WithPagination(start, count int) APIOption {
 	return func(v url.Values) error {
-		v.Set("start", fmt.Sprintf("%d", start))
-		v.Set("count", fmt.Sprintf("%d", count))
+		v.Set("start", strconv.Itoa(start))
+		v.Set("count", strconv.Itoa(count))
 		return nil
 	}
 }
@@ -197,7 +197,7 @@ func URLName(name string, tags ...language.Tag) string {
 		s = search.ReplaceAllString(s, replace)
 	}
 	t := albumNameRE.FindAllString(s, -1)
-	for i := 0; i < len(t); i++ {
+	for i := range t {
 		u := t[i]
 		// if the part is entirely capitals, probably an acronym
 		if upper.String(u) != u {

@@ -2,7 +2,6 @@ package smugmug_test
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -44,7 +43,7 @@ func TestAuthUser(t *testing.T) {
 			options:  []smugmug.APIOption{withError()},
 			f: func(user *smugmug.User, err error) {
 				a.Error(err)
-				a.True(errors.Is(err, errFail))
+				a.ErrorIs(err, errFail)
 				a.Nil(user)
 			},
 		},
