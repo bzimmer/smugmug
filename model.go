@@ -2,6 +2,7 @@ package smugmug
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"strconv"
 	"time"
@@ -20,7 +21,7 @@ type Coordinate float64
 
 // UnmarshalJSON converts the json value to a coordinate
 func (c *Coordinate) UnmarshalJSON(b []byte) error {
-	var s interface{}
+	var s any
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
@@ -33,6 +34,28 @@ func (c *Coordinate) UnmarshalJSON(b []byte) error {
 			return err
 		}
 		*c = Coordinate(f)
+	}
+	return nil
+}
+
+type Altitude string
+
+func (t *Altitude) UnmarshalJSON(data []byte) error {
+	// Altitude is inconsistently typed in ImageMetadata
+
+	// json[30].ImageMetadata.Altitude = "168.1 m";
+	// json[62].ImageMetadata.Altitude = "1700.2 m Above Sea Level";
+	// json[63].ImageMetadata.Altitude = "0.000000";
+
+	var s any
+	if err := json.Unmarshal(data, &s); err != nil {
+		return err
+	}
+	switch x := s.(type) {
+	case float64:
+		*t = Altitude(fmt.Sprintf("%f", x))
+	case string:
+		*t = Altitude(x)
 	}
 	return nil
 }
@@ -258,6 +281,7 @@ type Image struct {
 	// expansions
 	Album            *Album            `json:"Album"`
 	ImageSizeDetails *ImageSizeDetails `json:"ImageSizeDetails"`
+	ImageMetadata    *ImageMetadata    `json:"ImageMetadata"`
 }
 
 type ImageSize struct {
@@ -355,6 +379,86 @@ type Node struct {
 	Album          *Album `json:"Album"`
 	Parent         *Node  `json:"Parent"`
 	HighlightImage *Image `json:"HighlightImage"`
+}
+
+type ImageMetadata struct {
+	Title                  string   `json:"Title"`
+	Caption                string   `json:"Caption"`
+	UserComment            string   `json:"UserComment"`
+	Keywords               string   `json:"Keywords"`
+	Author                 string   `json:"Author"`
+	Copyright              string   `json:"Copyright"`
+	CopyrightURL           string   `json:"CopyrightUrl"`
+	CopyrightFlag          string   `json:"CopyrightFlag"`
+	UsageTerms             string   `json:"UsageTerms"`
+	Source                 string   `json:"Source"`
+	Credit                 string   `json:"Credit"`
+	City                   string   `json:"City"`
+	State                  string   `json:"State"`
+	Country                string   `json:"Country"`
+	Rating                 string   `json:"Rating"`
+	Category               string   `json:"Category"`
+	SupplementalCategories string   `json:"SupplementalCategories"`
+	SpecialInstructions    string   `json:"SpecialInstructions"`
+	AuthorTitle            string   `json:"AuthorTitle"`
+	CountryCode            string   `json:"CountryCode"`
+	TransmissionReference  string   `json:"TransmissionReference"`
+	Headline               string   `json:"Headline"`
+	WriterEditor           string   `json:"WriterEditor"`
+	Lens                   string   `json:"Lens"`
+	Make                   string   `json:"Make"`
+	Model                  string   `json:"Model"`
+	Aperture               string   `json:"Aperture"`
+	DateTimeModified       string   `json:"DateTimeModified"`
+	DateTimeCreated        string   `json:"DateTimeCreated"`
+	DateCreated            string   `json:"DateCreated"`
+	TimeCreated            string   `json:"TimeCreated"`
+	MicroDateTimeCreated   string   `json:"MicroDateTimeCreated"`
+	MicroDateTimeDigitized string   `json:"MicroDateTimeDigitized"`
+	DateDigitized          string   `json:"DateDigitized"`
+	Exposure               string   `json:"Exposure"`
+	ISO                    int      `json:"ISO"`
+	FocalLength            string   `json:"FocalLength"`
+	FocalLength35Mm        string   `json:"FocalLength35mm"`
+	CompressedBitsPerPixel string   `json:"CompressedBitsPerPixel"`
+	Flash                  string   `json:"Flash"`
+	Metering               string   `json:"Metering"`
+	ExposureProgram        string   `json:"ExposureProgram"`
+	ExposureCompensation   string   `json:"ExposureCompensation"`
+	ExposureMode           string   `json:"ExposureMode"`
+	LightSource            string   `json:"LightSource"`
+	WhiteBalance           string   `json:"WhiteBalance"`
+	DigitalZoomRatio       string   `json:"DigitalZoomRatio"`
+	Contrast               string   `json:"Contrast"`
+	Saturation             string   `json:"Saturation"`
+	Sharpness              string   `json:"Sharpness"`
+	SubjectDistance        string   `json:"SubjectDistance"`
+	SubjectRange           string   `json:"SubjectRange"`
+	SensingMethod          string   `json:"SensingMethod"`
+	ColorSpace             string   `json:"ColorSpace"`
+	Brightness             string   `json:"Brightness"`
+	LatitudeReference      string   `json:"LatitudeReference"`
+	LongitudeReference     string   `json:"LongitudeReference"`
+	Latitude               float64  `json:"Latitude"`
+	Longitude              float64  `json:"Longitude"`
+	AltitudeReference      string   `json:"AltitudeReference"`
+	Altitude               Altitude `json:"Altitude"`
+	SceneCaptureType       string   `json:"SceneCaptureType"`
+	GainControl            string   `json:"GainControl"`
+	ScaleFactor            string   `json:"ScaleFactor"`
+	CircleOfConfusion      string   `json:"CircleOfConfusion"`
+	FieldOfView            string   `json:"FieldOfView"`
+	DepthOfField           string   `json:"DepthOfField"`
+	HyperfocalDistance     string   `json:"HyperfocalDistance"`
+	NormalizedLightValue   string   `json:"NormalizedLightValue"`
+	Duration               string   `json:"Duration"`
+	AudioCodec             string   `json:"AudioCodec"`
+	VideoCodec             string   `json:"VideoCodec"`
+	Software               string   `json:"Software"`
+	SerialNumber           string   `json:"SerialNumber"`
+	LensSerialNumber       string   `json:"LensSerialNumber"`
+	URI                    string   `json:"Uri"`
+	URIDescription         string   `json:"UriDescription"`
 }
 
 // Uploadable holds the details about an image suitable for upload

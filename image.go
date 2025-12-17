@@ -60,6 +60,18 @@ func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessa
 			image.ImageSizeDetails = res.ImageSizeDetails
 		}
 	}
+	// ImageMetadata
+	if image.URIs.ImageMetadata != nil {
+		if val, ok := expansions[image.URIs.ImageMetadata.URI]; ok {
+			res := struct {
+				ImageMetadata *ImageMetadata `json:"ImageMetadata"`
+			}{}
+			if err := json.Unmarshal(*val, &res); err != nil {
+				return nil, err
+			}
+			image.ImageMetadata = res.ImageMetadata
+		}
+	}
 	// Album exists when expanding an image by the album key (eg HighlightImage)
 	if image.URIs.Album != nil {
 		if val, ok := expansions[image.URIs.Album.URI]; ok {

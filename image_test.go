@@ -75,6 +75,18 @@ func TestImage(t *testing.T) {
 			},
 		},
 		{
+			name:       "image size details & metadata expansion",
+			imageKey:   "mQRcX2V-0",
+			filename:   "testdata/image_UQpV019_metadata.json",
+			expansions: []string{"ImageMetadata"},
+			f: func(image *smugmug.Image, err error) {
+				a.NotNil(image)
+				a.NoError(err)
+				a.NotNil(image.ImageMetadata)
+				a.Equal("iPhone X back dual camera 4mm f/1.8", image.ImageMetadata.Lens)
+			},
+		},
+		{
 			name:    "api option failure",
 			options: []smugmug.APIOption{withError()},
 			f: func(image *smugmug.Image, err error) {
