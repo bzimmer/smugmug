@@ -52,8 +52,8 @@ func (s *ImageService) expand(image *Image, expansions map[string]*json.RawMessa
 		return nil, errNoImage
 	}
 	var err error
-	for _, expand := range []ImageExpandFunc{expandAlbum, expandMetadata, expandSizeDetails} {
-		image, err = expand(image, expansions)
+	for _, f := range []ImageExpandFunc{expandAlbum, expandMetadata, expandSizeDetails} {
+		image, err = f(image, expansions)
 		if err != nil {
 			return nil, err
 		}
