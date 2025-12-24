@@ -84,6 +84,31 @@ func TestImage(t *testing.T) {
 				a.NoError(err)
 				a.NotNil(image.ImageMetadata)
 				a.Equal("iPhone X back dual camera 4mm f/1.8", image.ImageMetadata.Lens)
+				a.Equal(smugmug.ISO(20), image.ImageMetadata.ISO)
+			},
+		},
+		{
+			name:       "incorrect ISO value in metadata",
+			imageKey:   "UQpV019-0",
+			filename:   "testdata/image_UQpV019_metadata_iso.json",
+			expansions: []string{"ImageMetadata"},
+			f: func(image *smugmug.Image, err error) {
+				a.NotNil(image)
+				a.NoError(err)
+				a.NotNil(image.ImageMetadata)
+				a.Equal(smugmug.ISO(0), image.ImageMetadata.ISO)
+			},
+		},
+		{
+			name:       "string ISO value in metadata",
+			imageKey:   "UQpV019-0",
+			filename:   "testdata/image_UQpV019_metadata_iso_string.json",
+			expansions: []string{"ImageMetadata"},
+			f: func(image *smugmug.Image, err error) {
+				a.NotNil(image)
+				a.NoError(err)
+				a.NotNil(image.ImageMetadata)
+				a.Equal(smugmug.ISO(500), image.ImageMetadata.ISO)
 			},
 		},
 		{

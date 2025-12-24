@@ -38,6 +38,27 @@ func (c *Coordinate) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type ISO int
+
+func (t *ISO) UnmarshalJSON(data []byte) error {
+	var s any
+	if err := json.Unmarshal(data, &s); err != nil {
+		return err
+	}
+	switch x := s.(type) {
+	case float64:
+		*t = ISO(x)
+	case string:
+		i, err := strconv.ParseInt(x, 10, 64)
+		if err != nil {
+			*t = 0
+			return nil
+		}
+		*t = ISO(i)
+	}
+	return nil
+}
+
 type Altitude string
 
 func (t *Altitude) UnmarshalJSON(data []byte) error {
@@ -418,7 +439,7 @@ type ImageMetadata struct {
 	MicroDateTimeDigitized string   `json:"MicroDateTimeDigitized"`
 	DateDigitized          string   `json:"DateDigitized"`
 	Exposure               string   `json:"Exposure"`
-	ISO                    int      `json:"ISO"`
+	ISO                    ISO      `json:"ISO"`
 	FocalLength            string   `json:"FocalLength"`
 	FocalLength35Mm        string   `json:"FocalLength35mm"`
 	CompressedBitsPerPixel string   `json:"CompressedBitsPerPixel"`

@@ -188,7 +188,7 @@ func (s *NodeService) Walk(
 // WalkN traverses all children of the node rooted at `nodeID` to the specified depth
 func (s *NodeService) WalkN(
 	ctx context.Context, nodeID string, fn NodeIterFunc, depth int, options ...APIOption) error {
-	k := &stack{}
+	var k stack
 	k.push(nodeID, nil, 0)
 	for {
 		var err error
