@@ -1,0 +1,504 @@
+{
+  "Response": {
+    "Uri": "/api/v2/image/UQpV019-0?_pretty=true",
+    "Locator": "Image",
+    "LocatorType": "Object",
+    "Image": {
+      "Title": "",
+      "Caption": "",
+      "Keywords": "7058; heic",
+      "KeywordArray": [
+        "7058",
+        "heic"
+      ],
+      "Watermark": "No",
+      "Latitude": "47.973777777778",
+      "Longitude": "-123.48731944444",
+      "Altitude": 1519,
+      "Hidden": false,
+      "ThumbnailUrl": "https://photos.smugmug.com/photos/i-UQpV019/0/Mgskr8x2ktHw9VjjV9nq8LLzZLQ2j6VXX3nGZRgcS/Th/i-UQpV019-Th.jpg",
+      "FileName": "IMG_7058_heic.JPG",
+      "Processing": false,
+      "UploadKey": "9798117731",
+      "Date": "2020-09-22T15:32:36+00:00",
+      "DateTimeUploaded": "2020-09-22T15:32:36+00:00",
+      "DateTimeOriginal": "2019-08-04T18:28:12+00:00",
+      "Format": "JPG",
+      "OriginalHeight": 3024,
+      "OriginalWidth": 4032,
+      "OriginalSize": 2252145,
+      "LastUpdated": "2020-09-22T15:34:58+00:00",
+      "Collectable": true,
+      "IsArchive": false,
+      "IsVideo": false,
+      "ComponentFileTypes": {
+        "Image": [
+          "jpg"
+        ]
+      },
+      "CanEdit": true,
+      "CanBuy": true,
+      "Protected": false,
+      "EZProject": false,
+      "Watermarked": false,
+      "ImageKey": "UQpV019",
+      "Serial": 0,
+      "ArchivedUri": "https://photos.smugmug.com/photos/i-UQpV019/0/NjL9vJntrjDffLPCVHGbTZzdzptKpzrkCCwvrQkcr/D/i-UQpV019-D.jpg",
+      "ArchivedSize": 2252145,
+      "ArchivedMD5": "4bd39b2fea80a6f1acb1ef551e5774b6",
+      "Status": "Open",
+      "SubStatus": "NFS",
+      "CanShare": true,
+      "Comments": true,
+      "ShowKeywords": true,
+      "FormattedValues": {
+        "Caption": {
+          "html": "",
+          "text": ""
+        },
+        "FileName": {
+          "html": "IMG_7058_heic.JPG",
+          "text": "IMG_7058_heic.JPG"
+        }
+      },
+      "PreferredDisplayFileExtension": "JPG",
+      "Uri": "/api/v2/image/UQpV019-0",
+      "WebUri": "https://photos.gravl.cc/Activities/2019/2019-08-04-Ride-the-Hurricane/n-jZ7bdZ/i-UQpV019",
+      "UriDescription": "Image by key",
+      "Uris": {
+        "LargestImage": {
+          "Uri": "/api/v2/image/UQpV019-0!largestimage",
+          "Locator": "LargestImage",
+          "LocatorType": "Object",
+          "UriDescription": "Largest size available for image",
+          "EndpointType": "LargestImage"
+        },
+        "ImageSizes": {
+          "Uri": "/api/v2/image/UQpV019-0!sizes",
+          "Locator": "ImageSizes",
+          "LocatorType": "Object",
+          "UriDescription": "Sizes available for image",
+          "EndpointType": "ImageSizes"
+        },
+        "ImageSizeDetails": {
+          "Uri": "/api/v2/image/UQpV019-0!sizedetails",
+          "Locator": "ImageSizeDetails",
+          "LocatorType": "Object",
+          "UriDescription": "Detailed size information for image",
+          "EndpointType": "ImageSizeDetails"
+        },
+        "PointOfInterest": {
+          "Uri": "/api/v2/image/UQpV019-0!pointofinterest",
+          "Locator": "PointOfInterest",
+          "LocatorType": "Object",
+          "UriDescription": "Point of interest for image",
+          "EndpointType": "PointOfInterest"
+        },
+        "PointOfInterestCrops": {
+          "Uri": "/api/v2/image/UQpV019-0!poicrops",
+          "Locator": "PointOfInterestCrops",
+          "LocatorType": "List",
+          "UriDescription": "PointOfInterest Crops for image",
+          "EndpointType": "PointOfInterestCrops"
+        },
+        "Regions": {
+          "Uri": "/api/v2/image/UQpV019-0!regions",
+          "Locator": "Region",
+          "LocatorType": "Objects",
+          "UriDescription": "Regions for image",
+          "EndpointType": "Regions"
+        },
+        "ImageAlbum": {
+          "Uri": "/api/v2/album/2GsRNZ",
+          "Locator": "Album",
+          "LocatorType": "Object",
+          "UriDescription": "Album by key",
+          "EndpointType": "Album",
+          "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+        },
+        "ImageOwner": {
+          "Uri": "/api/v2/user/zimmer",
+          "Locator": "User",
+          "LocatorType": "Object",
+          "UriDescription": "User By Nickname",
+          "EndpointType": "User"
+        },
+        "ImageAlbums": {
+          "Uri": "/api/v2/image/UQpV019-0!albums",
+          "Locator": "Album",
+          "LocatorType": "Objects",
+          "UriDescription": "Albums the image is included in",
+          "EndpointType": "ImageAlbums"
+        },
+        "ImageDownload": {
+          "Uri": "/api/v2/image/UQpV019-0!download",
+          "Locator": "ImageDownload",
+          "LocatorType": "Object",
+          "UriDescription": "Download image",
+          "EndpointType": "ImageDownload"
+        },
+        "ImageComments": {
+          "Uri": "/api/v2/image/UQpV019-0!comments",
+          "Locator": "Comment",
+          "LocatorType": "Objects",
+          "UriDescription": "Comments on image",
+          "EndpointType": "ImageComments"
+        },
+        "RotateImage": {
+          "Uri": "/api/v2/image/UQpV019-0!rotate",
+          "UriDescription": "Rotate an image",
+          "EndpointType": "RotateImage"
+        },
+        "ColorImage": {
+          "Uri": "/api/v2/image/UQpV019-0!color",
+          "Locator": "ColorImage",
+          "LocatorType": "Object",
+          "UriDescription": "Color an image",
+          "EndpointType": "ColorImage"
+        },
+        "CopyImage": {
+          "Uri": "/api/v2/image/UQpV019-0!copy",
+          "UriDescription": "Copy an image",
+          "EndpointType": "CopyImage"
+        },
+        "CropImage": {
+          "Uri": "/api/v2/image/UQpV019-0!crop",
+          "UriDescription": "Crop an image",
+          "EndpointType": "CropImage"
+        },
+        "WatermarkImage": {
+          "Uri": "/api/v2/image/UQpV019-0!watermark",
+          "UriDescription": "Watermark Image",
+          "EndpointType": "WatermarkImage"
+        },
+        "ImageMetadata": {
+          "Uri": "/api/v2/image/UQpV019-0!metadata",
+          "Locator": "ImageMetadata",
+          "LocatorType": "Object",
+          "UriDescription": "Metadata for image",
+          "EndpointType": "ImageMetadata"
+        },
+        "ImagePrices": {
+          "Uri": "/api/v2/image/UQpV019-0!prices",
+          "Locator": "CatalogSkuPrice",
+          "LocatorType": "Objects",
+          "UriDescription": "Purchasable Skus",
+          "EndpointType": "ImagePrices"
+        },
+        "ImagePricelistExclusions": {
+          "Uri": "/api/v2/image/UQpV019-0!pricelistexclusions",
+          "Locator": "ImagePricelistExclusions",
+          "LocatorType": "Object",
+          "UriDescription": "Pricelist information for an image",
+          "EndpointType": "ImagePricelistExclusions"
+        }
+      }
+    },
+    "UriDescription": "Image by key",
+    "EndpointType": "Image",
+    "DocUri": "https://api.smugmug.com/api/v2/doc/reference/image.html"
+  },
+  "Code": 200,
+  "Message": "Ok",
+  "Expansions": {
+    "/api/v2/album/2GsRNZ": {
+      "Uri": "/api/v2/album/2GsRNZ",
+      "Locator": "Album",
+      "LocatorType": "Object",
+      "Album": {
+        "NiceName": "2019-08-04-Ride-the-Hurricane",
+        "UrlName": "2019-08-04-Ride-the-Hurricane",
+        "Title": "2019-08-04 Ride the Hurricane",
+        "Name": "2019-08-04 Ride the Hurricane",
+        "TemplateUri": "/api/v2/template/17",
+        "AllowDownloads": false,
+        "Backprinting": "",
+        "BoutiquePackaging": "Inherit from User",
+        "CanRank": true,
+        "Clean": false,
+        "Comments": true,
+        "Description": "",
+        "EXIF": true,
+        "External": true,
+        "FamilyEdit": false,
+        "Filenames": false,
+        "FriendEdit": false,
+        "Geography": true,
+        "Header": "Custom",
+        "HideOwner": false,
+        "InterceptShipping": "Inherit from User",
+        "Keywords": "",
+        "LargestSize": "5K",
+        "PackagingBranding": true,
+        "Password": "",
+        "PasswordHint": "",
+        "Printable": false,
+        "Privacy": "Unlisted",
+        "ProofDays": 0,
+        "ProofDigital": false,
+        "Protected": false,
+        "Share": true,
+        "Slideshow": true,
+        "SmugSearchable": "Inherit from User",
+        "SortDirection": "Ascending",
+        "SortMethod": "Date Taken",
+        "SquareThumbs": true,
+        "Watermark": false,
+        "WorldSearchable": true,
+        "SecurityType": "None",
+        "CommerceLightbox": false,
+        "MaxPhotoDownloadSize": "Original",
+        "HighlightAlbumImageUri": "/api/v2/album/2GsRNZ/image/c48QftR-1",
+        "AlbumKey": "2GsRNZ",
+        "CanBuy": true,
+        "CanFavorite": false,
+        "Date": "2020-09-22T15:34:12+00:00",
+        "LastUpdated": "2020-09-22T15:34:12+00:00",
+        "ImagesLastUpdated": "2022-09-12T20:35:57+00:00",
+        "NodeID": "jZ7bdZ",
+        "OriginalSizes": 55631020,
+        "TotalSizes": 93250912,
+        "ImageCount": 14,
+        "UrlPath": "/Activities/2019/2019-08-04-Ride-the-Hurricane",
+        "CanShare": true,
+        "HasDownloadPassword": false,
+        "Packages": false,
+        "Uri": "/api/v2/album/2GsRNZ",
+        "WebUri": "https://photos.gravl.cc/Activities/2019/2019-08-04-Ride-the-Hurricane/n-jZ7bdZ",
+        "UriDescription": "Album by key",
+        "Uris": {
+          "AlbumShareUris": {
+            "Uri": "/api/v2/album/2GsRNZ!shareuris",
+            "Locator": "AlbumShareUris",
+            "LocatorType": "Object",
+            "UriDescription": "URIs that are useful for sharing",
+            "EndpointType": "AlbumShareUris"
+          },
+          "Node": {
+            "Uri": "/api/v2/node/jZ7bdZ",
+            "Locator": "Node",
+            "LocatorType": "Object",
+            "UriDescription": "Node with the given id.",
+            "EndpointType": "Node"
+          },
+          "NodeCoverImage": {
+            "Uri": "/api/v2/node/jZ7bdZ!cover",
+            "Locator": "Image",
+            "LocatorType": "Object",
+            "UriDescription": "Cover image for a folder, album, or page",
+            "EndpointType": "NodeCoverImage"
+          },
+          "User": {
+            "Uri": "/api/v2/user/zimmer",
+            "Locator": "User",
+            "LocatorType": "Object",
+            "UriDescription": "User By Nickname",
+            "EndpointType": "User"
+          },
+          "Folder": {
+            "Uri": "/api/v2/folder/user/zimmer/Activities/2019",
+            "Locator": "Folder",
+            "LocatorType": "Object",
+            "UriDescription": "A folder or legacy (sub)category by UrlPath",
+            "EndpointType": "Folder"
+          },
+          "ParentFolders": {
+            "Uri": "/api/v2/folder/user/zimmer/Activities/2019!parents",
+            "Locator": "Folder",
+            "LocatorType": "Objects",
+            "UriDescription": "The sequence of parent folders, from the given folder to the root",
+            "EndpointType": "ParentFolders"
+          },
+          "HighlightImage": {
+            "Uri": "/api/v2/highlight/node/jZ7bdZ",
+            "Locator": "Image",
+            "LocatorType": "Object",
+            "UriDescription": "Highlight image for a folder, album, or page",
+            "EndpointType": "HighlightImage"
+          },
+          "AlbumHighlightImage": {
+            "Uri": "/api/v2/album/2GsRNZ!highlightimage",
+            "Locator": "AlbumImage",
+            "LocatorType": "Object",
+            "UriDescription": "Highlight image for album",
+            "EndpointType": "AlbumHighlightImage"
+          },
+          "AlbumImages": {
+            "Uri": "/api/v2/album/2GsRNZ!images",
+            "Locator": "AlbumImage",
+            "LocatorType": "Objects",
+            "UriDescription": "Images from album",
+            "EndpointType": "AlbumImages"
+          },
+          "AlbumPopularMedia": {
+            "Uri": "/api/v2/album/2GsRNZ!popularmedia",
+            "Locator": "AlbumImage",
+            "LocatorType": "Objects",
+            "UriDescription": "Popular images from album",
+            "EndpointType": "AlbumPopularMedia"
+          },
+          "AlbumGeoMedia": {
+            "Uri": "/api/v2/album/2GsRNZ!geomedia",
+            "Locator": "AlbumImage",
+            "LocatorType": "Objects",
+            "UriDescription": "Geotagged images from album",
+            "EndpointType": "AlbumGeoMedia"
+          },
+          "AlbumComments": {
+            "Uri": "/api/v2/album/2GsRNZ!comments",
+            "Locator": "Comment",
+            "LocatorType": "Objects",
+            "UriDescription": "Comments on album",
+            "EndpointType": "AlbumComments"
+          },
+          "MoveAlbumImages": {
+            "Uri": "/api/v2/album/2GsRNZ!moveimages",
+            "UriDescription": "Move images into album",
+            "EndpointType": "MoveAlbumImages"
+          },
+          "CollectImages": {
+            "Uri": "/api/v2/album/2GsRNZ!collectimages",
+            "UriDescription": "Collect images into album",
+            "EndpointType": "CollectImages"
+          },
+          "ApplyAlbumTemplate": {
+            "Uri": "/api/v2/album/2GsRNZ!applyalbumtemplate",
+            "Locator": "ApplyAlbumTemplate",
+            "LocatorType": "Object",
+            "UriDescription": "Apply an album template",
+            "EndpointType": "ApplyAlbumTemplate"
+          },
+          "DeleteAlbumImages": {
+            "Uri": "/api/v2/album/2GsRNZ!deleteimages",
+            "UriDescription": "Delete album images",
+            "EndpointType": "DeleteAlbumImages"
+          },
+          "UploadFromUri": {
+            "Uri": "/api/v2/album/2GsRNZ!uploadfromuri",
+            "UriDescription": "Upload a photo or video from elsewhere on the web",
+            "EndpointType": "UploadFromUri"
+          },
+          "AlbumGrants": {
+            "Uri": "/api/v2/album/2GsRNZ!grants",
+            "Locator": "Grant",
+            "LocatorType": "Objects",
+            "UriDescription": "Grants for the Album",
+            "EndpointType": "AlbumGrants"
+          },
+          "AlbumDownload": {
+            "Uri": "/api/v2/album/2GsRNZ!download",
+            "Locator": "Download",
+            "LocatorType": "Objects",
+            "UriDescription": "Download album",
+            "EndpointType": "AlbumDownload"
+          },
+          "AlbumPrices": {
+            "Uri": "/api/v2/album/2GsRNZ!prices",
+            "Locator": "CatalogSkuPrice",
+            "LocatorType": "Objects",
+            "UriDescription": "Purchasable Skus",
+            "EndpointType": "AlbumPrices"
+          },
+          "AlbumPricelistExclusions": {
+            "Uri": "/api/v2/album/2GsRNZ!pricelistexclusions",
+            "Locator": "AlbumPricelistExclusions",
+            "LocatorType": "Object",
+            "UriDescription": "Pricelist information for an Album",
+            "EndpointType": "AlbumPricelistExclusions"
+          }
+        },
+        "ResponseLevel": "Full"
+      },
+      "UriDescription": "Album by key",
+      "EndpointType": "Album",
+      "DocUri": "https://api.smugmug.com/api/v2/doc/reference/album.html"
+    },
+    "/api/v2/image/UQpV019-0!metadata": {
+      "Uri": "/api/v2/image/UQpV019-0!metadata",
+      "Locator": "ImageMetadata",
+      "LocatorType": "Object",
+      "ImageMetadata": {
+        "Title": "",
+        "Caption": "",
+        "UserComment": "",
+        "Keywords": "",
+        "Author": "",
+        "Copyright": "",
+        "CopyrightUrl": "",
+        "CopyrightFlag": "",
+        "UsageTerms": "",
+        "Source": "",
+        "Credit": "",
+        "City": "",
+        "State": "",
+        "Country": "",
+        "Rating": "",
+        "CreatorContactInfo": "",
+        "Category": "",
+        "SupplementalCategories": "",
+        "SpecialInstructions": "",
+        "AuthorTitle": "",
+        "CountryCode": "",
+        "TransmissionReference": "",
+        "Headline": "",
+        "WriterEditor": "",
+        "Lens": "iPhone X back dual camera 4mm f/1.8",
+        "Make": "Apple",
+        "Model": "iPhone X",
+        "Aperture": "1.8",
+        "DateTimeModified": "2019-08-04T11:28:12",
+        "DateTimeCreated": "2019-08-04T11:28:12",
+        "DateCreated": "",
+        "TimeCreated": "",
+        "MicroDateTimeCreated": "2019-08-04T11:28:12.342",
+        "MicroDateTimeDigitized": "2019-08-04T11:28:12.342",
+        "DateDigitized": "2019-08-04T11:28:12",
+        "Exposure": "1/3040",
+        "ISO": "500",
+        "FocalLength": "4.0 mm",
+        "FocalLength35mm": "38.0 mm",
+        "CompressedBitsPerPixel": "",
+        "Flash": "Off, Did not fire",
+        "Metering": "Multi-segment",
+        "ExposureProgram": "Program AE",
+        "ExposureCompensation": "",
+        "ExposureMode": "Auto",
+        "LightSource": "",
+        "WhiteBalance": "Auto",
+        "DigitalZoomRatio": "1.34519573",
+        "Contrast": "",
+        "Saturation": "",
+        "Sharpness": "",
+        "SubjectDistance": "",
+        "SubjectRange": "",
+        "SensingMethod": "One-chip color area",
+        "ColorSpace": "Uncalibrated",
+        "Brightness": "",
+        "LatitudeReference": "North",
+        "LongitudeReference": "West",
+        "Latitude": 48.973777777778,
+        "Longitude": -122.48731944444,
+        "AltitudeReference": "Above Sea Level",
+        "Altitude": "1518.7 m Above Sea Level",
+        "SceneCaptureType": "Standard",
+        "GainControl": "",
+        "ScaleFactor": "",
+        "CircleOfConfusion": "0.003 mm",
+        "FieldOfView": "50.7 deg",
+        "DepthOfField": "",
+        "HyperfocalDistance": "2.81 m",
+        "NormalizedLightValue": "15.6",
+        "Duration": "",
+        "AudioCodec": "",
+        "VideoCodec": "",
+        "Software": "12.3.1",
+        "SerialNumber": "",
+        "LensSerialNumber": "",
+        "Uri": "/api/v2/image/UQpV019-0!metadata",
+        "UriDescription": "Metadata for image"
+      },
+      "UriDescription": "Metadata for image",
+      "EndpointType": "ImageMetadata"
+    }
+  }
+}
