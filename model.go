@@ -51,8 +51,9 @@ func (t *ISO) UnmarshalJSON(data []byte) error {
 	case string:
 		i, err := strconv.ParseInt(x, 10, 64)
 		if err != nil {
-			*t = 0
-			return nil
+			// sometimes ISO is not a number in the API responses
+			// zero is an acceptable fallback
+			i = 0
 		}
 		*t = ISO(i)
 	}
