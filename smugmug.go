@@ -34,19 +34,16 @@ var (
 	// albumNameRE allowable characters
 	albumNameRE = regexp.MustCompile(`[\p{L}\d]+`)
 
-	// searchReplacements are precompiled patterns for URLName normalization
-	searchReplacements = []struct {
-		re      *regexp.Regexp
-		replace string
-	}{
-		{regexp.MustCompile(`-`), " "},
-		{regexp.MustCompile("[`'\"" + `]`), ""},
-	}
+	// searchHyphenRE matches hyphens for URLName normalization
+	searchHyphenRE = regexp.MustCompile(`-`)
+
+	// searchQuoteRE matches quote characters for URLName normalization
+	searchQuoteRE = regexp.MustCompile("[`'\"" + `]`)
 )
 
 // provider specifies OAuth 1.0 URLs for SmugMug
 func provider() oauth.ServiceProvider {
-	return oauth.ServiceProvider{
+	return oauth.ServiceProvider{ //nolint:gosec // G101: these are OAuth endpoint URLs, not credentials
 		RequestTokenUrl:   "https://api.smugmug.com/services/oauth/1.0a/getRequestToken",
 		AuthorizeTokenUrl: "https://api.smugmug.com/services/oauth/1.0a/authorize",
 		AccessTokenUrl:    "https://api.smugmug.com/services/oauth/1.0a/getAccessToken",
@@ -189,9 +186,8 @@ func URLName(name string, tags ...language.Tag) string {
 		tag = tags[0]
 	}
 	upper := cases.Upper(tag)
-	for _, sr := range searchReplacements {
-		s = sr.re.ReplaceAllString(s, sr.replace)
-	}
+	s = searchHyphenRE.ReplaceAllString(s, " ")
+	s = searchQuoteRE.ReplaceAllString(s, "")
 	t := albumNameRE.FindAllString(s, -1)
 	for i := range t {
 		u := t[i]
