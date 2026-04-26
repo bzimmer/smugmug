@@ -33,11 +33,17 @@ const (
 var (
 	// albumNameRE allowable characters
 	albumNameRE = regexp.MustCompile(`[\p{L}\d]+`)
+
+	// searchHyphenRE matches hyphens for URLName normalization
+	searchHyphenRE = regexp.MustCompile(`-`)
+
+	// searchQuoteRE matches quote characters for URLName normalization
+	searchQuoteRE = regexp.MustCompile("[`'\"" + `]`)
 )
 
 // provider specifies OAuth 1.0 URLs for SmugMug
 func provider() oauth.ServiceProvider {
-	return oauth.ServiceProvider{
+	return oauth.ServiceProvider{ //nolint:gosec // G101: these are OAuth endpoint URLs, not credentials
 		RequestTokenUrl:   "https://api.smugmug.com/services/oauth/1.0a/getRequestToken",
 		AuthorizeTokenUrl: "https://api.smugmug.com/services/oauth/1.0a/authorize",
 		AccessTokenUrl:    "https://api.smugmug.com/services/oauth/1.0a/getAccessToken",
@@ -172,19 +178,6 @@ func WithSearch(scope, text string) APIOption {
 	}
 }
 
-// searchReplaceREs special characters to replace
-func searchReplaceREs() map[*regexp.Regexp]string {
-	re := make(map[*regexp.Regexp]string, 0)
-	for search, replace := range map[string]string{
-		`-`:                    " ",
-		"[" + "`" + `'"` + "]": "",
-	} {
-		c := regexp.MustCompile(search)
-		re[c] = replace
-	}
-	return re
-}
-
 // URLName returns `name` as a suitable URL name for a folder or album
 func URLName(name string, tags ...language.Tag) string {
 	s := name
@@ -193,9 +186,8 @@ func URLName(name string, tags ...language.Tag) string {
 		tag = tags[0]
 	}
 	upper := cases.Upper(tag)
-	for search, replace := range searchReplaceREs() {
-		s = search.ReplaceAllString(s, replace)
-	}
+	s = searchHyphenRE.ReplaceAllString(s, " ")
+	s = searchQuoteRE.ReplaceAllString(s, "")
 	t := albumNameRE.FindAllString(s, -1)
 	for i := range t {
 		u := t[i]
