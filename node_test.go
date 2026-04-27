@@ -2,6 +2,7 @@ package smugmug_test
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -88,6 +89,15 @@ func TestNode(t *testing.T) {
 			f: func(node *smugmug.Node, err error) {
 				a.Error(err)
 				a.ErrorIs(err, errFail)
+				a.Nil(node)
+			},
+		},
+		{
+			name:     "bad expansion JSON causes error",
+			nodeID:   "kTR76",
+			filename: "testdata/node_kTR76_bad_expansion.json",
+			f: func(node *smugmug.Node, err error) {
+				a.Error(err)
 				a.Nil(node)
 			},
 		},
@@ -301,6 +311,85 @@ func TestNodes(t *testing.T) {
 				0: "testdata/node_create_xmQnCV_.json",
 			},
 		},
+		{
+			name: "bad expansion JSON in nodes causes error",
+			f: func(mg *smugmug.Client) {
+				var n int
+				err := mg.Node.ChildrenIter(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
+					n++
+					return true, nil
+				})
+				a.Error(err)
+				a.Equal(0, n)
+			},
+			res: map[int]string{
+				0: "testdata/node_children_bad_expansion.json",
+			},
+		},
+		{
+			name:   "node creation server error",
+			status: http.StatusForbidden,
+			f: func(mg *smugmug.Client) {
+				nodelet := &smugmug.Nodelet{Name: "foobar", URLName: "Foobar"}
+				node, err := mg.Node.Create(context.TODO(), "g8CLb2", nodelet)
+				a.Error(err)
+				a.Nil(node)
+			},
+			res: map[int]string{},
+		},
+		{
+			name: "node walk with fn returning error",
+			f: func(mg *smugmug.Client) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
+					return false, errors.New("fn error")
+				})
+				a.Error(err)
+				a.Equal("fn error", err.Error())
+			},
+			res: map[int]string{
+				0: "testdata/node_zx4Fx.json",
+			},
+		},
+		{
+			name: "node walk stops when fn returns false",
+			f: func(mg *smugmug.Client) {
+				var n int
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
+					n++
+					return false, nil // stop immediately
+				})
+				a.NoError(err)
+				a.Equal(1, n)
+			},
+			res: map[int]string{
+				0: "testdata/node_zx4Fx.json",
+			},
+		},
+		{
+			name:   "node walk fails when initial node lookup fails",
+			status: http.StatusForbidden,
+			f: func(mg *smugmug.Client) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
+					return true, nil
+				})
+				a.Error(err)
+			},
+			res: map[int]string{},
+		},
+		{
+			name: "node walk children iter fails",
+			f: func(mg *smugmug.Client) {
+				err := mg.Node.Walk(context.TODO(), "zx4Fx", func(_ *smugmug.Node) (bool, error) {
+					return true, nil
+				})
+				a.Error(err)
+			},
+			res: map[int]string{
+				// root folder node fetched successfully
+				0: "testdata/node_zx4Fx.json",
+				// children request fails (forbidden)
+			},
+		},
 	}
 
 	for i := range tests {
@@ -314,9 +403,13 @@ func TestNodes(t *testing.T) {
 					return
 				}
 				fn, ok := test.res[j]
-				a.True(ok, "missing file for iteration {%d}", j)
-				http.ServeFile(w, r, fn)
 				j++
+				if !ok {
+					// No more responses configured: simulate a server error.
+					w.WriteHeader(http.StatusForbidden)
+					return
+				}
+				http.ServeFile(w, r, fn)
 			}))
 			defer svr.Close()
 

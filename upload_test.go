@@ -21,6 +21,8 @@ func TestUpload(t *testing.T) {
 		name     string
 		album    string
 		filename string
+		replaces string
+		status   int
 		err      string
 	}{
 		{
@@ -38,12 +40,29 @@ func TestUpload(t *testing.T) {
 			album:    "7dFHSm",
 			filename: "This is a name with spaces.jpg",
 		},
+		{
+			name:     "with replaces uri",
+			album:    "7dFHSm",
+			filename: "DSC33556.jpg",
+			replaces: "/api/v2/image/CVvj69L-0",
+		},
+		{
+			name:     "upload server error",
+			album:    "7dFHSm",
+			filename: "DSC33556.jpg",
+			status:   http.StatusForbidden,
+			err:      "failed to upload",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			mux := http.NewServeMux()
 			mux.HandleFunc("/photo.jpg", func(w http.ResponseWriter, r *http.Request) {
+				if tt.status != 0 {
+					w.WriteHeader(tt.status)
+					return
+				}
 				a.Equal(http.MethodPut, r.Method)
 				a.Equal(url.PathEscape(tt.filename), r.Header.Get("X-Smug-FileName"))
 				http.ServeFile(w, r, "testdata/upload_CVvj69L.json")
@@ -56,6 +75,7 @@ func TestUpload(t *testing.T) {
 			up := &smugmug.Uploadable{
 				Name:     tt.filename,
 				AlbumKey: tt.album,
+				Replaces: tt.replaces,
 			}
 			upload, err := mg.Upload.Upload(context.TODO(), up)
 			if tt.err != "" {
