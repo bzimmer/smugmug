@@ -1,3 +1,4 @@
+//nolint:testpackage // white-box test for unexported decode method
 package smugmug
 
 import (
