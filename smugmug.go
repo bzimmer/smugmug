@@ -15,8 +15,6 @@ import (
 	"golang.org/x/text/language"
 )
 
-//go:generate genwith --client --do --package smugmug
-
 const (
 	batch       = 100
 	concurrency = 2
