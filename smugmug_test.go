@@ -79,6 +79,24 @@ func TestOption(t *testing.T) {
 	a.NotNil(client)
 }
 
+func TestDecodeError(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
+	// Serve a 4xx with a non-JSON body to exercise the decodeError JSON-parse error path.
+	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(http.StatusForbidden)
+		_, _ = w.Write([]byte("not valid json {"))
+	}))
+	defer svr.Close()
+
+	client, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+	a.NoError(err)
+	_, err = client.User.AuthUser(context.TODO())
+	a.Error(err)
+}
+
 type errorTransport struct{}
 
 func (t *errorTransport) RoundTrip(*http.Request) (*http.Response, error) {

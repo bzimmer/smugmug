@@ -30,6 +30,15 @@ func TestAuthUser(t *testing.T) {
 			},
 		},
 		{
+			name:     "success without node expansion in expansions map",
+			filename: "testdata/user_cmac_no_expansion.json",
+			f: func(user *smugmug.User, err error) {
+				a.NoError(err)
+				a.NotNil(user)
+				a.Nil(user.Node)
+			},
+		},
+		{
 			name:     "failed parse",
 			filename: "user_test.go",
 			f: func(user *smugmug.User, err error) {
@@ -44,6 +53,14 @@ func TestAuthUser(t *testing.T) {
 			f: func(user *smugmug.User, err error) {
 				a.Error(err)
 				a.ErrorIs(err, errFail)
+				a.Nil(user)
+			},
+		},
+		{
+			name:     "bad node expansion JSON causes error",
+			filename: "testdata/user_cmac_bad_expansion.json",
+			f: func(user *smugmug.User, err error) {
+				a.Error(err)
 				a.Nil(user)
 			},
 		},

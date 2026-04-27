@@ -52,3 +52,21 @@ func TestUploadables(t *testing.T) {
 	err := <-errc
 	a.Error(err)
 }
+
+func TestUploadablesNonSkipError(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
+	// testFsUploadable returns errors.New("missing") for "missing.txt",
+	// which is not ErrSkip, so it propagates as an error.
+	fs := new(afero.MemMapFs)
+	a.NoError(afero.WriteFile(fs, "missing.txt", []byte("content"), 0644))
+
+	fu := filesystem.NewFsUploadables(fs, []string{"missing.txt"}, &testFsUploadable{})
+	a.NotNil(fu)
+	_, errc := fu.Uploadables(context.TODO())
+
+	err := <-errc
+	a.Error(err)
+	a.Equal("missing", err.Error())
+}

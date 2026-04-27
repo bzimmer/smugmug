@@ -128,6 +128,29 @@ func TestImage(t *testing.T) {
 				a.Error(err)
 			},
 		},
+		{
+			name:       "bad expansion JSON causes error",
+			imageKey:   "mQRcX2V-0",
+			filename:   "testdata/image_mQRcX2V-0_bad_expansion.json",
+			expansions: []string{"ImageSizeDetails"},
+			f: func(image *smugmug.Image, err error) {
+				a.Nil(image)
+				a.Error(err)
+			},
+		},
+		{
+			name:       "patch api option failure",
+			imageKey:   "VPB9RVH-0",
+			filename:   "testdata/image_B2fHSt7-0.json",
+			expansions: []string{},
+			patch:      map[string]any{"Keywords": []string{}},
+			options:    []smugmug.APIOption{withError()},
+			f: func(image *smugmug.Image, err error) {
+				a.Nil(image)
+				a.Error(err)
+				a.ErrorIs(err, errFail)
+			},
+		},
 	}
 	for i := range tests {
 		tt := tests[i]
@@ -170,6 +193,7 @@ func TestImages(t *testing.T) {
 		albumKey   string
 		expansions []string
 		filename   string
+		status     int
 		options    []smugmug.APIOption
 		f          func(images []*smugmug.Image, pages *smugmug.Pages, err error)
 	}{
@@ -212,6 +236,27 @@ func TestImages(t *testing.T) {
 				a.Nil(pages)
 			},
 		},
+		{
+			name:     "server error",
+			albumKey: "WpK3n2",
+			status:   http.StatusForbidden,
+			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.Nil(images)
+				a.Nil(pages)
+			},
+		},
+		{
+			name:     "bad expansion JSON in images causes error",
+			albumKey: "WpK3n2",
+			filename: "testdata/images_WpK3n2_bad_expansion.json",
+			options:  []smugmug.APIOption{smugmug.WithExpansions("Album")},
+			f: func(images []*smugmug.Image, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.Nil(images)
+				a.Nil(pages)
+			},
+		},
 	}
 
 	for i := range tests {
@@ -219,6 +264,10 @@ func TestImages(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if tt.status != 0 {
+					w.WriteHeader(tt.status)
+					return
+				}
 				http.ServeFile(w, r, tt.filename)
 			}))
 			defer svr.Close()
@@ -276,6 +325,7 @@ func TestDeleteImage(t *testing.T) {
 		albumKey string
 		imageKey string
 		filename string
+		status   int
 		options  []smugmug.APIOption
 		f        func(bool, error)
 	}{
@@ -289,7 +339,7 @@ func TestDeleteImage(t *testing.T) {
 			},
 		},
 		{
-			name:     "success",
+			name:     "api option failure",
 			imageKey: "VPB9RVH-0",
 			filename: "testdata/image_743XwH7_delete.json",
 			options:  []smugmug.APIOption{withError()},
@@ -298,12 +348,28 @@ func TestDeleteImage(t *testing.T) {
 				a.False(ok)
 			},
 		},
+		{
+			name:     "server error (fault returned)",
+			imageKey: "VPB9RVH-0",
+			status:   http.StatusForbidden,
+			f: func(ok bool, err error) {
+				a.Error(err)
+				a.False(ok)
+				var fault *smugmug.Fault
+				a.True(errors.As(err, &fault))
+				a.Equal(http.StatusForbidden, fault.Code)
+			},
+		},
 	}
 	for i := range tests {
 		tt := tests[i]
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if tt.status != 0 {
+					w.WriteHeader(tt.status)
+					return
+				}
 				if tt.filename == "" {
 					w.WriteHeader(http.StatusNotFound)
 					return

@@ -23,6 +23,7 @@ func TestAlbum(t *testing.T) {
 		albumKey string
 		filename string
 		patch    map[string]any
+		options  []smugmug.APIOption
 		f        func(*smugmug.Album, error)
 	}{
 		{
@@ -64,6 +65,29 @@ func TestAlbum(t *testing.T) {
 				a.NotNil(album)
 			},
 		},
+		{
+			name:     "api option failure on Album",
+			albumKey: "RM4BL2",
+			filename: "testdata/album_RM4BL2.json",
+			options:  []smugmug.APIOption{withError()},
+			f: func(album *smugmug.Album, err error) {
+				a.Error(err)
+				a.ErrorIs(err, errFail)
+				a.Nil(album)
+			},
+		},
+		{
+			name:     "api option failure on Patch",
+			albumKey: "RM4BL2",
+			filename: "testdata/album_RM4BL2.json",
+			patch:    map[string]any{"Name": "Foo"},
+			options:  []smugmug.APIOption{withError()},
+			f: func(album *smugmug.Album, err error) {
+				a.Error(err)
+				a.ErrorIs(err, errFail)
+				a.Nil(album)
+			},
+		},
 	}
 
 	for i := range tests {
@@ -96,9 +120,9 @@ func TestAlbum(t *testing.T) {
 
 			switch {
 			case tt.patch != nil:
-				tt.f(mg.Album.Patch(context.Background(), tt.albumKey, tt.patch))
+				tt.f(mg.Album.Patch(context.Background(), tt.albumKey, tt.patch, tt.options...))
 			default:
-				tt.f(mg.Album.Album(context.Background(), tt.albumKey))
+				tt.f(mg.Album.Album(context.Background(), tt.albumKey, tt.options...))
 			}
 		})
 	}
@@ -108,41 +132,170 @@ func TestAlbumExpansions(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "testdata/album_2XrGxm_expansions.json")
-	}))
-	defer svr.Close()
+	tests := []struct {
+		name     string
+		filename string
+		f        func(*smugmug.Album, error)
+	}{
+		{
+			name:     "valid expansions",
+			filename: "testdata/album_2XrGxm_expansions.json",
+			f: func(album *smugmug.Album, err error) {
+				a.NoError(err)
+				a.NotNil(album)
+				a.NotNil(album.Node)
+				a.NotNil(album.User)
+				a.Equal("cmac", album.User.NickName)
+				a.NotNil(album.HighlightImage)
+				a.Equal("7952669755", album.HighlightImage.UploadKey)
+			},
+		},
+		{
+			name:     "bad expansion JSON causes error",
+			filename: "testdata/album_2XrGxm_bad_expansion.json",
+			f: func(album *smugmug.Album, err error) {
+				a.Error(err)
+				a.Nil(album)
+			},
+		},
+	}
 
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-	a.NoError(err)
-	album, err := mg.Album.Album(context.TODO(), "2XrGxm",
-		smugmug.WithExpansions("Node", "AlbumHighlightImage", "AlbumImage", "User"))
-	a.NoError(err)
-	a.NotNil(album)
-	a.NotNil(album.Node)
-	a.NotNil(album.User)
-	a.Equal("cmac", album.User.NickName)
-	a.NotNil(album.HighlightImage)
-	a.Equal("7952669755", album.HighlightImage.UploadKey)
+	for i := range tests {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				http.ServeFile(w, r, tt.filename)
+			}))
+			defer svr.Close()
+
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+			album, err := mg.Album.Album(context.TODO(), "2XrGxm",
+				smugmug.WithExpansions("Node", "AlbumHighlightImage", "AlbumImage", "User"))
+			tt.f(album, err)
+		})
+	}
 }
 
 func TestAlbumSearch(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
 
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "testdata/album_search_marmot_page_1.json")
-	}))
-	defer svr.Close()
+	tests := []struct {
+		name    string
+		options []smugmug.APIOption
+		file    string
+		f       func([]*smugmug.Album, *smugmug.Pages, error)
+	}{
+		{
+			name: "success",
+			file: "testdata/album_search_marmot_page_1.json",
+			f: func(albums []*smugmug.Album, pages *smugmug.Pages, err error) {
+				a.NoError(err)
+				a.NotNil(albums)
+				a.NotNil(pages)
+				a.Equal(10, pages.Count)
+				a.Equal(20, pages.Total)
+			},
+		},
+		{
+			name:    "api option failure",
+			file:    "testdata/album_search_marmot_page_1.json",
+			options: []smugmug.APIOption{withError()},
+			f: func(albums []*smugmug.Album, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.ErrorIs(err, errFail)
+				a.Nil(albums)
+				a.Nil(pages)
+			},
+		},
+		{
+			name: "bad expansion JSON in search results causes error",
+			file: "testdata/album_search_bad_expansion.json",
+			f: func(albums []*smugmug.Album, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.Nil(albums)
+				a.Nil(pages)
+			},
+		},
+	}
 
-	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
-	a.NoError(err)
-	albums, pages, err := mg.Album.Search(context.TODO())
-	a.NoError(err)
-	a.NotNil(albums)
-	a.NotNil(pages)
-	a.Equal(10, pages.Count)
-	a.Equal(20, pages.Total)
+	for i := range tests {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				http.ServeFile(w, r, tt.file)
+			}))
+			defer svr.Close()
+
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+			albums, pages, err := mg.Album.Search(context.TODO(), tt.options...)
+			tt.f(albums, pages, err)
+		})
+	}
+}
+
+func TestAlbumUserAlbums(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
+	tests := []struct {
+		name    string
+		options []smugmug.APIOption
+		status  int
+		f       func([]*smugmug.Album, *smugmug.Pages, error)
+	}{
+		{
+			name: "success",
+			f: func(albums []*smugmug.Album, pages *smugmug.Pages, err error) {
+				a.NoError(err)
+				a.NotNil(albums)
+				a.NotNil(pages)
+			},
+		},
+		{
+			name:    "api option failure",
+			options: []smugmug.APIOption{withError()},
+			f: func(albums []*smugmug.Album, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.ErrorIs(err, errFail)
+				a.Nil(albums)
+				a.Nil(pages)
+			},
+		},
+		{
+			name:   "server error",
+			status: http.StatusForbidden,
+			f: func(albums []*smugmug.Album, pages *smugmug.Pages, err error) {
+				a.Error(err)
+				a.Nil(albums)
+				a.Nil(pages)
+			},
+		},
+	}
+
+	for i := range tests {
+		tt := tests[i]
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if tt.status != 0 {
+					w.WriteHeader(tt.status)
+					return
+				}
+				http.ServeFile(w, r, "testdata/album_search_marmot_page_1.json")
+			}))
+			defer svr.Close()
+
+			mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+			a.NoError(err)
+			albums, pages, err := mg.Album.Albums(context.TODO(), "cmac", tt.options...)
+			tt.f(albums, pages, err)
+		})
+	}
 }
 
 func TestAlbumSearchIter(t *testing.T) {
