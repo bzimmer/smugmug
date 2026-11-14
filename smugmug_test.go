@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -181,6 +182,14 @@ func TestURLName(t *testing.T) {
 			album: "2009-10-11 BIFD Pancake Breakfast", lang: language.English},
 		{url: "2009-10-11-BIFD-Pancake-Breakfast",
 			album: "2009-10-11 BIFD `Pancake Breakfast`", lang: language.English},
+		// cut at the last whole word within MaxURLName characters
+		{url: "2026-08-05-Etappe-3-Helnæs-Bugt-Svanninge-Bakker-Faaborg",
+			album: "2026-08-05 Etappe 3. Helnæs Bugt - Svanninge Bakker - Faaborg - Svendborg"},
+		// exactly MaxURLName characters is kept whole
+		{url: "Abcdefghi-" + strings.Repeat("Abcdefghi-", 4) + "Abcdefghij",
+			album: strings.Repeat("abcdefghi ", 5) + "abcdefghij"},
+		// a single word longer than MaxURLName is cut
+		{url: "A" + strings.Repeat("b", smugmug.MaxURLName-1), album: "a" + strings.Repeat("b", 70)},
 	}
 
 	for i := range tests {
