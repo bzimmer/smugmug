@@ -1,14 +1,14 @@
 module github.com/bzimmer/smugmug
 
-go 1.25.9
+go 1.27.4
 
 require (
 	github.com/bzimmer/httpwares v0.1.3
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
 	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/sync v0.20.0
-	golang.org/x/text v0.36.0
+	golang.org/x/sync v0.25.0
+	golang.org/x/text v0.44.0
 )
 
 require (

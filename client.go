@@ -68,7 +68,7 @@ func WithHTTPClient(client *http.Client) Option {
 // do executes the http request and populates v with the result.
 func (c *Client) do(req *http.Request, v any) error {
 	ctx := req.Context()
-	res, err := c.client.Do(req) //nolint:gosec // G704: request URI is constructed by the library, not from user input
+	res, err := c.client.Do(req)
 	if err != nil {
 		select {
 		case <-ctx.Done():
