@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/mrjones/oauth"
 	"golang.org/x/text/cases"
@@ -26,6 +27,9 @@ const (
 
 	TypeAlbum  = "Album"
 	TypeFolder = "Folder"
+
+	// MaxURLName is the longest URL name SmugMug accepts for a node
+	MaxURLName = 60
 )
 
 var (
@@ -177,6 +181,8 @@ func WithSearch(scope, text string) APIOption {
 }
 
 // URLName returns `name` as a suitable URL name for a folder or album
+//
+// Names longer than `MaxURLName` characters are cut at the last whole word that fits
 func URLName(name string, tags ...language.Tag) string {
 	s := name
 	tag := language.Und
@@ -194,7 +200,32 @@ func URLName(name string, tags ...language.Tag) string {
 			t[i] = cases.Title(tag).String(u)
 		}
 	}
-	return strings.Join(t, "-")
+	return truncateURLName(t)
+}
+
+// truncateURLName joins the parts with hyphens, keeping as many whole parts as
+// fit within `MaxURLName` characters; a first part that is itself too long is cut
+func truncateURLName(parts []string) string {
+	var b strings.Builder
+	var n int
+	for i, part := range parts {
+		size := utf8.RuneCountInString(part)
+		if i > 0 {
+			size++
+		}
+		if n+size > MaxURLName {
+			if i == 0 {
+				return string([]rune(part)[:MaxURLName])
+			}
+			break
+		}
+		if i > 0 {
+			b.WriteString("-")
+		}
+		b.WriteString(part)
+		n += size
+	}
+	return b.String()
 }
 
 // NewHTTPClient is a convenience function for creating an OAUTH1-compatible http client
