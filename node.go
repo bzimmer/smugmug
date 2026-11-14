@@ -101,13 +101,17 @@ func (s *NodeService) Node(ctx context.Context, nodeID string, options ...APIOpt
 }
 
 // Create creates a node for the nodelet under the `parentID`
-func (s *NodeService) Create(ctx context.Context, parentID string, nodelet *Nodelet) (*Node, error) {
+//
+// Expansions are only populated when requested, e.g. `WithExpansions("Album")`
+// to populate `Node.Album` for a newly created album
+func (s *NodeService) Create(
+	ctx context.Context, parentID string, nodelet *Nodelet, options ...APIOption) (*Node, error) {
 	uri := fmt.Sprintf("node/%s!children", parentID)
 	body, err := json.Marshal(nodelet)
 	if err != nil {
 		return nil, err
 	}
-	req, err := s.client.newRequestWithBody(ctx, http.MethodPost, uri, bytes.NewReader(body), nil)
+	req, err := s.client.newRequestWithBody(ctx, http.MethodPost, uri, bytes.NewReader(body), options)
 	if err != nil {
 		return nil, err
 	}

@@ -306,6 +306,38 @@ func TestNodes(t *testing.T) {
 				a.NoError(err)
 				a.NotNil(node)
 				a.Equal("xmQnCV", node.NodeID)
+				a.Nil(node.Album)
+			},
+			res: map[int]string{
+				0: "testdata/node_create_xmQnCV_.json",
+			},
+		},
+		{
+			name: "node creation with album expansion",
+			f: func(mg *smugmug.Client) {
+				nodelet := &smugmug.Nodelet{
+					Type:    smugmug.TypeAlbum,
+					Name:    "foobar",
+					URLName: "Foobar",
+				}
+				node, err := mg.Node.Create(context.TODO(), "g8CLb2", nodelet, smugmug.WithExpansions("Album"))
+				a.NoError(err)
+				a.NotNil(node)
+				a.Equal("xmQnCV", node.NodeID)
+				a.NotNil(node.Album)
+				a.Equal("nkm9b5", node.Album.AlbumKey)
+			},
+			res: map[int]string{
+				0: "testdata/node_create_xmQnCV_album_expansion.json",
+			},
+		},
+		{
+			name: "node creation fails with api option",
+			f: func(mg *smugmug.Client) {
+				nodelet := &smugmug.Nodelet{Name: "foobar", URLName: "Foobar"}
+				node, err := mg.Node.Create(context.TODO(), "g8CLb2", nodelet, withError())
+				a.ErrorIs(err, errFail)
+				a.Nil(node)
 			},
 			res: map[int]string{
 				0: "testdata/node_create_xmQnCV_.json",
@@ -418,4 +450,26 @@ func TestNodes(t *testing.T) {
 			test.f(mg)
 		})
 	}
+}
+
+func TestNodeCreateOptions(t *testing.T) {
+	t.Parallel()
+	a := assert.New(t)
+
+	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		a.Equal(http.MethodPost, r.Method)
+		a.Equal("/node/g8CLb2!children", r.URL.Path)
+		a.Equal("Album", r.URL.Query().Get("_expand"))
+		http.ServeFile(w, r, "testdata/node_create_xmQnCV_album_expansion.json")
+	}))
+	defer svr.Close()
+
+	mg, err := smugmug.NewClient(smugmug.WithBaseURL(svr.URL))
+	a.NoError(err)
+
+	nodelet := &smugmug.Nodelet{Type: smugmug.TypeAlbum, Name: "foobar", URLName: "Foobar"}
+	node, err := mg.Node.Create(context.TODO(), "g8CLb2", nodelet, smugmug.WithExpansions("Album"))
+	a.NoError(err)
+	a.NotNil(node.Album)
+	a.Equal("nkm9b5", node.Album.AlbumKey)
 }
